@@ -4,14 +4,14 @@ import net.minecraftforge.common.config.Config;
 
 @Config(modid = ScreenshotMain.MODID)
 @Config.LangKey("main.config.title")
-public class ModConfig{
+class ModConfig{
 
 
     @Config.Name("Override")
     @Config.Comment("Override the default screenshotkey")
     public static boolean Override = false;
 
-    @Config.Name("Save")
+    @Config.Name("SaveScreenshots")
     @Config.Comment("Set to true if you want your screenshots to save locally and upload to Imgur. Only has effect if Override is set to true")
     public static boolean SaveScreenshots = true;
 }

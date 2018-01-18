@@ -6,10 +6,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ConfigChanged{
 
+
     @SubscribeEvent
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-        if(eventArgs.getModID().equals("screenshotuploader")){
-            System.out.println("Config changed!");
+    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if(event.getModID().equals(ScreenshotMain.MODID)){
             ScreenshotMain.syncConfig();
         }
     }
