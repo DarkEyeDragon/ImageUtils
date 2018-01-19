@@ -1,5 +1,7 @@
 package com.darkeyedragon.screenshotuploader.client.imageuploaders;
 
+import com.darkeyedragon.screenshotuploader.client.ScreenshotMain;
+import com.darkeyedragon.screenshotuploader.client.Utils.CopyToClipboard;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
@@ -18,6 +20,10 @@ public class ImgurUploader{
 
     private ByteArrayOutputStream baos = new ByteArrayOutputStream();
     private ExecutorService exService = Executors.newCachedThreadPool();
+
+
+    private CopyToClipboard copyToClipboard = new CopyToClipboard();
+
 
     public void uploadImage(BufferedImage bufferedImage){
 
@@ -65,10 +71,17 @@ public class ImgurUploader{
                 wr.close();
                 rd.close();
                 JsonObject jsonObject = new JsonParser().parse(stb.toString()).getAsJsonObject();
-                Minecraft.getMinecraft().player.sendChatMessage("Uploaded to "+jsonObject.get("data").getAsJsonObject().get("link").getAsString());
+                String result = jsonObject.get("data").getAsJsonObject().get("link").getAsString();
+                Minecraft.getMinecraft().player.sendChatMessage("Uploaded to "+ result);
+                if(ScreenshotMain.copyToClipboard){
+                    if(copyToClipboard.copy(result)){
+                        Minecraft.getMinecraft().player.sendChatMessage("Copied to clipboard");
+                    }else{
+                        Minecraft.getMinecraft().player.sendChatMessage("Unable to save to clipboard");
+                    }
+                }
             }catch (IOException e){
                 e.printStackTrace();
-
             }
         });
     }
