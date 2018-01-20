@@ -16,8 +16,10 @@ public class CustomScreenshotEvent{
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onScreenshot(ScreenshotEvent event){
+        System.out.println("Screenshot event");
+        System.out.println(ScreenshotMain.overrideDefaultScreenshotKey);
+
         if(ScreenshotMain.overrideDefaultScreenshotKey){
-            System.out.print("SCREENSHOT OVERRIDE");
             BufferedImage screenshot = event.getImage();
             imgurUploader.uploadImage(screenshot);
         }

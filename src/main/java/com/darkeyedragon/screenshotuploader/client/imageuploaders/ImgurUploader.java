@@ -5,6 +5,11 @@ import com.darkeyedragon.screenshotuploader.client.Utils.CopyToClipboard;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -30,7 +35,7 @@ public class ImgurUploader{
         exService.execute(() -> {
 
             Thread.currentThread().setName("Imgur Image Uploading");
-
+            int responseCode = 0;
             try{
                 URL url = new URL("https://api.imgur.com/3/image");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -67,21 +72,43 @@ public class ImgurUploader{
 
 
                 // Get the response
-                System.out.println("Response Code: " + con.getResponseCode());
+                responseCode = con.getResponseCode();
+                System.out.println("Response Code: " + responseCode);
                 wr.close();
                 rd.close();
                 JsonObject jsonObject = new JsonParser().parse(stb.toString()).getAsJsonObject();
                 String result = jsonObject.get("data").getAsJsonObject().get("link").getAsString();
-                Minecraft.getMinecraft().player.sendChatMessage("Uploaded to "+ result);
+
+                //Send result to player
+                ITextComponent uploadstr = new TextComponentString("Uploaded to ");
+                ITextComponent linkText = new TextComponentString(result);
+                linkText.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, result));
+                linkText.getStyle().setUnderlined(true);
+                linkText.getStyle().setColor(TextFormatting.AQUA);
+                Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(uploadstr.appendSibling(linkText));
+
                 if(ScreenshotMain.copyToClipboard){
                     if(copyToClipboard.copy(result)){
-                        Minecraft.getMinecraft().player.sendChatMessage("Copied to clipboard");
+                        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Copied to clipboard!"));
+                        System.out.println("Copied "+result+" to clipboard");
                     }else{
-                        Minecraft.getMinecraft().player.sendChatMessage("Unable to save to clipboard");
+                        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Unable to save to clipboard"));
+                        System.out.println("Unable to save "+result+"to clipboard");
                     }
                 }
             }catch (IOException e){
+                //In case something goes wrong!
                 e.printStackTrace();
+                ITextComponent errorText = new TextComponentString("Something went wrong! Response code: "+responseCode);
+                ITextComponent report = new TextComponentString("If this keeps happening please report the issue ");
+                ITextComponent link = new TextComponentString("here");
+                ITextComponent hover = new TextComponentString("github.com/DarkEyeDragon/ScreenshotUploader/issues");
+                link.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/DarkEyeDragon/ScreenshotUploader/issues"));
+                link.getStyle().setColor(TextFormatting.AQUA);
+                link.getStyle().setUnderlined(true);
+                link.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover));
+                Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(errorText);
+                Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(report.appendSibling(link));
             }
         });
     }

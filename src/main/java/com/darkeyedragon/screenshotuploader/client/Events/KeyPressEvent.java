@@ -7,6 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ScreenShotHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.image.BufferedImage;
 import java.util.Timer;
@@ -19,6 +21,7 @@ public class KeyPressEvent{
     private ImgurUploader imgurUploader = new ImgurUploader();
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public void onKeyInput(InputEvent.KeyInputEvent event){
         if(KeyBindings.openScreenshotGuiKey.isPressed()){
             System.out.println("Key "+ event.getResult() +" is pressed!" );

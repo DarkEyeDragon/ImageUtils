@@ -8,10 +8,14 @@ public class CopyToClipboard{
     private String copiedText;
 
     public boolean copy(String message){
-        StringSelection stringSelection = new StringSelection(message);
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
-        copiedText = message;
-        return true;
+        if(message != null){
+            StringSelection stringSelection = new StringSelection(message);
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
+            copiedText = message;
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public String getCopy(){

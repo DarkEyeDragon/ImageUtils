@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
 
-@Mod(modid = ScreenshotMain.MODID, version = ScreenshotMain.VERSION)
+@Mod(modid = ScreenshotMain.MODID, version = ScreenshotMain.VERSION, updateJSON = "http://darkeyedragon.me/mods/updates/screenshotuploader.json")
 public class ScreenshotMain
 {
     public static final String MODID = "screenshotuploader";
@@ -42,18 +42,19 @@ public class ScreenshotMain
     public void preInit(FMLPreInitializationEvent event){
         MinecraftForge.EVENT_BUS.register(new ConfigChanged());
         config = new Configuration(event.getSuggestedConfigurationFile());
+        overrideDefaultScreenshotKey = config.getCategory(Configuration.CATEGORY_GENERAL).get("Override").getBoolean();
+        copyToClipboard = config.getCategory(Configuration.CATEGORY_GENERAL).get("CopyToClipboard").getBoolean();
     }
 
     public static void updateConfig(){
+        System.out.println("Config updated.");
         ConfigManager.sync(ScreenshotMain.MODID, Config.Type.INSTANCE);
         config = new Configuration(new File(config.getConfigFile().getAbsoluteFile().toURI()));
         overrideDefaultScreenshotKey = config.getCategory(Configuration.CATEGORY_GENERAL).get("Override").getBoolean();
         copyToClipboard = config.getCategory(Configuration.CATEGORY_GENERAL).get("CopyToClipboard").getBoolean();
 
-        //System.out.println(overrideDefaultScreenshotKey);
-        System.out.println(copyToClipboard);
-
-
+        System.out.println("Default:"+overrideDefaultScreenshotKey);
+        System.out.println("copyToClipboard:"+copyToClipboard);
         if(config.hasChanged()){
             ConfigManager.sync(MODID, Config.Type.INSTANCE);
         }
