@@ -1,7 +1,9 @@
 package com.darkeyedragon.screenshotuploader.client.Events;
 
 import com.darkeyedragon.screenshotuploader.client.KeyBindings;
+import com.darkeyedragon.screenshotuploader.client.ModConfig;
 import com.darkeyedragon.screenshotuploader.client.gui.CustomGui;
+import com.darkeyedragon.screenshotuploader.client.imageuploaders.CustomUploader;
 import com.darkeyedragon.screenshotuploader.client.imageuploaders.ImgurUploader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ScreenShotHelper;
@@ -19,6 +21,7 @@ public class KeyPressEvent{
     private Timer timer = new Timer();
 
     private ImgurUploader imgurUploader = new ImgurUploader();
+    private CustomUploader customUploader = new CustomUploader();
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
@@ -29,7 +32,19 @@ public class KeyPressEvent{
         }
         else if(KeyBindings.screenshotUploadKey.isPressed()){
             BufferedImage screenshot = ScreenShotHelper.createScreenshot(Minecraft.getMinecraft().displayWidth,Minecraft.getMinecraft().displayHeight, Minecraft.getMinecraft().getFramebuffer());
-            imgurUploader.uploadImage(screenshot);
+            if(ModConfig.CustomServer){
+                if(!ModConfig.ServerSettings.server.isEmpty())
+                    if(ModConfig.ServerSettings.postData.length > 0)
+                        //for (String s: ModConfig.ServerSettings.postData){
+                            customUploader.uploadImage(screenshot, ModConfig.ServerSettings.server);
+                        //}
+                    else
+                        customUploader.uploadImage(screenshot, ModConfig.ServerSettings.server);
+                else
+                    System.out.println("Invalid URL");
+            }else{
+                imgurUploader.uploadImage(screenshot);
+            }
         }
     }
 }

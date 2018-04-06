@@ -1,6 +1,6 @@
 package com.darkeyedragon.screenshotuploader.client.imageuploaders;
 
-import com.darkeyedragon.screenshotuploader.client.ScreenshotMain;
+import com.darkeyedragon.screenshotuploader.client.ModConfig;
 import com.darkeyedragon.screenshotuploader.client.Utils.CopyToClipboard;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -87,7 +87,7 @@ public class ImgurUploader{
                 linkText.getStyle().setColor(TextFormatting.AQUA);
                 Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(uploadstr.appendSibling(linkText));
 
-                if(ScreenshotMain.copyToClipboard){
+                if(ModConfig.copyToClipboard){
                     if(copyToClipboard.copy(result)){
                         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Copied to clipboard!"));
                         System.out.println("Copied "+result+" to clipboard");
