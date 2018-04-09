@@ -14,20 +14,20 @@ Planned features:
 - Filters
 - Overlays/watermarks
 
-##Changing settings
+## Changing settings
 - you can change your settings by going to mods on the main menu or by going to mod options in the in-game menu.
 
-#Uploading to a custom server
+# Uploading to a custom server
 Once you've gotten to mod settings there will be a "Server settings" button
 
-##Client configuration
+## Client configuration
 Link: link to the upload script
 Post values: add POST data to your request for servers that require some form of authentication.
 everything before `=` is considered as the `key` and everything after as `value`
 you can get the `key` like this in PHP for example: `$_POST["key"]` and that would return the `value`
 **NOTE:** `{image}` is required as this will send the image data. However you can choose whatever `key` you want.
 **NOTE:** dont use spaces between ´=´ they will be added.
-##Example:
+## Example:
 ```
 image={image} //send post data with image as key and {image} as value
 key=2DAC1D297E6E7E348E5CE1884A7FC //send post data with key as key and 2DAC1D297E6E7E348E5CE1884A7FC as value
