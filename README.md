@@ -37,7 +37,7 @@ key=2DAC1D297E6E7E348E5CE1884A7FC //send post data with key as key and 2DAC1D297
 if you are using some image hosting service make sure to look up what data you need to send.
 If you use your own upload script you can pretty much do whatever you want.
 
-##Server configuration PHP
+#### Server configuration PHP
 
 **NOTE:** PLEASE for the love of your own sanity, USE VALIDATION or anyone could upload anything to your server
 **NOTE:** I will assume you have at least basic knowlege about PHP.
