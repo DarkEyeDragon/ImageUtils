@@ -4,15 +4,14 @@ buildscript {
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.2"
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.3'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
-//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
+//Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 version = "1.1.0"
 group = "com.darkeyedragon.screenshotuploader" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -37,8 +36,8 @@ minecraft {
 }
 
 dependencies {
-    compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.5'
-    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.1'
+    compile (group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.5')
+    compile (group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.1'){transitive = false}
 }
 
 processResources {
@@ -60,5 +59,6 @@ processResources {
     }
 }
 shadowJar {
-    relocate 'org.apache.httpcomponents', 'com.darkeyedragon.screenshotuploader.client.apache'
+    relocate 'org.apache.http.entity', 'com.darkeyedragon.screenshotuploader.apache'
 }
+reobf{shadowJar {} }
