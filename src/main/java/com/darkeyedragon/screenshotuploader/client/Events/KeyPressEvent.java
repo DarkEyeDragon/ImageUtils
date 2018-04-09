@@ -1,4 +1,4 @@
-package com.darkeyedragon.screenshotuploader.client.Events;
+package com.darkeyedragon.screenshotuploader.client.events;
 
 import com.darkeyedragon.screenshotuploader.client.KeyBindings;
 import com.darkeyedragon.screenshotuploader.client.ModConfig;

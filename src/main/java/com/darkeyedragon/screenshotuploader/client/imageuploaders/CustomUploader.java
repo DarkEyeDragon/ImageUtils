@@ -2,7 +2,7 @@ package com.darkeyedragon.screenshotuploader.client.imageuploaders;
 
 import com.darkeyedragon.screenshotuploader.client.ModConfig;
 import com.darkeyedragon.screenshotuploader.client.ScreenshotMain;
-import com.darkeyedragon.screenshotuploader.client.Utils.CopyToClipboard;
+import com.darkeyedragon.screenshotuploader.client.utils.CopyToClipboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;

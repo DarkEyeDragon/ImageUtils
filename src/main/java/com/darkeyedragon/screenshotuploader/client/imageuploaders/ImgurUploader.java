@@ -1,7 +1,7 @@
 package com.darkeyedragon.screenshotuploader.client.imageuploaders;
 
 import com.darkeyedragon.screenshotuploader.client.ModConfig;
-import com.darkeyedragon.screenshotuploader.client.Utils.CopyToClipboard;
+import com.darkeyedragon.screenshotuploader.client.utils.CopyToClipboard;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;

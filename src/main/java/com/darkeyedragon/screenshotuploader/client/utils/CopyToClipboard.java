@@ -1,4 +1,4 @@
-package com.darkeyedragon.screenshotuploader.client.Utils;
+package com.darkeyedragon.screenshotuploader.client.utils;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;

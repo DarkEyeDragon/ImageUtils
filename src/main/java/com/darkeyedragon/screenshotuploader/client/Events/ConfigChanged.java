@@ -1,8 +1,8 @@
-package com.darkeyedragon.screenshotuploader.client.Events;
+package com.darkeyedragon.screenshotuploader.client.events;
 
 import com.darkeyedragon.screenshotuploader.client.ModConfig;
 import com.darkeyedragon.screenshotuploader.client.ScreenshotMain;
-import com.darkeyedragon.screenshotuploader.client.Utils.StringFormatter;
+import com.darkeyedragon.screenshotuploader.client.utils.StringFormatter;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;

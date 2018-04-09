@@ -1,10 +1,10 @@
 package com.darkeyedragon.screenshotuploader.client;
 
 
-import com.darkeyedragon.screenshotuploader.client.Events.ConfigChanged;
-import com.darkeyedragon.screenshotuploader.client.Events.CustomScreenshotEvent;
-import com.darkeyedragon.screenshotuploader.client.Events.KeyPressEvent;
-import com.darkeyedragon.screenshotuploader.client.Utils.StringFormatter;
+import com.darkeyedragon.screenshotuploader.client.events.ConfigChanged;
+import com.darkeyedragon.screenshotuploader.client.events.CustomScreenshotEvent;
+import com.darkeyedragon.screenshotuploader.client.events.KeyPressEvent;
+import com.darkeyedragon.screenshotuploader.client.utils.StringFormatter;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
