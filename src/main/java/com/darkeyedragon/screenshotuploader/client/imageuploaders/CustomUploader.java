@@ -38,21 +38,12 @@ public class CustomUploader{
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             int responseCode = 0;
             String responseMessage = "";
-            System.out.println("========================================================");
-            System.out.println("                  LOG YOU FUCKING SHIT");
-            System.out.println("========================================================");
             try{
-                System.out.println("SCREENSHOTLOGGER: 1");
                 ImageIO.write(bufferedImage, "jpg", baos);
-                System.out.println("SCREENSHOTLOGGER: 2");
                 byte[] bytes = baos.toByteArray();
-                System.out.println("SCREENSHOTLOGGER: 3");
                 CloseableHttpClient client = HttpClients.createDefault();
-                System.out.println("SCREENSHOTLOGGER: 4");
                 HttpPost httpPost = new HttpPost(link);
-                System.out.println("SCREENSHOTLOGGER: 5");
                 Minecraft.getMinecraft().ingameGUI.setOverlayMessage("Uploading image to custom server...", true);
-                System.out.println("SCREENSHOTLOGGER: 6");
                 MultipartEntityBuilder builder = MultipartEntityBuilder.create();
                 for (String[] s: ScreenshotMain.postData){
                     if(s[1].equals("{image}"))

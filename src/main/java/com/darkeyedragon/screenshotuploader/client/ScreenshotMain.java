@@ -20,7 +20,6 @@ public class ScreenshotMain
     public static final String MODID = "screenshotuploader";
     static final String VERSION = "1.1.0";
     static final String updateJSON = "http://darkeyedragon.me/mods/updates/screenshotuploader.json";
-    public KeyBindings keybinds;
 
     public static List<String[]> postData;
 
@@ -32,7 +31,7 @@ public class ScreenshotMain
         MinecraftForge.EVENT_BUS.register(new CustomScreenshotEvent());
         MinecraftForge.EVENT_BUS.register(new ModConfig());
         MinecraftForge.EVENT_BUS.register(ConfigChanged.class);
-        keybinds = new KeyBindings();
+        KeyBindings keybinds = new KeyBindings();
         keybinds.RegisterKeybinds();
     }
     @Mod.EventHandler
