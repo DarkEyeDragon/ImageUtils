@@ -2,7 +2,7 @@ package com.darkeyedragon.screenshotuploader.client;
 
 import net.minecraftforge.common.config.Config;
 
-@Config(modid = ScreenshotMain.MODID, category = "general", name = ScreenshotMain.MODID+"/general")
+@Config(modid = ScreenshotMain.MODID, name = ScreenshotMain.MODID+"/general")
 @Config.LangKey("screenshot.config.general")
 public class ModConfig{
 
