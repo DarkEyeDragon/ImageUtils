@@ -45,7 +45,7 @@ This is a VERY basic example. With very little security to keep it fairly simple
 you can read https://security.stackexchange.com/questions/32852/risks-of-a-php-image-upload-form to find out more about security
 
 **Make sure to change the `$key` dont use the one given here.**
-```
+```php
 <?php
 /**
  * Created by PhpStorm.
