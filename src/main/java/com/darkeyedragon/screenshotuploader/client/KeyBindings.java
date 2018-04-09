@@ -10,7 +10,6 @@ public class KeyBindings{
 
 
     void RegisterKeybinds(){
-
         screenshotUploadKey = new KeyBinding("Screenshot Uploader",Keyboard.KEY_F4, "Screenshot Uploader");
         ClientRegistry.registerKeyBinding(screenshotUploadKey);
     }
