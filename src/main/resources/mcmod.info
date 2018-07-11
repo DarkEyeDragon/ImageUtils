@@ -1,13 +1,13 @@
 [
 {
-  "modid": "screenshotuploader",
-  "name": "Screenshot Uploader",
-  "description": "Directly upload your images to imgur or a custom server.",
+  "modid": "imageutils",
+  "name": "Image Utils",
+  "description": "Share, view, manage your pictures with ease!",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "http://darkeyedragon.me/mods",
-  "updateJSON": "http://darkeyedragon.me/mods/updates/screenshotuploader.json",
-  "updateURL": "http://darkeyedragon.me/mods/updates/screenshotuploader.json",
+  "updateJSON": "http://darkeyedragon.me/mods/updates/imageutils.json",
+  "updateURL": "http://darkeyedragon.me/mods/updates/imageutils.json",
   "authorList": ["DarkEyeDragon"],
   "logoFile": "",
   "screenshots": [],
