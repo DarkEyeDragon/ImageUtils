@@ -1,4 +1,4 @@
-package com.darkeyedragon.imageutils.client;
+package com.darkeyedragon.imageutils.client.config;
 
 import com.darkeyedragon.imageutils.client.adaptors.UploaderTypeAdaptor;
 import com.google.gson.Gson;

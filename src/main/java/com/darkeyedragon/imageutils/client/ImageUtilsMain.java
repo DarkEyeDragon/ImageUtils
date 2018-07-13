@@ -2,6 +2,7 @@ package com.darkeyedragon.imageutils.client;
 
 
 import com.darkeyedragon.imageutils.client.config.ConfigFile;
+import com.darkeyedragon.imageutils.client.config.UploaderFile;
 import com.darkeyedragon.imageutils.client.events.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;

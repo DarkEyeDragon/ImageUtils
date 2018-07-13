@@ -1,4 +1,4 @@
-package com.darkeyedragon.imageutils.client;
+package com.darkeyedragon.imageutils.client.utils;
 
 import java.awt.image.BufferedImage;
 

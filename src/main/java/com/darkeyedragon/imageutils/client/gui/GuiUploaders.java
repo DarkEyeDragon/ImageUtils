@@ -1,7 +1,7 @@
 package com.darkeyedragon.imageutils.client.gui;
 
 import com.darkeyedragon.imageutils.client.ImageUtilsMain;
-import com.darkeyedragon.imageutils.client.UploaderFile;
+import com.darkeyedragon.imageutils.client.config.UploaderFile;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
