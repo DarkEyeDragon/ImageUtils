@@ -39,7 +39,7 @@ If you use your own upload script you can pretty much do whatever you want.
 
 #### Server configuration PHP
 
-**NOTE:** PLEASE for the love of your own sanity, USE VALIDATION or anyone could upload anything to your server
+**NOTE:** PLEASE for the love of god, USE VALIDATION or anyone could upload anything to your server
 **NOTE:** I will assume you have at least basic knowlege about PHP.
 This is a VERY basic example. With very little security to keep it fairly simple and straight forward.
 you can read https://security.stackexchange.com/questions/32852/risks-of-a-php-image-upload-form to find out more about security
@@ -79,3 +79,12 @@ if(isset($_FILES["image"])){ //check if there is a key named image
 else
     http_response_code (400); //send and invalid request error back
 ```
+# Versions
+### Update 1.2.0
+- Added Partial Screenshots (F6 by default)
+- Added image previewer on valid image links (click an image link in chat and it will display the image)
+### Update 1.1.0
+- Added custom upload server options
+- Optimized image uploading
+### Update 1.0.0
+- Initial release

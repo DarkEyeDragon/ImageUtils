@@ -1,10 +1,9 @@
 package com.darkeyedragon.imageutils.client;
 
 
+import com.darkeyedragon.imageutils.client.config.ConfigFile;
 import com.darkeyedragon.imageutils.client.events.*;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -13,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -35,8 +36,10 @@ public class ImageUtilsMain
     public static List<String[]> postData;
     private KeyBindings keybinds;
 
-    public static File configDir;
+    public static ConfigFile config;
+    public static Path configPath;
     public static File uploadDir;
+    public static File configLocation;
     public static List<UploaderFile> uploaders;
 
     @Mod.EventHandler
@@ -44,26 +47,33 @@ public class ImageUtilsMain
     {
         MinecraftForge.EVENT_BUS.register(new KeyPressEvent());
         MinecraftForge.EVENT_BUS.register(new CustomScreenshotEvent());
-        MinecraftForge.EVENT_BUS.register(ConfigChanged.class);
         MinecraftForge.EVENT_BUS.register(new ChatReceivedEvent());
         MinecraftForge.EVENT_BUS.register(new CustomGuiOpenEvent());
         MinecraftForge.EVENT_BUS.register(new GuiOptionsHook());
+        MinecraftForge.EVENT_BUS.register(ConfigChanged.class);
         keybinds = new KeyBindings();
         keybinds.RegisterKeybinds();
 
     }
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent pre){
-
-        ConfigManager.sync(MODID, Config.Type.INSTANCE);
-        //postData = StringFormatter.postData(ModConfig.ServerSettings.postData);
-        configDir = pre.getModConfigurationDirectory();
         logger = pre.getModLog();
+
+        configPath = Paths.get(pre.getModConfigurationDirectory().getPath(), MODID);
+
+        try{
+            configLocation = Paths.get(configPath.toFile().getPath(), MODID+".cfg").toFile();
+            ConfigHandler.create();
+            config = new ConfigFile(Paths.get(configPath.toFile().getPath(), MODID + ".cfg"));
+            ConfigHandler.load();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent post){
         uploaders = new ArrayList<>();
-        uploadDir = new File(new File(configDir, MODID), "uploaders");
+        uploadDir = new File(configPath.toFile(), "uploaders");
         if(!uploadDir.exists()){
             if(uploadDir.mkdir()){
                 logger.info("No uploaders directory, creating one...");
@@ -86,9 +96,7 @@ public class ImageUtilsMain
                         logger.warn("Unable to load "+file.getName()+"! "+e.getMessage());
                     }
                 }
-                //ModConfig.ServerSettings.uploader = displayName.toArray(new String[0]);
             }
-            ConfigManager.sync(MODID, Config.Type.INSTANCE);
         }
     }
 }

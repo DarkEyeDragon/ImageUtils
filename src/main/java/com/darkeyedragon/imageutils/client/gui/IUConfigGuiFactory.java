@@ -1,8 +1,8 @@
 package com.darkeyedragon.imageutils.client.gui;
 
+import com.darkeyedragon.imageutils.client.ConfigHandler;
 import com.darkeyedragon.imageutils.client.ImageUtilsMain;
 import com.darkeyedragon.imageutils.client.UploaderFile;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -19,27 +19,37 @@ import java.util.Set;
 
 public class IUConfigGuiFactory implements  IModGuiFactory{
 
-    public static class UIConfigGuiScreen extends GuiConfig
-    {
+    public static class UIConfigGuiScreen extends GuiConfig{
 
-        public UIConfigGuiScreen(GuiScreen parent)
-        {
+        public UIConfigGuiScreen(GuiScreen parent){
             super(parent, getConfigElements(), ImageUtilsMain.MODID, false, false, I18n.format("imageutil.config.general"));
         }
 
-        private static List<IConfigElement> getConfigElements()
-    {
-        String[] uploaders = new String[ImageUtilsMain.uploaders.size()];
-        for(int x=0; x < ImageUtilsMain.uploaders.size(); x++){
-            List<UploaderFile> u = ImageUtilsMain.uploaders;
-            uploaders[x] = u.get(x).getDisplayName();
+
+        public static List<IConfigElement> getConfigElements(){
+            List<String> uploadersList = new ArrayList<>();
+            for(UploaderFile uf : ImageUtilsMain.uploaders){
+                uploadersList.add(uf.getDisplayName());
+            }
+            String[] uploadersArray = uploadersList.toArray(new String[0]);
+            List<IConfigElement> elements = new ArrayList<>();
+            //PROPERTIES
+            Property uploader = new Property("Uploader", uploadersArray[0], Property.Type.STRING, uploadersArray);
+            Property override = new Property("Override", String.valueOf(ConfigHandler.override), Property.Type.BOOLEAN);
+            Property copy = new Property("Copy",String.valueOf(ConfigHandler.copy), Property.Type.BOOLEAN);
+            Property customUploader = new Property("Custom Uploader",String.valueOf(ConfigHandler.customUploader), Property.Type.BOOLEAN);
+
+
+            ConfigCategory generalCC = new ConfigCategory("General");
+            generalCC.put("uploader", uploader);
+            generalCC.put("override", override);
+            generalCC.put("copy", copy);
+            generalCC.put("customUploader", customUploader);
+            ConfigElement generalCE = new ConfigElement(generalCC);
+            elements.add(generalCE);
+
+            return elements;
         }
-        List<IConfigElement> stringsList = new ArrayList<>();
-        ConfigCategory uploadersCat = new ConfigCategory("Settings");
-        uploadersCat.put("uploader", new Property("Uploader", "more test", Property.Type.STRING, uploaders));
-        stringsList.add(new ConfigElement(uploadersCat));
-        return stringsList;
-    }
     }
 
 
@@ -60,11 +70,9 @@ public class IUConfigGuiFactory implements  IModGuiFactory{
         return new IUConfigGuiFactory.UIConfigGuiScreen(parentScreen);
     }
 
-    private static final Set<RuntimeOptionCategoryElement> fmlCategories = ImmutableSet.of(new RuntimeOptionCategoryElement("HELP", "FML"));
-
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories()
     {
-        return fmlCategories;
+        return null;
     }
 }
