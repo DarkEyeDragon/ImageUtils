@@ -5,6 +5,8 @@ import java.util.Map;
 public class UploaderTypeAdaptor{
     private String RequestURL;
     private String FileFormName;
+    private String URL;
+    private String DeletionURL;
     private Map<String, Object> Arguments;
 
     public String getRequestUrl(){
@@ -17,4 +19,9 @@ public class UploaderTypeAdaptor{
     public Map<String, Object> getArgumentsTypeAdaptor(){
         return Arguments;
     }
+
+    public String getURL(){
+        return URL;
+    }
+
 }

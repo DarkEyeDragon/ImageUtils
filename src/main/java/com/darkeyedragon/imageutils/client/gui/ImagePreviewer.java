@@ -1,6 +1,6 @@
 package com.darkeyedragon.imageutils.client.gui;
 
-import com.darkeyedragon.imageutils.client.message.SendClientMessage;
+import com.darkeyedragon.imageutils.client.message.ClientMessage;
 import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
 import com.darkeyedragon.imageutils.client.utils.ImageUtil;
 import net.minecraft.client.Minecraft;
@@ -64,9 +64,9 @@ public class ImagePreviewer extends GuiScreen{
     {
         if(button.id == 0){
             if(CopyToClipboard.copy(bufferedImage))
-                SendClientMessage.basic("Copied image to clipboard");
+                ClientMessage.basic("Copied image to clipboard");
             else
-                SendClientMessage.basic("Unable to copy image to clipboard");
+                ClientMessage.basic("Unable to copy image to clipboard");
         }else if(button.id == 1){
             try{
                 Desktop.getDesktop().browse(new URI(url.toString()));
@@ -77,9 +77,9 @@ public class ImagePreviewer extends GuiScreen{
         else if (button.id == 2)
         {
             if(CopyToClipboard.copy(url.toString()))
-                SendClientMessage.basic("Copied link to clipboard");
+                ClientMessage.basic("Copied link to clipboard");
             else
-                SendClientMessage.basic("Unable to copy link to clipboard");
+                ClientMessage.basic("Unable to copy link to clipboard");
         }
     }
     private void generateImage(){

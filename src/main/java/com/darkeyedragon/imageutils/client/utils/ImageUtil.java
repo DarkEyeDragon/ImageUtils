@@ -1,6 +1,6 @@
 package com.darkeyedragon.imageutils.client.utils;
 
-import com.darkeyedragon.imageutils.client.message.SendClientMessage;
+import com.darkeyedragon.imageutils.client.message.ClientMessage;
 import net.coobird.thumbnailator.Thumbnails;
 
 import javax.imageio.ImageIO;
@@ -15,7 +15,7 @@ public class ImageUtil{
         try{
             return Thumbnails.of(img).size(newW, newH).asBufferedImage();
         }catch (IOException e){
-            SendClientMessage.basic("Unable to resize image for preview!");
+            ClientMessage.basic("Unable to resize image for preview!");
             return null;
         }
     }

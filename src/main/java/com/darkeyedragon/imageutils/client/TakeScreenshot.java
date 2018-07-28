@@ -10,9 +10,6 @@ import java.awt.image.BufferedImage;
 
 public class TakeScreenshot{
 
-    private ImgurUploader imgurUploader = new ImgurUploader();
-    private CustomUploader customUploader = new CustomUploader();
-
     public void full(){
         BufferedImage screenshot = ScreenShotHelper.createScreenshot(Minecraft.getMinecraft().displayWidth,Minecraft.getMinecraft().displayHeight, Minecraft.getMinecraft().getFramebuffer());
         upload(screenshot);
@@ -31,19 +28,13 @@ public class TakeScreenshot{
     }
 
     private void upload(BufferedImage screenshot){
-
-        //TODO CHANGE
-        /*if(ModConfig.CustomServer){
-            //if(!ModConfig.ServerSettings.server.isEmpty())
-                /*if(ModConfig.ServerSettings.postData.length > 0)
-                    customUploader.uploadImage(screenshot, ModConfig.ServerSettings.server);
-                else
-                    customUploader.uploadImage(screenshot, ModConfig.ServerSettings.server);
-
+        if(ModConfig.customServer){
+            if(!ModConfig.uploader.isEmpty())
+                    CustomUploader.uploadImage(screenshot);
             else
                 System.out.println("Invalid URL");
         }else
-            imgurUploader.uploadImage(screenshot);*/
+            ImgurUploader.uploadImage(screenshot);
     }
 
 }

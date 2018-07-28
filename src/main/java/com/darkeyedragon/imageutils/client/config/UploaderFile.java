@@ -15,6 +15,9 @@ public class UploaderFile{
     private Map<String, Object> arguments;
     private String fileName;
     private String displayName;
+    private String jsonResponseKey;
+    private boolean jsonResponse;
+    private boolean loaded;
 
     public UploaderFile(File file) throws Exception{
         if(file.isFile()){
@@ -23,8 +26,16 @@ public class UploaderFile{
             uploader = new Gson().fromJson(contents, UploaderTypeAdaptor.class);
             arguments = uploader.getArgumentsTypeAdaptor();
             fileName = file.getName();
+            String responseString = uploader.getURL();
             String cap = fileName.substring(0, 1).toUpperCase() + fileName.substring(1);
             displayName = FilenameUtils.removeExtension(cap);
+            if(uploader.getURL() != null){
+                jsonResponse = responseString.startsWith("$json:");
+            }
+            if(jsonResponse){
+                jsonResponseKey = responseString.substring(responseString.indexOf(":")+1, responseString.lastIndexOf("$"));
+            }
+            loaded = true;
         }
     }
     public Map<String, Object> getArguments(){
@@ -38,4 +49,16 @@ public class UploaderFile{
         return fileName;
     }
     public String getDisplayName() { return  displayName; }
+
+    public boolean isJsonResponse(){
+        return jsonResponse;
+    }
+
+    public String getJsonResponseKey(){
+        return jsonResponseKey;
+    }
+
+    public boolean isLoaded(){
+        return loaded;
+    }
 }

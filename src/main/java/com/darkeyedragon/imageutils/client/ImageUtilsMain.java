@@ -22,7 +22,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Mod(modid = ImageUtilsMain.MODID, version = ImageUtilsMain.VERSION, updateJSON = ImageUtilsMain.updateJSON, clientSideOnly = true, guiFactory = "com.darkeyedragon.imageutils.client.gui.IUConfigGuiFactory")
+@Mod(modid = ImageUtilsMain.MODID, version = ImageUtilsMain.VERSION, updateJSON = ImageUtilsMain.updateJSON, clientSideOnly = true)
 public class ImageUtilsMain
 {
     public static final String MODID = "imageutils";
@@ -34,7 +34,6 @@ public class ImageUtilsMain
 
     public static WeakHashMap<String, BufferedImage> validLinks = new WeakHashMap<>();
 
-    public static List<String[]> postData;
     private KeyBindings keybinds;
 
     public static ConfigFile config;
@@ -42,6 +41,7 @@ public class ImageUtilsMain
     public static File uploadDir;
     public static File configLocation;
     public static List<UploaderFile> uploaders;
+    public static UploaderFile activeUploader;
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
@@ -59,17 +59,7 @@ public class ImageUtilsMain
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent pre){
         logger = pre.getModLog();
-
         configPath = Paths.get(pre.getModConfigurationDirectory().getPath(), MODID);
-
-        try{
-            configLocation = Paths.get(configPath.toFile().getPath(), MODID+".cfg").toFile();
-            ConfigHandler.create();
-            config = new ConfigFile(Paths.get(configPath.toFile().getPath(), MODID + ".cfg"));
-            ConfigHandler.load();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
     }
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent post){
@@ -82,20 +72,36 @@ public class ImageUtilsMain
                 logger.warn("Unable to create uploaders directory! This will cause problems later on.");
             }
         }else{
-            logger.info("Uploaders directory found, loading uploaders...");
-            String[] list = uploadDir.list();
-            if(list != null && list.length > 0){
-                List<String> displayName = new ArrayList<>();
-                for(File file : Objects.requireNonNull(uploadDir.listFiles())){
-                    try{
-                        UploaderFile uf = new UploaderFile(file);
-                        uploaders.add(uf);
-                        displayName.add(uf.getDisplayName());
-                        logger.info("Loaded: "+file.getName());
-                    }catch(Exception e){
-                        e.printStackTrace();
-                        logger.warn("Unable to load "+file.getName()+"! "+e.getMessage());
-                    }
+            loadUploaders();
+            if(ModConfig.uploader != null || !ModConfig.uploader.equalsIgnoreCase("")){
+                setActiveUploader();
+            }
+        }
+    }
+    public static void setActiveUploader(){
+        if(ModConfig.customServer){
+
+            ImageUtilsMain.uploaders.forEach(uf -> {
+                if(uf.getFileName().equalsIgnoreCase(ModConfig.uploader)){
+                    logger.info("Setting active uploader script.");
+                    activeUploader = uf;
+                }
+            });
+        }
+    }
+    public static void loadUploaders(){
+        logger.info("Uploaders directory found, loading uploaders...");
+        String[] list = uploadDir.list();
+        if(list != null && list.length > 0){
+            List<String> displayName = new ArrayList<>();
+            for(File file : Objects.requireNonNull(uploadDir.listFiles())){
+                try{
+                    UploaderFile uf = new UploaderFile(file);
+                    uploaders.add(uf);
+                    displayName.add(uf.getDisplayName());
+                    logger.info("Loaded: "+file.getName());
+                }catch(Exception e){
+                    logger.warn("Unable to load "+file.getName()+"! "+e.getMessage());
                 }
             }
         }

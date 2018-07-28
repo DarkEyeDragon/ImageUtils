@@ -2,12 +2,12 @@ package com.darkeyedragon.imageutils.client.imageuploaders;
 
 import com.darkeyedragon.imageutils.client.ImageUtilsMain;
 import com.darkeyedragon.imageutils.client.message.Messages;
-import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
@@ -22,13 +22,9 @@ import java.util.Base64;
 
 public class ImgurUploader{
 
-    private ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    private static ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-
-    private CopyToClipboard copyToClipboard = new CopyToClipboard();
-
-
-    public void uploadImage(BufferedImage bufferedImage){
+    public static void uploadImage(BufferedImage bufferedImage){
 
         ImageUtilsMain.fixedThreadPool.submit(() -> {
 
@@ -48,7 +44,7 @@ public class ImgurUploader{
                 Minecraft.getMinecraft().ingameGUI.setOverlayMessage("Uploading image...", true);
 
 
-                ImageIO.write(bufferedImage, "png", baos);
+                ImageIO.write(bufferedImage, "jpg", baos);
                 baos.flush();
 
 
@@ -88,18 +84,18 @@ public class ImgurUploader{
             }catch (IOException e){
                 //In case something goes wrong!
                 e.printStackTrace();
-                ITextComponent errorText = new TextComponentString("Something went wrong! Response code: "+responseCode);
+                ITextComponent errorText = new TextComponentTranslation("imageutil.message.upload.error").appendText(" "+responseCode);
                 ITextComponent report = new TextComponentString("If this keeps happening please report the issue ");
-                ITextComponent link = new TextComponentString("here");
-                ITextComponent hover = new TextComponentString("github.com/DarkEyeDragon/ScreenshotUploader/issues");
-                link.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/DarkEyeDragon/ScreenshotUploader/issues"));
+                ITextComponent link = new TextComponentTranslation("imageutil.message.upload.errorlink");
+                ITextComponent hover = new TextComponentString("github.com/DarkEyeDragon/ImageUtils/issues");
+                link.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/DarkEyeDragon/ImageUtils/issues"));
                 link.getStyle().setColor(TextFormatting.AQUA);
                 link.getStyle().setUnderlined(true);
                 link.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover));
                 Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(errorText);
                 Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(report.appendSibling(link));
 
-                new Messages().errorMessage(responseCode, "Something went wrong! Response code");
+                Messages.errorMessage(responseCode, "Something went wrong! Response code:");
             }
         });
     }

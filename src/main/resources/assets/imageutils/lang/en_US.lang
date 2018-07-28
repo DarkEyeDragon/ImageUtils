@@ -6,16 +6,14 @@ imageutil.config.override=Override default key
 imageutil.config.override.tooltip=Override the default screenshot key.
 imageutil.config.uploaders=Uploaders
 
-imageutil.config.server_settings=Server Settings
-imageutil.config.server_settings.tooltip=Server Settings [Advanced]
 imageutil.config.link=Link
 imageutil.config.link.tooltip=The URL to your upload script
-imageutil.config.post_data=Post Data
-imageutil.config.post_data.tooltip=Post data to be sent. For more info visit the github.
 
 imageutil.message.upload.success=Image uploaded to
-imageutil.message.upload.error=Something went wrong!
+imageutil.message.upload.error=Something went wrong! Response code:
 imageutil.message.upload.error1=Make sure your server/client is configured correctly! You can find more information
+
 imageutil.message.upload.errorlink=here
-imageutil.message.copy_to_Clipboard=Copied to clipboard!
-imageutil.message.copy_to_Clipboard_error=Unable to save to clipboard
+imageutil.message.copy_to_clipboard=Copied to clipboard!
+imageutil.message.copy_to_clipboard_error=Unable to save to clipboard
+imageutil.message.invalid_config=Your config has not been loaded because it doesn't exist or isn't configure correctly. Check the logs for more information.
