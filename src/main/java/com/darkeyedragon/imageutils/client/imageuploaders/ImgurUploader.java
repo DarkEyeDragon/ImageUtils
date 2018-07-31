@@ -1,10 +1,13 @@
 package com.darkeyedragon.imageutils.client.imageuploaders;
 
 import com.darkeyedragon.imageutils.client.ImageUtilsMain;
+import com.darkeyedragon.imageutils.client.ModConfig;
 import com.darkeyedragon.imageutils.client.message.Messages;
+import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -22,15 +25,16 @@ import java.util.Base64;
 
 public class ImgurUploader{
 
-    private static ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
     public static void uploadImage(BufferedImage bufferedImage){
 
         ImageUtilsMain.fixedThreadPool.submit(() -> {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
             Thread.currentThread().setName("Imgur ImageUtil Uploading");
             int responseCode = 0;
             try{
+                GuiNewChat chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
                 URL url = new URL("https://api.imgur.com/3/image");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
@@ -72,15 +76,15 @@ public class ImgurUploader{
                 String result = jsonObject.get("data").getAsJsonObject().get("link").getAsString();
 
                 //Send result to player
-                new Messages().uploadMessage(result);
+                Messages.uploadMessage(result);
                 //TODO CHANGE
-                /*if(ModConfig.copyToClipboard){
+                if(ModConfig.copyToClipboard){
                     if(CopyToClipboard.copy(result)){
-                        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentTranslation("screenshot.message.copy_to_Clipboard"));
+                        chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard"));
                     }else{
-                        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentTranslation("screenshot.message.copy_to_Clipboard_error"));
+                        chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard_error"));
                     }
-                }*/
+                }
             }catch (IOException e){
                 //In case something goes wrong!
                 e.printStackTrace();
@@ -95,7 +99,7 @@ public class ImgurUploader{
                 Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(errorText);
                 Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(report.appendSibling(link));
 
-                Messages.errorMessage(responseCode, "Something went wrong! Response code:");
+                Messages.errorMessage(e.getMessage());
             }
         });
     }

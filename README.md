@@ -1,90 +1,75 @@
-# ScreenshotUploader
-Minecraft forge mod that does exactly as it name indicates. Upload screenshots.
+# Image Utils
+Minecraft forge mod that does exactly as it name indicates. Help you with images. Mainly uploading screenshots.
+
+Latest version can be found [here]() //TODO add link
 
 #### Default keys:
 - F4 Upload image
 - F2 Save and upload image (override has to be enabled to upload)
+- F6 Take partial screenshot.
 
 #### Features:
 - Direct upload to imgur
-- Copy link to clipboard (configurable)
-- Upload to your own server
+- Copy link to clipboard
+- Upload to custom image servers using the ShareX config files (more information below)
 
 
 #### Planned features:
-- ~~Add custom server support to upload to your own server~~
+- ~~Add custom server support to upload to your own server~~ DONE
 - Filters
 - Overlays/watermarks
 
 #### Changing settings
 - you can change your settings by going to mods on the main menu or by going to mod options in the in-game menu.
-
+![alt text](https://darkeyedragon.me/images/tut1.png "change settings")
 ## Uploading to a custom server
-Once you've gotten to mod settings there will be a "Server settings" button
+To upload to a custom image server you'll need to enable `use custom server` otherwise it'll just use Imgur as uploader.
 
-#### Client configuration
-Link: link to the upload script
-Post values: add POST data to your request for servers that require some form of authentication.
-everything before `=` is considered as the `key` and everything after as `value`
-you can get the `key` like this in PHP for example: `$_POST["key"]` and that would return the `value`
-**NOTE:** `{image}` is required as this will send the image data. However you can choose whatever `key` you want.
-**NOTE:** dont use spaces between ´=´ they will be added.
-#### Example:
+after you've enabled `use custom server` you'll see an input box where you can set the upload script. There you need to fill in the name of the script (with extension).
+an example could be `darkeyedragon-me.json` or `darkeyedragon-me.sxcu` (.sxcu is the extension of [sharex's](https://getsharex.com) config files).
+**Note:** the extension on it's own doesn't really matter. It just has to be in the right format.
+
+#### Config Example
 ```
-image={image} //send post data with image as key and {image} as value
-key=2DAC1D297E6E7E348E5CE1884A7FC //send post data with key as key and 2DAC1D297E6E7E348E5CE1884A7FC as value
-```
-if you are using some image hosting service make sure to look up what data you need to send.
-If you use your own upload script you can pretty much do whatever you want.
-
-#### Server configuration PHP
-
-**NOTE:** PLEASE for the love of god, USE VALIDATION or anyone could upload anything to your server
-**NOTE:** I will assume you have at least basic knowlege about PHP.
-This is a VERY basic example. With very little security to keep it fairly simple and straight forward.
-you can read https://security.stackexchange.com/questions/32852/risks-of-a-php-image-upload-form to find out more about security
-
-**Make sure to change the `$key` dont use the one given here.**
-```php
-<?php
-/**
- * Created by PhpStorm.
- * User: DarkEyeDragon
- * Date: 4-4-2018
- * Time: 03:21
- */
-
-$key = "2DAC1D297E6E7E348E5CE1884A7FC"; //this can be anything, just make sure its the same as the one you set in the client
-
-if(isset($_FILES["image"])){ //check if there is a key named image
-    if($_POST["key"] === $key) {
-        $target_dir = "images/"; //directory to upload to (MUST EXIST!)
-        $file_name = str_replace(".", "-", uniqid("img", false)); //get an unique id
-        $target_file = $target_dir . basename($file_name . ".jpg"); //add the extention
-        
-        $fp = fopen('log.txt', 'a'); //create a file
-        fwrite($fp, $_FILES["image"]); //write image data to the file to see if it comes in correctly
-
-        if (move_uploaded_file($_FILES["screenshot"]["tmp_name"], $target_file)) {
-            fwrite($fp, "The file " . basename($_FILES["screenshot"]["name"]) . " has been uploaded.");
-            header("Location: http://$_SERVER[HTTP_HOST]/$target_file"); //send the url to the image back to the client
-        } else {
-            fwrite($fp, "Sorry, there was an error uploading your file.");
-            http_response_code (500); //send an internal error back
-        }
-    }else{
-      http_response_code (401); //send unauthorized error back
-    }
+{
+    "RequestURL": "https://darkeyedragon.is-a-virg.in/upload",
+    "FileFormName": "image",
+    "URL": "$json:url$",
+    "DeletionURL": "$json:del_url$",
+	"Arguments":{
+		"collection":"some collection string",
+		"collection_token":"some collection token"
+	}
 }
-else
-    http_response_code (400); //send and invalid request error back
 ```
-# Versions
-### Update 1.2.0
-- Added Partial Screenshots (F6 by default)
-- Added image previewer on valid image links (click an image link in chat and it will display the image)
-### Update 1.1.0
-- Added custom upload server options
-- Optimized image uploading
-### Update 1.0.0
-- Initial release
+| Key        | Description           | Required  |
+|---|-------------| :-----:|
+| `RequestURL`      | The url to upload the file to | **yes** |
+| `FileFormName`      | The name of the image that will be sent. This can be renamed by the upload server to anything. If not provided, default is `image`     |   **no** |
+| `URL` | The link to the image that will be shown in-game. add `$json:theKey$` if your server responds with a json file. Otherwise you can remove this key.    |    **no** |
+| `DeletionURL` | The deletion link that will be returned. add `$json:theDeletionKey$` if your server responds with a json file. Otherwise you can remove this key.    |    **no** |
+| `Arguments` | Additional information that needs to be given. Username, password, secret keys, etc. You can remove this if not needed (Highly recommended to use some form of validation though).    |    **no** |
+A tutorial of how to make your own file can be found [here](https://getsharex.com/docs/custom-uploader)
+**Note:** Keys specific to shareX are not needed. Example being the `DestinationType`.
+**Note:** Not all keys are supported yet. The ones shown in the example will work. But not guarantee is given for the other ones.
+more support will be added later.
+
+A good custom uploader is [https://sxcu.net](https://sxcu.net) (the example is for their services)
+you can also download their scripts from here: https://sxcu.net/domains and just drop them in your uploader files
+
+###Adding config files
+To add a config file you'll need to go to `%appdata%/config/imageutils/uploaders`
+and drop your file in there. (If you added a file after you launched the game you can go to the mod's settings and set "reload uploaders" to true and it will reload all you upload scripts.)
+
+#### Config settings explained
+* Copy to clipboard: copy the image link to your clipboard as soon as the image is uploaded.\n
+* Override default key: Override the default screenshot key (F2). This will allow you to save and upload images.\n
+* Use custom server: If set to false it will upload images using Imgur. if set to true it will use the selected upload script from "Name of the script"\n
+* Reload uploaders: When set to true it will reload your configs as soon as you close the config window. (will always go back to false after).
+* Name of the script: the name of the script you'd like to use to upload images (only works when "Use custom server" is set to true).
+
+Example:
+![alt text](https://darkeyedragon.me/images/tut2.png "change settings")
+
+If you have additional questions you can always join Codevision's discord [here](https://discord.gg/yy8jwdS).
+Found a bug? Don't forget to report it under `issues`!!

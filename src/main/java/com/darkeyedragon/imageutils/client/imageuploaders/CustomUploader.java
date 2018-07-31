@@ -3,14 +3,12 @@ package com.darkeyedragon.imageutils.client.imageuploaders;
 import com.darkeyedragon.imageutils.client.ImageUtilsMain;
 import com.darkeyedragon.imageutils.client.ModConfig;
 import com.darkeyedragon.imageutils.client.config.UploaderFile;
-import com.darkeyedragon.imageutils.client.message.ClientMessage;
 import com.darkeyedragon.imageutils.client.message.Messages;
 import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
 import com.darkeyedragon.imageutils.client.utils.JsonHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -28,7 +26,7 @@ import java.util.Map;
 public class CustomUploader{
 
     private static MultipartEntityBuilder builder;
-    private static String uploadStr;
+    //private static String uploadStr;
     private static UploaderFile uploaderFile;
     private static HttpPost httpPost;
     private static CloseableHttpClient client;
@@ -57,8 +55,8 @@ public class CustomUploader{
             Thread.currentThread().setName("Custom ImageUtil Uploading");
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            int responseCode = 0;
-            String responseMessage = "";
+            //int responseCode = 0;
+            //String responseMessage = "";
             try{
                 ImageIO.write(bufferedImage, "jpg", baos);
                 byte[] bytes = baos.toByteArray();
@@ -71,13 +69,16 @@ public class CustomUploader{
                 if(uploaderFile.isJsonResponse()){
                     Map<String,String> responseJson = JsonHelper.readJsonFromUrl(response.getEntity().getContent());
                     urlString = responseJson.get(uploaderFile.getJsonResponseKey());
-                    chat.printChatMessage(new ClientMessage().link("Image Link", urlString, TextFormatting.BLUE));
+                    //chat.printChatMessage(new ClientMessage().link("Image Link", urlString, TextFormatting.BLUE));
+                    Messages.uploadMessage(urlString);
                 }else{
+                    //TODO do some further testing
                     System.out.println(response.getAllHeaders().length);
-                    responseCode = response.getStatusLine().getStatusCode();
-                    responseMessage = response.getStatusLine().getReasonPhrase();
+                    //responseCode = response.getStatusLine().getStatusCode();
+                    //responseMessage = response.getStatusLine().getReasonPhrase();
                     urlString = response.getHeaders("Location")[0].toString().split("\\s+")[1];
-                    chat.printChatMessage(new ClientMessage().link("Image Link", urlString, TextFormatting.BLUE));
+                    //chat.printChatMessage(new ClientMessage().link("Image Link", urlString, TextFormatting.BLUE));
+                    Messages.uploadMessage(urlString);
                 }
 
                 //Send result to player
@@ -93,12 +94,13 @@ public class CustomUploader{
             }catch (Exception e){
                 //In case something goes wrong!
                 e.printStackTrace();
-                Messages.errorMessage(responseCode, responseMessage);
+                Messages.errorMessage(e.getMessage());
             }finally{
                 try{
                     client.close();
                 }catch(IOException e){
                     e.printStackTrace();
+                    Messages.errorMessage(e.getMessage());
                 }
             }
         });

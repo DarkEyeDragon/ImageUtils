@@ -9,9 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.awt.image.BufferedImage;
 
 public class CustomScreenshotEvent{
-
-    private ImgurUploader imgurUploader = new ImgurUploader();
-
+    
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onScreenshot(net.minecraftforge.client.event.ScreenshotEvent event){

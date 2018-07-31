@@ -15,7 +15,7 @@ apply plugin: 'java'
 
 version = "1.2.0"
 group = "com.darkeyedragon.imageutils" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "ScreenshotUploader"
+archivesBaseName = "ImageUtils"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
@@ -39,7 +39,6 @@ dependencies {
     compile (group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.5')
     compile (group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.1'){transitive = false}
     compile (group: 'net.coobird', name: 'thumbnailator', version: '0.4.8')
-
 }
 
 processResources {

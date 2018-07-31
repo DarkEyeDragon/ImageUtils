@@ -21,10 +21,7 @@ public class TakeScreenshot{
             int width = Math.abs(second.x - first.x-3);
             BufferedImage alteredScreenshot = screenshot.getSubimage(first.x+3, first.y+3, width, height);
             upload(alteredScreenshot);
-        /*Graphics2D g2d = screenshot.createGraphics();
-        g2d.setColor(Color.red);
-        g2d.setStroke(new BasicStroke(5));
-        g2d.drawLine(first.x,first.y,second.x,second.y);*/
+
     }
 
     private void upload(BufferedImage screenshot){

@@ -1,7 +1,9 @@
 package com.darkeyedragon.imageutils.client.utils;
 
+import com.darkeyedragon.imageutils.client.ImageUtilsMain;
 import com.darkeyedragon.imageutils.client.message.ClientMessage;
 import net.coobird.thumbnailator.Thumbnails;
+import net.minecraft.client.Minecraft;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -24,6 +26,15 @@ public class ImageUtil{
         conn = imgUrl.openConnection();
         conn.setRequestProperty("User-Agent", "ScreenshotUploader/1.2");
         InputStream image = conn.getInputStream();
-        return ImageIO.read(image);
+        BufferedImage img = ImageIO.read(image);
+        addToLinkList(imgUrl.toString(), img);
+        return img;
+    }
+
+    public static synchronized void addToLinkList(String urlString, BufferedImage downloadedImage){
+        Minecraft.getMinecraft().addScheduledTask(() -> {
+            ImageUtilsMain.validLinks.put(urlString, downloadedImage);
+            System.out.println(ImageUtilsMain.validLinks.size());
+        });
     }
 }

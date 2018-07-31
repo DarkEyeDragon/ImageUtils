@@ -10,7 +10,8 @@ imageutil.config.link=Link
 imageutil.config.link.tooltip=The URL to your upload script
 
 imageutil.message.upload.success=Image uploaded to
-imageutil.message.upload.error=Something went wrong! Response code:
+imageutil.message.upload.hover=Click here to view see a preview of the image
+imageutil.message.upload.error=Something went wrong! Last error:
 imageutil.message.upload.error1=Make sure your server/client is configured correctly! You can find more information
 
 imageutil.message.upload.errorlink=here

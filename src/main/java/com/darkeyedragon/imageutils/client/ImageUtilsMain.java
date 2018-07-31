@@ -15,10 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,14 +29,19 @@ public class ImageUtilsMain
     public static Logger logger;
     public static ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
 
-    public static WeakHashMap<String, BufferedImage> validLinks = new WeakHashMap<>();
+    public static LinkedHashMap<String, BufferedImage> validLinks = new LinkedHashMap<String, BufferedImage>(){
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<String, BufferedImage> eldest){
+            return size()> 3;
+        }
+    };
 
     private KeyBindings keybinds;
 
     public static ConfigFile config;
-    public static Path configPath;
-    public static File uploadDir;
-    public static File configLocation;
+    private static Path configPath;
+    private static File uploadDir;
+    static File configLocation;
     public static List<UploaderFile> uploaders;
     public static UploaderFile activeUploader;
 
@@ -73,8 +75,10 @@ public class ImageUtilsMain
             }
         }else{
             loadUploaders();
-            if(ModConfig.uploader != null || !ModConfig.uploader.equalsIgnoreCase("")){
-                setActiveUploader();
+            if(ModConfig.uploader != null){
+                if(!ModConfig.uploader.equalsIgnoreCase("")){
+                    setActiveUploader();
+                }
             }
         }
     }
@@ -99,9 +103,9 @@ public class ImageUtilsMain
                     UploaderFile uf = new UploaderFile(file);
                     uploaders.add(uf);
                     displayName.add(uf.getDisplayName());
-                    logger.info("Loaded: "+file.getName());
+                    logger.info("Loaded: %s",file.getName());
                 }catch(Exception e){
-                    logger.warn("Unable to load "+file.getName()+"! "+e.getMessage());
+                    logger.warn("Unable to load %s ! %s",file.getName(),e.getMessage());
                 }
             }
         }

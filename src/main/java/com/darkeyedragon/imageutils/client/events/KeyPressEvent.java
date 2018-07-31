@@ -25,7 +25,7 @@ public class KeyPressEvent{
             Minecraft.getMinecraft().displayGuiScreen( new PartialScreenshotGui());
             MouseInfo.getPointerInfo().getLocation();
         }else if(KeyBindings.screenshotViewer.isPressed()){
-            Minecraft.getMinecraft().displayGuiScreen( new GuiLocalScreenshots());
+            Minecraft.getMinecraft().displayGuiScreen( new GuiLocalScreenshots(null));
         }
     }
 }
