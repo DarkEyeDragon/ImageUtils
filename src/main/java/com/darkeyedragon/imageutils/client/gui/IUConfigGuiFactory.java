@@ -3,21 +3,20 @@ package com.darkeyedragon.imageutils.client.gui;
 import com.darkeyedragon.imageutils.client.ConfigHandler;
 import com.darkeyedragon.imageutils.client.ImageUtilsMain;
 import com.darkeyedragon.imageutils.client.config.UploaderFile;
+import cpw.mods.fml.client.IModGuiFactory;
+import cpw.mods.fml.client.config.IConfigElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.client.IModGuiFactory;
-import net.minecraftforge.fml.client.config.GuiConfig;
-import net.minecraftforge.fml.client.config.IConfigElement;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class IUConfigGuiFactory implements  IModGuiFactory{
+public class IUConfigGuiFactory implements IModGuiFactory{
 
     public static class UIConfigGuiScreen extends GuiConfig{
 

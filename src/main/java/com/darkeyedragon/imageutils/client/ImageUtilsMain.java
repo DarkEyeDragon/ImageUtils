@@ -4,11 +4,11 @@ package com.darkeyedragon.imageutils.client;
 import com.darkeyedragon.imageutils.client.config.ConfigFile;
 import com.darkeyedragon.imageutils.client.config.UploaderFile;
 import com.darkeyedragon.imageutils.client.events.*;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.image.BufferedImage;
@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Mod(modid = ImageUtilsMain.MODID, version = ImageUtilsMain.VERSION, updateJSON = ImageUtilsMain.updateJSON, clientSideOnly = true)
+@Mod(modid = ImageUtilsMain.MODID, version = ImageUtilsMain.VERSION /*,updateJSON = ImageUtilsMain.updateJSON, clientSideOnly = true*/)
 public class ImageUtilsMain
 {
     public static final String MODID = "imageutils";

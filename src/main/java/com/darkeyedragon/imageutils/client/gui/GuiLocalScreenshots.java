@@ -73,13 +73,13 @@ public class GuiLocalScreenshots extends GuiScreen{
     public void drawScreen(int mouseX, int mouseY, float partialTicks){
         BufferedImage img = finalImage;
         this.list.drawScreen(mouseX, mouseY, partialTicks);
-        this.drawCenteredString(this.fontRenderer, "Screenshots", this.width / 2, 16, 16777215);
+        this.drawCenteredString(this.fontRendererObj, "Screenshots", this.width / 2, 16, 16777215);
         super.drawScreen(mouseX, mouseY, partialTicks);
         if(completedLoading){
             if(isSelected){
                 deleteButton.enabled = true;
                 uploadButton.enabled = true;
-                int scaledHeight = new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
+                int scaledHeight = new ScaledResolution(Minecraft.getMinecraft(),0,0).getScaledHeight();
 
                 int imgWidth = (int) Math.round(img.getWidth() * (scaledHeight * 0.00105));
                 int imgHeight = (int) Math.round(img.getHeight() * (scaledHeight * 0.00105));
@@ -88,20 +88,20 @@ public class GuiLocalScreenshots extends GuiScreen{
                 String name = "Name: " + imageResource.getName();
                 String dimensions = "Dimensions: " + imageResource.getImage().getWidth() + "x" + imageResource.getImage().getHeight();
                 String location = "Location: " + imageResource.getPath();
-                mc.fontRenderer.drawString(name, width - imgOffsetX, imgOffsetY + imgHeight + 10, 0xffffff);
-                mc.fontRenderer.drawString(dimensions, width - imgOffsetX, imgOffsetY + imgHeight + 20, 0xffffff);
-                mc.fontRenderer.drawString(location, width - imgOffsetX, imgOffsetY + imgHeight + 30, 0xffffff);
+                mc.fontRendererObj.drawString(name, width - imgOffsetX, imgOffsetY + imgHeight + 10, 0xffffff);
+                mc.fontRendererObj.drawString(dimensions, width - imgOffsetX, imgOffsetY + imgHeight + 20, 0xffffff);
+                mc.fontRendererObj.drawString(location, width - imgOffsetX, imgOffsetY + imgHeight + 30, 0xffffff);
                 Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
                 drawModalRectWithCustomSizedTexture(width - imgOffsetX, imgOffsetY, 0, 0, imgWidth, imgHeight, imgWidth, imgHeight);
             }
         }else{
-            drawCenteredString(mc.fontRenderer,"loading your sexy screenshots...", (int)(Math.round(width/1.4)), (int)(Math.round(height/2.3)), 0xffffff);
+            drawCenteredString(mc.fontRendererObj,"loading your sexy screenshots...", (int)(Math.round(width/1.4)), (int)(Math.round(height/2.3)), 0xffffff);
         }
     }
     /**
      * Handles mouse input.
      */
-    public void handleMouseInput() throws IOException
+    public void handleMouseInput()
     {
         super.handleMouseInput();
         this.list.handleMouseInput();
@@ -244,11 +244,16 @@ public class GuiLocalScreenshots extends GuiScreen{
             GuiLocalScreenshots.this.drawDefaultBackground();
         }
 
-        protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks)
-        {
-            GuiLocalScreenshots.this.drawCenteredString(GuiLocalScreenshots.this.fontRenderer, (screenshots.get(slotIndex).getName()), this.width / 5, yPos + 1, 16777215);
+        @Override
+        protected void drawSlot(int p_148126_1_, int p_148126_2_, int p_148126_3_, int p_148126_4_, Tessellator p_148126_5_, int p_148126_6_, int p_148126_7_){
+
         }
-        public void handleMouseInput()
+
+        void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks)
+        {
+            GuiLocalScreenshots.this.drawCenteredString(GuiLocalScreenshots.this.fontRendererObj, (screenshots.get(slotIndex).getName()), this.width / 5, yPos + 1, 16777215);
+        }
+        void handleMouseInput()
         {
             if (this.isMouseYWithinSlotBounds(this.mouseY))
             {
@@ -256,7 +261,7 @@ public class GuiLocalScreenshots extends GuiScreen{
                 {
                     int i = (this.width - this.getListWidth()) / 5;
                     int j = (this.width + this.getListWidth()) / 5;
-                    int k = this.mouseY - this.top - this.headerPadding + (int)this.amountScrolled - 4;
+                    int k = this.mouseY - this.top - this.headerPadding + this.getAmountScrolled() - 4;
                     int l = k / this.slotHeight;
 
                     if (l < this.getSize() && this.mouseX >= i && this.mouseX <= j && l >= 0 && k >= 0)
@@ -334,7 +339,7 @@ public class GuiLocalScreenshots extends GuiScreen{
                     }
                     else if (this.initialClickY >= 0)
                     {
-                        this.amountScrolled -= (float)(this.mouseY - this.initialClickY) * this.scrollMultiplier;
+                        this.amountScrolled -= (this.mouseY - this.initialClickY) * this.scrollMultiplier;
                         this.initialClickY = this.mouseY;
                     }
                 }

@@ -8,7 +8,7 @@ import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
 import com.darkeyedragon.imageutils.client.utils.JsonHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.ChatComponentTranslation;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -38,7 +38,7 @@ public class CustomUploader{
             chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
             uploaderFile = ImageUtilsMain.activeUploader;
             if(uploaderFile == null || uploaderFile.getUploader() ==null){
-                chat.printChatMessage(new TextComponentTranslation("imageutil.message.invalid_config"));
+                chat.printChatMessage(new ChatComponentTranslation("imageutil.message.invalid_config"));
                 return;
             }
             builder = MultipartEntityBuilder.create();
@@ -60,7 +60,7 @@ public class CustomUploader{
             try{
                 ImageIO.write(bufferedImage, "jpg", baos);
                 byte[] bytes = baos.toByteArray();
-                Minecraft.getMinecraft().ingameGUI.setOverlayMessage("Uploading image to custom server...", true);
+                Minecraft.getMinecraft().ingameGUI.setRecordPlaying("Uploading image to custom server...", true);
                 builder.addBinaryBody("image", bytes, ContentType.IMAGE_JPEG, uploaderFile.getUploader().getFileFormName());
                 HttpEntity multipart = builder.build();
                 httpPost.setEntity(multipart);
@@ -85,9 +85,9 @@ public class CustomUploader{
                 //new Messages().uploadMessage(result);
                 if(ModConfig.copyToClipboard){
                     if(CopyToClipboard.copy(urlString)){
-                        chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard"));
+                        chat.printChatMessage(new ChatComponentTranslation("imageutil.message.copy_to_clipboard"));
                     }else{
-                        chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard_error"));
+                        chat.printChatMessage(new ChatComponentTranslation("imageutil.message.copy_to_clipboard_error"));
                     }
                 }
 
