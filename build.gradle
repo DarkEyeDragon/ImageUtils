@@ -1,10 +1,11 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url = "https://oss.sonatype.org/content/repositories/snapshots/net/md-5/SpecialSource"}
         maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.3'
     }
 }

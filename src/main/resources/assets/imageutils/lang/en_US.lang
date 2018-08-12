@@ -1,13 +1,20 @@
 imageutil.config.general=General
 imageutil.config.general.tooltip=General Settings
+
 imageutil.config.copy=Copy To Clipboard
 imageutil.config.copy.tooltip=Copy the link to your screenshot for easy pasting
+
 imageutil.config.override=Override default key
 imageutil.config.override.tooltip=Override the default screenshot key.
-imageutil.config.uploaders=Uploaders
 
-imageutil.config.link=Link
-imageutil.config.link.tooltip=The URL to your upload script
+imageutil.config.uploader_file=Uploader file
+imageutil.config.uploader_file.tooltip=The URL to your upload file/script
+
+imageutil.config.reload_uploaders=Reload uploaders
+imageutil.config.reload_uploaders.tooltip=Set this to true if you added files after launching the game. This will reload all the upload scripts.
+
+imageutil.config.debug=Debug Mode
+imageutil.config.debug.tooltip=This will display usefull information to the debug screen. For regular gameplay this probably should be set to false.
 
 imageutil.message.upload.success=Image uploaded to
 imageutil.message.upload.hover=Click here to view see a preview of the image

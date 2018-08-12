@@ -19,6 +19,7 @@ public class ConfigChanged{
                 ModConfig.reloadUploaders = false;
                 ConfigManager.sync(ImageUtilsMain.MODID, Config.Type.INSTANCE);
             }
+            //ImageUtilsMain.debug(ModConfig.debug);
         }
     }
 }

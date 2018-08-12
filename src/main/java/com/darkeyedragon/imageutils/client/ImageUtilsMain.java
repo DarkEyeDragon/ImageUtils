@@ -1,7 +1,6 @@
 package com.darkeyedragon.imageutils.client;
 
 
-import com.darkeyedragon.imageutils.client.config.ConfigFile;
 import com.darkeyedragon.imageutils.client.config.UploaderFile;
 import com.darkeyedragon.imageutils.client.events.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -38,10 +37,8 @@ public class ImageUtilsMain
 
     private KeyBindings keybinds;
 
-    public static ConfigFile config;
     private static Path configPath;
     private static File uploadDir;
-    static File configLocation;
     public static List<UploaderFile> uploaders;
     public static UploaderFile activeUploader;
 
@@ -53,6 +50,7 @@ public class ImageUtilsMain
         MinecraftForge.EVENT_BUS.register(new ChatReceivedEvent());
         MinecraftForge.EVENT_BUS.register(new CustomGuiOpenEvent());
         MinecraftForge.EVENT_BUS.register(new GuiOptionsHook());
+        MinecraftForge.EVENT_BUS.register(new IngameGuiEvent());
         MinecraftForge.EVENT_BUS.register(ConfigChanged.class);
         keybinds = new KeyBindings();
         keybinds.RegisterKeybinds();
@@ -81,6 +79,7 @@ public class ImageUtilsMain
                 }
             }
         }
+        //debug(ModConfig.debug);
     }
     public static void setActiveUploader(){
         if(ModConfig.customServer){
@@ -110,4 +109,16 @@ public class ImageUtilsMain
             }
         }
     }
+    //TODO CHANGE TO FUTURETASK
+    /*public static void debug(boolean enable){
+        ScheduledExecutorService timedTask = Executors.newScheduledThreadPool(1);
+        if(enable){
+            if(timedTask.isShutdown() || timedTask.isTerminated()){
+                logger.info("Enabling debug mode...");
+                timedTask.scheduleAtFixedRate(() -> Minecraft.getMinecraft().addScheduledTask(ServerUtil::ping), 0, 30L, TimeUnit.SECONDS);
+            }
+        }else{
+            //timedTask.shutdown();
+        }
+    }*/
 }

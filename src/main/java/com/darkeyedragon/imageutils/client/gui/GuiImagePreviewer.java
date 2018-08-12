@@ -17,12 +17,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class ImagePreviewer extends GuiScreen{
+public class GuiImagePreviewer extends GuiScreen{
     private URL url;
     private BufferedImage bufferedImage;
     private ResourceLocation resourceLocation;
     private int scale = new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
-    public ImagePreviewer(URL url, BufferedImage image){
+    public GuiImagePreviewer(URL url, BufferedImage image){
         this.url = url;
         this.bufferedImage = image;
         generateImage();
@@ -56,7 +56,7 @@ public class ImagePreviewer extends GuiScreen{
         this.buttonList.clear();
         this.buttonList.add(new GuiButton(0, this.width / 2 - 50 - 105, 10, 100, 20, "Copy Image"));
         this.buttonList.add(new GuiButton(1, this.width / 2 - 50, 10, 100, 20, "Open Image"));
-        this.buttonList.add(new GuiButton(2, this.width / 2 - 50 + 105 + 105, 10, 100, 20, "Copy Url"));
+        this.buttonList.add(new GuiButton(2, this.width / 2 - 50 + 105, 10, 100, 20, "Copy Url"));
     }
 
     @Override

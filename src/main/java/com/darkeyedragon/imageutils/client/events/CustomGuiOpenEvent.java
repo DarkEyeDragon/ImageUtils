@@ -1,7 +1,7 @@
 package com.darkeyedragon.imageutils.client.events;
 
 import com.darkeyedragon.imageutils.client.ImageUtilsMain;
-import com.darkeyedragon.imageutils.client.gui.ImagePreviewer;
+import com.darkeyedragon.imageutils.client.gui.GuiImagePreviewer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiConfirmOpenLink;
 import net.minecraft.util.text.ITextComponent;
@@ -24,7 +24,7 @@ public class CustomGuiOpenEvent{
                 String link = Objects.requireNonNull(textComponent.getStyle().getClickEvent()).getValue();
                 if(ImageUtilsMain.validLinks.containsKey(link)){
                     BufferedImage image = ImageUtilsMain.validLinks.get(link);
-                    e.setGui(new ImagePreviewer(new URL(link),image));
+                    e.setGui(new GuiImagePreviewer(new URL(link),image));
                 }
             }else{
                 ImageUtilsMain.logger.warn("Something went wrong! Unable to get URL");

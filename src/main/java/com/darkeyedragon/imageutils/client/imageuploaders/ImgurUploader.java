@@ -48,7 +48,7 @@ public class ImgurUploader{
                 Minecraft.getMinecraft().ingameGUI.setOverlayMessage("Uploading image...", true);
 
 
-                ImageIO.write(bufferedImage, "jpg", baos);
+                ImageIO.write(bufferedImage, "png", baos);
                 baos.flush();
 
 

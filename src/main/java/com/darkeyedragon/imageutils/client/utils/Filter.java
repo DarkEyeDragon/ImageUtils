@@ -3,6 +3,8 @@ package com.darkeyedragon.imageutils.client.utils;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -41,5 +43,9 @@ public class Filter{
             e.printStackTrace();
             return false;
         }
+    }
+    public static String getHostName(String link) throws URISyntaxException{
+        URI uri = new URI(link);
+        return uri.getHost();
     }
 }

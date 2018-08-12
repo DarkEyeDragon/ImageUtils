@@ -35,6 +35,7 @@ public class CustomUploader{
 
     public static void uploadImage(BufferedImage bufferedImage){
         ImageUtilsMain.fixedThreadPool.submit(() -> {
+            Thread.currentThread().setName("Custom ImageUtil Uploading");
             chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
             uploaderFile = ImageUtilsMain.activeUploader;
             if(uploaderFile == null || uploaderFile.getUploader() ==null){
@@ -45,20 +46,17 @@ public class CustomUploader{
             client = HttpClients.createDefault();
             httpPost = new HttpPost(uploaderFile.getUploader().getRequestUrl());
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-            if(uploaderFile.getArguments() == null){
-                return;
+            if(uploaderFile.getArguments() != null){
+                uploaderFile.getArguments().forEach((k,v)->
+                        builder.addTextBody(k, (String)v)
+                );
             }
-            uploaderFile.getArguments().forEach((k,v)->
-                    builder.addTextBody(k, (String)v)
-            );
-
-            Thread.currentThread().setName("Custom ImageUtil Uploading");
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             //int responseCode = 0;
             //String responseMessage = "";
             try{
-                ImageIO.write(bufferedImage, "jpg", baos);
+                ImageIO.write(bufferedImage, "png", baos);
                 byte[] bytes = baos.toByteArray();
                 Minecraft.getMinecraft().ingameGUI.setOverlayMessage("Uploading image to custom server...", true);
                 builder.addBinaryBody("image", bytes, ContentType.IMAGE_JPEG, uploaderFile.getUploader().getFileFormName());
