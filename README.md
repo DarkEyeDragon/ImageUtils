@@ -9,9 +9,12 @@ Latest version can be found [here]() //TODO add link
 - F6 Take partial screenshot.
 
 #### Features:
-- Direct upload to imgur
-- Copy link to clipboard
-- Upload to custom image servers using the ShareX config files (more information below)
+- View images in-game.
+- Direct upload to [Imgur](https://imgur.com/).
+- Copy link to clipboard.
+- Copy image to clipboard.
+- Open in browser.
+- Upload to custom image servers using the ShareX config files (more information below).
 
 
 #### Planned features:
