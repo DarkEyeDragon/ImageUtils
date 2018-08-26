@@ -49,7 +49,7 @@ public class ImageUtilsMain
         MinecraftForge.EVENT_BUS.register(new CustomScreenshotEvent());
         MinecraftForge.EVENT_BUS.register(new ChatReceivedEvent());
         MinecraftForge.EVENT_BUS.register(new CustomGuiOpenEvent());
-        MinecraftForge.EVENT_BUS.register(new GuiOptionsHook());
+        MinecraftForge.EVENT_BUS.register(new GuiMenuHook());
         MinecraftForge.EVENT_BUS.register(new IngameGuiEvent());
         MinecraftForge.EVENT_BUS.register(ConfigChanged.class);
         keybinds = new KeyBindings();

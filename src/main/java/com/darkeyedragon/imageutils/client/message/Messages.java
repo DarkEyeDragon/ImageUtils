@@ -74,7 +74,7 @@ public class Messages{
                         result = new TextComponentString(test[0].replace(Pattern.quote(link), "")).appendSibling(textLink);
                     }
                     Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(result);
-                }catch (IOException e){
+                }catch(IOException e){
                     e.printStackTrace();
                     Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString(e.getMessage()));
                 }

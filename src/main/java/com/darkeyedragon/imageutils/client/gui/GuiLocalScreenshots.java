@@ -42,6 +42,7 @@ public class GuiLocalScreenshots extends GuiScreen{
     private ResourceLocation resource;
     private ImageResource imageResource;
     private boolean completedLoading;
+    private boolean uploading =false;
 
 
     public GuiLocalScreenshots(GuiScreen parentScreen){
@@ -93,9 +94,14 @@ public class GuiLocalScreenshots extends GuiScreen{
                 mc.fontRenderer.drawString(location, width - imgOffsetX, imgOffsetY + imgHeight + 30, 0xffffff);
                 Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
                 drawModalRectWithCustomSizedTexture(width - imgOffsetX, imgOffsetY, 0, 0, imgWidth, imgHeight, imgWidth, imgHeight);
+                if(uploading){
+                    uploadButton.displayString = "Uploading...";
+                }else{
+                    uploadButton.displayString = "Upload";
+                }
             }
         }else{
-            drawCenteredString(mc.fontRenderer,"loading your sexy screenshots...", (int)(Math.round(width/1.4)), (int)(Math.round(height/2.3)), 0xffffff);
+            drawCenteredString(mc.fontRenderer,"loading your screenshots...", (int)(Math.round(width/1.4)), (int)(Math.round(height/2.3)), 0xffffff);
         }
     }
     /**
@@ -119,18 +125,23 @@ public class GuiLocalScreenshots extends GuiScreen{
             ImageUtilsMain.fixedThreadPool.submit(this::loadScreenshots);
         }
         else if(button == uploadButton){
+
             //TODO make upload screen
             uploadButton.displayString = "Uploading...";
             uploadButton.enabled = false;
             if(imageResource.getImage() != null){
                 if(ModConfig.customServer){
+                    uploading = true;
                     ImgurUploader.uploadImage(imageResource.getImage());
+                    uploading = false;
+
                 }else{
                     CustomUploader.uploadImage(imageResource.getImage());
                 }
             }else{
                 uploadButton.displayString = "Unable to upload screenshot!";
             }
+            //mc.displayGuiScreen(new GuiProgressbar(this));
         }
         else if(button == deleteButton){
             java.util.List<ImageResource> toDelete = new ArrayList<>();
@@ -180,7 +191,7 @@ public class GuiLocalScreenshots extends GuiScreen{
 
         List(Minecraft mcIn)
         {
-            super(mcIn, GuiLocalScreenshots.this.width, GuiLocalScreenshots.this.height, 32, GuiLocalScreenshots.this.height - 65 + 4, 18);
+            super(mcIn, GuiLocalScreenshots.this.width, GuiLocalScreenshots.this.height, 32, GuiLocalScreenshots.this.height - 65 + 4, 20);
 
         }
         @Override
@@ -254,8 +265,10 @@ public class GuiLocalScreenshots extends GuiScreen{
             {
                 if (Mouse.getEventButton() == 0 && Mouse.getEventButtonState() && this.mouseY >= this.top && this.mouseY <= this.bottom)
                 {
-                    int i = (this.width - this.getListWidth()) / 5;
-                    int j = (this.width + this.getListWidth()) / 5;
+                    //int i = (this.width - this.getListWidth()) / 5;
+                    //int j = (this.width + this.getListWidth()) / 5;
+                    int i = this.left + (this.width / 5) - (this.getListWidth() / 3);
+                    int j = this.left + (this.width / 5) + (this.getListWidth() / 3);
                     int k = this.mouseY - this.top - this.headerPadding + (int)this.amountScrolled - 4;
                     int l = k / this.slotHeight;
 
@@ -374,8 +387,8 @@ public class GuiLocalScreenshots extends GuiScreen{
                 }
 
                 if(this.showSelectionBox && this.isSelected(j)){
-                    int i1 = this.left + (this.width / 5 - this.getListWidth() / 3);
-                    int j1 = this.left + this.width / 5 + this.getListWidth() / 3;
+                    int i1 = this.left + (this.width / 5) - (this.getListWidth() / 3);
+                    int j1 = this.left + (this.width / 5) + (this.getListWidth() / 3);
                     GlStateManager.color(1.0F, 0F, 1.0F, 0F);
                     GlStateManager.disableTexture2D();
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
