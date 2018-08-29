@@ -26,7 +26,6 @@ import java.util.Map;
 public class CustomUploader{
 
     private static MultipartEntityBuilder builder;
-    //private static String uploadStr;
     private static UploaderFile uploaderFile;
     private static HttpPost httpPost;
     private static CloseableHttpClient client;

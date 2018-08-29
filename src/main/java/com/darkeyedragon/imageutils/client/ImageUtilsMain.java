@@ -102,9 +102,9 @@ public class ImageUtilsMain
                     UploaderFile uf = new UploaderFile(file);
                     uploaders.add(uf);
                     displayName.add(uf.getDisplayName());
-                    logger.info("Loaded: %s",file.getName());
+                    logger.info("Loaded: "+file.getName());
                 }catch(Exception e){
-                    logger.warn("Unable to load %s ! %s",file.getName(),e.getMessage());
+                    logger.warn("Unable to load "+file.getName()+ e.getMessage()+"!");
                 }
             }
         }
