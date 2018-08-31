@@ -21,6 +21,9 @@ imageutil.message.upload.hover=Click here to view see a preview of the image
 imageutil.message.upload.error=Something went wrong! Last error:
 imageutil.message.upload.error1=Make sure your server/client is configured correctly! You can find more information
 
+imageutil.gui.delete_screenshot=Are you sure you want to delete this screenshot?
+imageutil.gui.delete_screenshot_line2=This action can't be undone!
+
 imageutil.message.upload.errorlink=here
 imageutil.message.copy_to_clipboard=Copied to clipboard!
 imageutil.message.copy_to_clipboard_error=Unable to save to clipboard

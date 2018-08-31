@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 public class ImageUtilsMain
 {
     public static final String MODID = "imageutils";
-    static final String VERSION = "1.0.0";
+    static final String VERSION = "1.0.1";
     static final String updateJSON = "https://darkeyedragon.me/mods/updates/imageutils.json";
 
     public static Logger logger;

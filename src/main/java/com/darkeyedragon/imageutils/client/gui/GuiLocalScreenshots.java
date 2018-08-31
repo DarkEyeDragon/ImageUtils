@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import org.lwjgl.input.Mouse;
 
 import javax.imageio.ImageIO;
@@ -97,11 +98,25 @@ public class GuiLocalScreenshots extends GuiScreen implements IGuiConfirmAction{
                 Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
                 drawModalRectWithCustomSizedTexture(width - imgOffsetX, imgOffsetY, 0, 0, imgWidth, imgHeight, imgWidth, imgHeight);
                 if(deleteImage){
-                    GuiConfirmAction guiConfirmDelete = new GuiConfirmAction(this);
+                    GuiConfirmAction guiConfirmDelete = new GuiConfirmAction((result, id) ->
+                        {
+                            if(result){
+                                deleteScreenshots();
+                            }
+                            mc.displayGuiScreen(this);
+                        }, new TextComponentTranslation("imageutil.gui.delete_screenshot").getUnformattedComponentText(), new TextComponentTranslation("imageutil.gui.delete_screenshot_line2").getUnformattedComponentText(), 0, this){
+                        @Override
+                        public void drawScreen(int mouseX, int mouseY, float partialTicks)
+                        {
+                            this.parent.drawScreen(-1, -1, partialTicks);
+                            super.drawScreen(mouseX, mouseY, partialTicks);
+                        }
+                    };
                     mc.displayGuiScreen(guiConfirmDelete);
                     deleteImage = false;
                 }
             }else{
+                list.elementClicked(0, false, 0,0);
                 this.drawCenteredString(this.fontRenderer, "Screenshots", this.width / 2, 16, 16777215);
             }
         }else{
@@ -237,7 +252,7 @@ public class GuiLocalScreenshots extends GuiScreen implements IGuiConfirmAction{
         /**
          * The element in the slot that was clicked, boolean for whether it was double clicked or not
          */
-        protected void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY)
+        public void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY)
         {
             screenshots.forEach((item)-> item.setSelected(false));
             imageResource = screenshots.get(slotIndex);
