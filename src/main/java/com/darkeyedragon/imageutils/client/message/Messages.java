@@ -21,13 +21,14 @@ import static com.darkeyedragon.imageutils.client.utils.ImageUtil.addToLinkList;
 public class Messages{
 
 
-    public static void uploadMessage(String result){
+    public static void uploadMessage (String result){
 
         ITextComponent uploadstr = new TextComponentTranslation("imageutil.message.upload.success").appendSibling(new TextComponentString(" "));
         ITextComponent linkText = new TextComponentString(result);
         try{
             ImageUtil.downloadFromUrl(new URL(result));
-        }catch(IOException e){
+        }
+        catch (IOException e){
             e.printStackTrace();
         }
         linkText.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentTranslation("imageutil.message.upload.hover")));
@@ -36,7 +37,8 @@ public class Messages{
         linkText.getStyle().setColor(TextFormatting.AQUA);
         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(uploadstr.appendSibling(linkText));
     }
-    public static void errorMessage(String errorMessage){
+
+    public static void errorMessage (String errorMessage){
         ITextComponent errorText = new TextComponentTranslation("imageutil.message.upload.error");
         errorText.getStyle().setColor(TextFormatting.RED);
         ITextComponent response = new TextComponentString(errorMessage);
@@ -52,9 +54,10 @@ public class Messages{
         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(response);
         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(infoMessage.appendSibling(new TextComponentString(" ")).appendSibling(link));
     }
-    public static void imageLink(String link, String unformattedText){
-        ImageUtilsMain.fixedThreadPool.submit(()->{
-            if(Filter.isValidImage(link)){
+
+    public static void imageLink (String link, String unformattedText){
+        ImageUtilsMain.fixedThreadPool.submit(() -> {
+            if (Filter.isValidImage(link)){
                 try{
                     URL url = new URL(link);
                     BufferedImage downloadedImage = ImageUtil.downloadFromUrl(url);
@@ -67,23 +70,25 @@ public class Messages{
                     textLink.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(link)));
                     ITextComponent result;
                     String test[] = unformattedText.split(Pattern.quote(link));
-                    if(test.length > 1){
+                    if (test.length > 1){
                         result = new TextComponentString(test[0].replace(Pattern.quote(link), "")).appendSibling(textLink).appendText(test[1]);
                         System.out.println(result);
                     }else{
                         result = new TextComponentString(test[0].replace(Pattern.quote(link), "")).appendSibling(textLink);
                     }
                     Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(result);
-                }catch(IOException e){
+                }
+                catch (IOException e){
                     e.printStackTrace();
                     Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString(e.getMessage()));
                 }
             }
         });
     }
-    public static void imageLink(String link){
-        ImageUtilsMain.fixedThreadPool.submit(()->{
-            if(Filter.isValidImage(link)){
+
+    public static void imageLink (String link){
+        ImageUtilsMain.fixedThreadPool.submit(() -> {
+            if (Filter.isValidImage(link)){
                 try{
                     URL url = new URL(link);
                     BufferedImage downloadedImage = ImageUtil.downloadFromUrl(url);
@@ -95,7 +100,8 @@ public class Messages{
                     textLink.getStyle().setUnderlined(true);
                     textLink.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(link)));
                     Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(textLink);
-                }catch (IOException e){
+                }
+                catch (IOException e){
                     e.printStackTrace();
                     Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString(e.getMessage()));
                 }

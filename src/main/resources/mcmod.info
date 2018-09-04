@@ -1,16 +1,18 @@
 [
-{
-  "modid": "imageutils",
-  "name": "Image Utils",
-  "description": "Share, view, manage your pictures with ease!",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "http://darkeyedragon.me/mods",
-  "updateJSON": "http://darkeyedragon.me/mods/updates/imageutils.json",
-  "updateURL": "http://darkeyedragon.me/mods/updates/imageutils.json",
-  "authorList": ["DarkEyeDragon"],
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
-}
+  {
+    "modid": "imageutils",
+    "name": "Image Utils",
+    "description": "Share, view, manage your pictures with ease!",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "http://darkeyedragon.me/mods",
+    "updateJSON": "http://darkeyedragon.me/mods/updates/imageutils.json",
+    "updateURL": "http://darkeyedragon.me/mods/updates/imageutils.json",
+    "authorList": [
+      "DarkEyeDragon"
+    ],
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
 ]

@@ -10,12 +10,12 @@ public class FileEntity extends org.apache.http.entity.FileEntity{
 
     private OutputStreamProgress outstream;
 
-    public FileEntity(File file, String contentType) {
+    public FileEntity (File file, String contentType){
         super(file, contentType);
     }
 
     @Override
-    public void writeTo(OutputStream outstream) throws IOException{
+    public void writeTo (OutputStream outstream) throws IOException{
         this.outstream = new OutputStreamProgress(outstream);
         super.writeTo(this.outstream);
     }
@@ -23,15 +23,15 @@ public class FileEntity extends org.apache.http.entity.FileEntity{
     /**
      * Progress: 0-100
      */
-    public int getProgress() {
-        if (outstream == null) {
+    public int getProgress (){
+        if (outstream == null){
             return 0;
         }
         long contentLength = getContentLength();
-        if (contentLength <= 0) { // Prevent division by zero and negative values
+        if (contentLength <= 0){ // Prevent division by zero and negative values
             return 0;
         }
         long writtenLength = outstream.getWrittenLength();
-        return (int) (100*writtenLength/contentLength);
+        return (int) (100 * writtenLength / contentLength);
     }
 }

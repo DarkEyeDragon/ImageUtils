@@ -12,13 +12,13 @@ public class ChatReceivedEvent{
 
 
     @SubscribeEvent
-    public void ChatReceived(ClientChatReceivedEvent e){
+    public void ChatReceived (ClientChatReceivedEvent e){
         String text = e.getMessage().getUnformattedText();
         List<String> urls = Filter.extractUrls(text);
-        if(urls.size() > 0){
+        if (urls.size() > 0){
             e.setCanceled(true);
             for (String link : urls){
-                if(Filter.isValidImage(link)){
+                if (Filter.isValidImage(link)){
                     e.setCanceled(true);
                     Messages.imageLink(link, text);
                 }else{

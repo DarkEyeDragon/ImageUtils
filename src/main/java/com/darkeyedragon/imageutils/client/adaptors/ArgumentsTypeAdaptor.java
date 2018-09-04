@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class ArgumentsTypeAdaptor{
     private HashMap<String, String> Arguments;
 
-    public HashMap<String, String> getArguments(){
+    public HashMap<String, String> getArguments (){
         return Arguments;
     }
 }

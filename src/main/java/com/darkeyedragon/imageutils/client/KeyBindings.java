@@ -10,12 +10,12 @@ public class KeyBindings{
     public static KeyBinding screenshotPartialUploadKey;
     public static KeyBinding screenshotViewer;
 
-    void RegisterKeybinds(){
-        screenshotUploadKey = new KeyBinding("Screenshot UploaderFile",Keyboard.KEY_F4, "Screenshot UploaderFile");
+    void RegisterKeybinds (){
+        screenshotUploadKey = new KeyBinding("Screenshot UploaderFile", Keyboard.KEY_F4, "Screenshot UploaderFile");
         ClientRegistry.registerKeyBinding(screenshotUploadKey);
-        screenshotPartialUploadKey = new KeyBinding("Partial Screenshot UploaderFile",Keyboard.KEY_F6, "Screenshot UploaderFile");
+        screenshotPartialUploadKey = new KeyBinding("Partial Screenshot UploaderFile", Keyboard.KEY_F6, "Screenshot UploaderFile");
         ClientRegistry.registerKeyBinding(screenshotPartialUploadKey);
-        screenshotViewer = new KeyBinding("View local screenshots",Keyboard.KEY_F7, "Screenshot UploaderFile");
+        screenshotViewer = new KeyBinding("View local screenshots", Keyboard.KEY_F7, "Screenshot UploaderFile");
         ClientRegistry.registerKeyBinding(screenshotViewer);
     }
 }

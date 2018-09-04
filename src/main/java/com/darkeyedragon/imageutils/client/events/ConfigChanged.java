@@ -10,11 +10,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class ConfigChanged{
 
     @SubscribeEvent
-    public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equals(ImageUtilsMain.MODID)) {
+    public static void onConfigChanged (ConfigChangedEvent.OnConfigChangedEvent event){
+        if (event.getModID().equals(ImageUtilsMain.MODID)){
             ConfigManager.sync(ImageUtilsMain.MODID, Config.Type.INSTANCE);
             ImageUtilsMain.setActiveUploader();
-            if(ModConfig.reloadUploaders){
+            if (ModConfig.reloadUploaders){
                 ImageUtilsMain.loadUploaders();
                 ModConfig.reloadUploaders = false;
                 ConfigManager.sync(ImageUtilsMain.MODID, Config.Type.INSTANCE);

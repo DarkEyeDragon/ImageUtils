@@ -9,18 +9,19 @@ public class UploaderTypeAdaptor{
     private String DeletionURL;
     private Map<String, Object> Arguments;
 
-    public String getRequestUrl(){
+    public String getRequestUrl (){
         return RequestURL;
     }
 
-    public String getFileFormName(){
+    public String getFileFormName (){
         return FileFormName;
     }
-    public Map<String, Object> getArgumentsTypeAdaptor(){
+
+    public Map<String, Object> getArgumentsTypeAdaptor (){
         return Arguments;
     }
 
-    public String getURL(){
+    public String getURL (){
         return URL;
     }
 

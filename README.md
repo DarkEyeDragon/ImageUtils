@@ -1,7 +1,7 @@
 # Image Utils
 Minecraft forge mod that does exactly as it name indicates. Help you with images. Mainly uploading screenshots.
 
-Latest version can be found [here]() //TODO add link
+Latest version can be found on [CurseForge](https://minecraft.curseforge.com/projects/image-utils/files)
 
 #### Default keys:
 - F4 Upload image

@@ -14,17 +14,18 @@ public class ConfigFile{
     private String fileName;
     private String path;
 
-    public ConfigFile(File file) throws Exception{
+    public ConfigFile (File file) throws Exception{
         //if(file.isFile()){
-            Path path = Paths.get(file.getPath());
-            String contents = new String(Files.readAllBytes(path));
-            configType = new Gson().fromJson(contents, ConfigTypeAdaptor.class);
-            this.file = file;
-            fileName = file.getName();
-            this.path = file.getPath();
+        Path path = Paths.get(file.getPath());
+        String contents = new String(Files.readAllBytes(path));
+        configType = new Gson().fromJson(contents, ConfigTypeAdaptor.class);
+        this.file = file;
+        fileName = file.getName();
+        this.path = file.getPath();
         //}
     }
-    public ConfigFile(Path path) throws Exception{
+
+    public ConfigFile (Path path) throws Exception{
         //if(file.isFile()){
         String contents = new String(Files.readAllBytes(path));
         configType = new Gson().fromJson(contents, ConfigTypeAdaptor.class);
@@ -33,23 +34,27 @@ public class ConfigFile{
         file = path.toFile();
         //}
     }
-    public boolean isCopy(){
+
+    public boolean isCopy (){
         return configType.isCopy();
     }
 
-    public boolean isCustomServer(){
+    public boolean isCustomServer (){
         return configType.isCustomUploader();
     }
 
-    public String getUploader(){
-        if(configType.getUploader() == null) return null;
+    public String getUploader (){
+        if (configType.getUploader() == null){
+            return null;
+        }
         return configType.getUploader();
     }
-    public boolean isOverride(){
+
+    public boolean isOverride (){
         return configType.isOverride();
     }
 
-    public String getPath(){
+    public String getPath (){
         return path;
     }
 }

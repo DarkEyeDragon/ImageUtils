@@ -5,7 +5,7 @@ import java.util.TimerTask;
 public class ServerPingTimer extends TimerTask{
 
     @Override
-    public void run(){
+    public void run (){
 
     }
 }

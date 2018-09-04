@@ -32,12 +32,12 @@ public class CustomUploader{
     private static String urlString;
     private static GuiNewChat chat;
 
-    public static void uploadImage(BufferedImage bufferedImage){
+    public static void uploadImage (BufferedImage bufferedImage){
         ImageUtilsMain.fixedThreadPool.submit(() -> {
             Thread.currentThread().setName("Custom ImageUtil Uploading");
             chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
             uploaderFile = ImageUtilsMain.activeUploader;
-            if(uploaderFile == null || uploaderFile.getUploader() ==null){
+            if (uploaderFile == null || uploaderFile.getUploader() == null){
                 chat.printChatMessage(new TextComponentTranslation("imageutil.message.invalid_config"));
                 return;
             }
@@ -45,9 +45,9 @@ public class CustomUploader{
             client = HttpClients.createDefault();
             httpPost = new HttpPost(uploaderFile.getUploader().getRequestUrl());
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-            if(uploaderFile.getArguments() != null){
-                uploaderFile.getArguments().forEach((k,v)->
-                        builder.addTextBody(k, (String)v)
+            if (uploaderFile.getArguments() != null){
+                uploaderFile.getArguments().forEach((k, v) ->
+                        builder.addTextBody(k, (String) v)
                 );
             }
 
@@ -63,8 +63,8 @@ public class CustomUploader{
                 httpPost.setEntity(multipart);
                 CloseableHttpResponse response = client.execute(httpPost);
 
-                if(uploaderFile.isJsonResponse()){
-                    Map<String,String> responseJson = JsonHelper.readJsonFromUrl(response.getEntity().getContent());
+                if (uploaderFile.isJsonResponse()){
+                    Map<String, String> responseJson = JsonHelper.readJsonFromUrl(response.getEntity().getContent());
                     urlString = responseJson.get(uploaderFile.getJsonResponseKey());
                     //chat.printChatMessage(new ClientMessage().link("Image Link", urlString, TextFormatting.BLUE));
                     Messages.uploadMessage(urlString);
@@ -80,22 +80,24 @@ public class CustomUploader{
 
                 //Send result to player
                 //new Messages().uploadMessage(result);
-                if(ModConfig.copyToClipboard){
-                    if(CopyToClipboard.copy(urlString)){
+                if (ModConfig.copyToClipboard){
+                    if (CopyToClipboard.copy(urlString)){
                         chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard"));
                     }else{
                         chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard_error"));
                     }
                 }
 
-            }catch (Exception e){
+            }
+            catch (Exception e){
                 //In case something goes wrong!
                 e.printStackTrace();
                 Messages.errorMessage(e.getMessage());
             }finally{
                 try{
                     client.close();
-                }catch(IOException e){
+                }
+                catch (IOException e){
                     e.printStackTrace();
                     Messages.errorMessage(e.getMessage());
                 }

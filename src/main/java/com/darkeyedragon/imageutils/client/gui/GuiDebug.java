@@ -6,9 +6,10 @@ import net.minecraft.client.gui.GuiIngame;
 
 public class GuiDebug extends GuiIngame{
     private FontRenderer fr = mc.fontRenderer;
-    public GuiDebug(Minecraft mcIn){
+
+    public GuiDebug (Minecraft mcIn){
         super(mcIn);
-        drawCenteredString(fr,"This is a test", mc.displayWidth-30, 20, 0xffffff);
+        drawCenteredString(fr, "This is a test", mc.displayWidth - 30, 20, 0xffffff);
     }
 
 }

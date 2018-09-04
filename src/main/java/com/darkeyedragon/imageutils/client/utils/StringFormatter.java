@@ -6,7 +6,7 @@ import java.util.List;
 
 public class StringFormatter{
 
-    public static List<String[]> postData(String[] string){
+    public static List<String[]> postData (String[] string){
         List<String[]> result = new ArrayList<String[]>(){
         };
         for (String aString : string){

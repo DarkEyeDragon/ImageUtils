@@ -26,7 +26,7 @@ import java.util.Base64;
 public class ImgurUploader{
 
 
-    public static void uploadImage(BufferedImage bufferedImage){
+    public static void uploadImage (BufferedImage bufferedImage){
 
         ImageUtilsMain.fixedThreadPool.submit(() -> {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -78,17 +78,18 @@ public class ImgurUploader{
                 //Send result to player
                 Messages.uploadMessage(result);
                 //TODO CHANGE
-                if(ModConfig.copyToClipboard){
-                    if(CopyToClipboard.copy(result)){
+                if (ModConfig.copyToClipboard){
+                    if (CopyToClipboard.copy(result)){
                         chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard"));
                     }else{
                         chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard_error"));
                     }
                 }
-            }catch (IOException e){
+            }
+            catch (IOException e){
                 //In case something goes wrong!
                 e.printStackTrace();
-                ITextComponent errorText = new TextComponentTranslation("imageutil.message.upload.error").appendText(" "+responseCode);
+                ITextComponent errorText = new TextComponentTranslation("imageutil.message.upload.error").appendText(" " + responseCode);
                 ITextComponent report = new TextComponentString("If this keeps happening please report the issue ");
                 ITextComponent link = new TextComponentTranslation("imageutil.message.upload.errorlink");
                 ITextComponent hover = new TextComponentString("github.com/DarkEyeDragon/ImageUtils/issues");

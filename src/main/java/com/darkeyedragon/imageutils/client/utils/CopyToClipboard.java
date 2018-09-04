@@ -9,8 +9,8 @@ public class CopyToClipboard{
 
     private static String copiedText;
 
-    public static boolean copy(String message){
-        if(message != null){
+    public static boolean copy (String message){
+        if (message != null){
             StringSelection stringSelection = new StringSelection(message);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
             copiedText = message;
@@ -19,8 +19,9 @@ public class CopyToClipboard{
             return false;
         }
     }
-    public static boolean copy(BufferedImage image){
-        if(image != null){
+
+    public static boolean copy (BufferedImage image){
+        if (image != null){
             TransferableImage trans = new TransferableImage(image);
             Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
             c.setContents(trans, null);
@@ -29,7 +30,8 @@ public class CopyToClipboard{
             return false;
         }
     }
-    public String getCopy(){
+
+    public String getCopy (){
         return copiedText;
     }
 }
