@@ -36,7 +36,6 @@ public class ImageUtil{
     public static synchronized void addToLinkList (String urlString, BufferedImage downloadedImage){
         Minecraft.getMinecraft().addScheduledTask(() -> {
             ImageUtilsMain.validLinks.put(urlString, downloadedImage);
-            System.out.println(ImageUtilsMain.validLinks.size());
         });
     }
 }

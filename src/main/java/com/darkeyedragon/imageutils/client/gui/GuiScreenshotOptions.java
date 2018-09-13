@@ -11,7 +11,7 @@ public class GuiScreenshotOptions extends GuiConfirmAction{
 
     private GuiTextField imageName;
     private String title;
-    private GuiScreen parent;
+    final GuiScreen parent;
     private GuiLocalScreenshots guiLocalScreenshots;
     private ImageResource imageResource;
 

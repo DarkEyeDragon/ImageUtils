@@ -1,6 +1,6 @@
 package com.darkeyedragon.imageutils.client.gui;
 
-import com.darkeyedragon.imageutils.client.TakeScreenshot;
+import com.darkeyedragon.imageutils.client.ScreenshotHandler;
 import com.darkeyedragon.imageutils.client.utils.RegionSelector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class GuiPartialScreenshot extends GuiScreen{
 
@@ -67,8 +68,8 @@ public class GuiPartialScreenshot extends GuiScreen{
         mouseReleased.y *= res;
         mouseReleased.x *= res;
 
-        new TakeScreenshot().partial(new Point(Math.min(mouseClicked.x, mouseReleased.x), Math.min(mouseClicked.y, mouseReleased.y)), new Point(Math.max(mouseClicked.x, mouseReleased.x), Math.max(mouseClicked.y, mouseReleased.y)));
-
+        BufferedImage image = ScreenshotHandler.partial(new Point(Math.min(mouseClicked.x, mouseReleased.x), Math.min(mouseClicked.y, mouseReleased.y)), new Point(Math.max(mouseClicked.x, mouseReleased.x), Math.max(mouseClicked.y, mouseReleased.y)));
+        ScreenshotHandler.upload(image);
         mc.displayGuiScreen(null);
     }
 }

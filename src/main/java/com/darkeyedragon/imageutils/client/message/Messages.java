@@ -72,7 +72,6 @@ public class Messages{
                     String test[] = unformattedText.split(Pattern.quote(link));
                     if (test.length > 1){
                         result = new TextComponentString(test[0].replace(Pattern.quote(link), "")).appendSibling(textLink).appendText(test[1]);
-                        System.out.println(result);
                     }else{
                         result = new TextComponentString(test[0].replace(Pattern.quote(link), "")).appendSibling(textLink);
                     }

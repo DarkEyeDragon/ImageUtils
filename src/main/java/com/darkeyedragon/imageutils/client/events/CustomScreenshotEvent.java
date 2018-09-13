@@ -2,6 +2,7 @@ package com.darkeyedragon.imageutils.client.events;
 
 import com.darkeyedragon.imageutils.client.ImageUtilsMain;
 import com.darkeyedragon.imageutils.client.ModConfig;
+import com.darkeyedragon.imageutils.client.ScreenshotHandler;
 import com.darkeyedragon.imageutils.client.imageuploaders.ImgurUploader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
@@ -26,17 +27,17 @@ public class CustomScreenshotEvent{
             ImgurUploader.uploadImage(screenshot);
         }else{
             event.setCanceled(true);
-            ImageUtilsMain.fixedThreadPool.submit(()->{
-                File screenshotFile = event.getScreenshotFile();
+            BufferedImage screenshot = ScreenshotHandler.full();
+            ImageUtilsMain.fixedThreadPool.submit(() -> {
+                File screenshotFile = ScreenshotHandler.getTimestampedPNGFileForDirectory(Minecraft.getMinecraft().gameDir);
                 try{
-                    //TODO PR Changes to Forge about ScreenshotEvent's unchangeable messages.
                     //TODO PR Event to intercept Actions
-                    ImageIO.write(event.getImage(), "png", screenshotFile);
-                    Minecraft.getMinecraft().addScheduledTask(()->{
+                    ImageIO.write(screenshot, "png", screenshotFile.getAbsoluteFile());
+                    Minecraft.getMinecraft().addScheduledTask(() -> {
                         ITextComponent prefix = new TextComponentString("Screenshot saved as: ");
-                        ITextComponent itextcomponent = new TextComponentString(event.getScreenshotFile().getName());
-                        itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, event.getScreenshotFile().getAbsolutePath()));
-                        ImageUtilsMain.validLinks.put(event.getScreenshotFile().getName(), event.getImage());
+                        ITextComponent itextcomponent = new TextComponentString(screenshotFile.getName());
+                        itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, screenshotFile.getAbsolutePath()));
+                        //ImageUtilsMain.validLinks.put(event.getScreenshotFile().getName(), screenshot);
                         itextcomponent.getStyle().setUnderlined(true);
                         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(prefix.appendSibling(itextcomponent));
                     });

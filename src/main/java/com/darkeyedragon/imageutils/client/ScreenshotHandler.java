@@ -7,25 +7,27 @@ import net.minecraft.util.ScreenShotHelper;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-public class TakeScreenshot{
+public class ScreenshotHandler{
 
-    public void full (){
-        BufferedImage screenshot = ScreenShotHelper.createScreenshot(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, Minecraft.getMinecraft().getFramebuffer());
-        upload(screenshot);
+    public static BufferedImage full (){
+        return ScreenShotHelper.createScreenshot(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, Minecraft.getMinecraft().getFramebuffer());
     }
 
-    public void partial (Point first, Point second){
+    public static BufferedImage partial (Point first, Point second){
         BufferedImage screenshot = ScreenShotHelper.createScreenshot(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, Minecraft.getMinecraft().getFramebuffer());
         System.out.println("Values: X:" + (first.x + 3) + " Y:" + (first.y + 3) + " W:" + (second.x - first.x - 3) + " H:" + (second.y - first.y - 3));
         int height = Math.abs(second.y - first.y - 3);
         int width = Math.abs(second.x - first.x - 3);
-        BufferedImage alteredScreenshot = screenshot.getSubimage(first.x + 3, first.y + 3, width, height);
-        upload(alteredScreenshot);
-
+        return screenshot.getSubimage(first.x + 3, first.y + 3, width, height);
+        //upload(alteredScreenshot);
     }
 
-    private void upload (BufferedImage screenshot){
+    public static void upload (BufferedImage screenshot){
         if (ModConfig.customServer){
             if (!ModConfig.uploader.isEmpty()){
                 CustomUploader.uploadImage(screenshot);
@@ -37,4 +39,20 @@ public class TakeScreenshot{
         }
     }
 
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+
+    public static File getTimestampedPNGFileForDirectory (File gameDirectory){
+        String s = DATE_FORMAT.format(new Date());
+        int i = 1;
+
+        while (true){
+            File file1 = new File(gameDirectory, s + (i == 1 ? "" : "_" + i) + ".png");
+
+            if (!file1.exists()){
+                return file1;
+            }
+
+            ++i;
+        }
+    }
 }
