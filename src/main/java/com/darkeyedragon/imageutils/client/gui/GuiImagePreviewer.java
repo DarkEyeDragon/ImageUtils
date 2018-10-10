@@ -2,6 +2,7 @@ package com.darkeyedragon.imageutils.client.gui;
 
 import com.darkeyedragon.imageutils.client.message.ClientMessage;
 import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
+import com.darkeyedragon.imageutils.client.utils.ImageResource;
 import com.darkeyedragon.imageutils.client.utils.ImageUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -9,22 +10,26 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public class GuiImagePreviewer extends GuiScreen{
     private final String urlStr;
+    private ImageResource imgResource;
     private BufferedImage bufferedImage;
     private ResourceLocation resourceLocation;
     private final int scale = new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
 
-    public GuiImagePreviewer (String urlStr, BufferedImage image){
-        this.bufferedImage = image;
-        this.urlStr = urlStr;
+    public GuiImagePreviewer (ImageResource imgResource){
+        this.imgResource = imgResource;
+        this.bufferedImage = imgResource.getImage();
+        this.urlStr = imgResource.getUrl();
         generateImage();
     }
 
@@ -60,7 +65,11 @@ public class GuiImagePreviewer extends GuiScreen{
         this.buttonList.clear();
         this.buttonList.add(new GuiButton(0, this.width / 2 - 50 - 105, 10, 100, 20, "Copy Image"));
         this.buttonList.add(new GuiButton(1, this.width / 2 - 50, 10, 100, 20, "Open Image"));
-        this.buttonList.add(new GuiButton(2, this.width / 2 - 50 + 105, 10, 100, 20, "Copy Url"));
+        GuiButton urlButton = new GuiButton(2, this.width / 2 - 50 + 105, 10, 100, 20, "Copy Url");
+        if(urlStr == null){
+            urlButton.enabled = false;
+        }
+        this.buttonList.add(urlButton);
     }
 
     @Override
@@ -72,11 +81,21 @@ public class GuiImagePreviewer extends GuiScreen{
                 ClientMessage.basic("Unable to copy image to clipboard");
             }
         }else if (button.id == 1){
-            try{
-                Desktop.getDesktop().browse(new URI(urlStr));
-            }
-            catch (IOException | URISyntaxException e){
-                e.printStackTrace();
+            if(imgResource.getPath() != null){
+                try{
+                    Desktop.getDesktop().open(new File(imgResource.getPath()));
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
+            }else if(imgResource.getUrl() != null){
+                try{
+                    Desktop.getDesktop().browse(new URI(urlStr));
+                }
+                catch (IOException | URISyntaxException e){
+                    e.printStackTrace();
+                    mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Unable to open browser!"));
+                }
             }
         }else if (button.id == 2){
             if (CopyToClipboard.copy(urlStr)){

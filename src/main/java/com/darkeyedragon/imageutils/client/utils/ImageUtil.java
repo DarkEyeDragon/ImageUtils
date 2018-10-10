@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -37,5 +38,9 @@ public class ImageUtil{
         Minecraft.getMinecraft().addScheduledTask(() -> {
             ImageUtilsMain.validLinks.put(urlString, downloadedImage);
         });
+    }
+
+    public static BufferedImage getLocal(File location) throws IOException{
+        return ImageIO.read(location);
     }
 }

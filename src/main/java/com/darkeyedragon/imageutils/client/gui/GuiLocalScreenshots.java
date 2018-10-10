@@ -115,23 +115,6 @@ public class GuiLocalScreenshots extends GuiScreen{
                 GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
                 Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
                 drawModalRectWithCustomSizedTexture(width / 2, imgOffsetY, 0, 0, imgWidth, imgHeight, imgWidth, imgHeight);
-                if (deleteImage){
-                    GuiConfirmAction guiConfirmDelete = new GuiConfirmAction((result, id) ->
-                    {
-                        if (result){
-                            deleteScreenshots();
-                        }
-                        mc.displayGuiScreen(this);
-                    }, "Confirm", new TextComponentTranslation("imageutil.gui.delete_screenshot").getUnformattedComponentText(), new TextComponentTranslation("imageutil.gui.delete_screenshot_line2").getUnformattedComponentText(), 0, this){
-                        @Override
-                        public void drawScreen (int mouseX, int mouseY, float partialTicks){
-                            this.parent.drawScreen(-1, -1, partialTicks);
-                            super.drawScreen(mouseX, mouseY, partialTicks);
-                        }
-                    };
-                    mc.displayGuiScreen(guiConfirmDelete);
-                    deleteImage = false;
-                }
             }else{
                 list.elementClicked(0, false, 0, 0);
                 this.drawCenteredString(this.fontRenderer, "Screenshots", this.width / 2, 16, 16777215);
@@ -175,15 +158,24 @@ public class GuiLocalScreenshots extends GuiScreen{
             //mc.displayGuiScreen(new GuiProgressbar(this));
         }else if (button == deleteButton){
 
-            deleteImage = true;
-            if (deleteImageConfirm){
-
-                deleteImageConfirm = false;
-            }
+            GuiConfirmAction guiConfirmDelete = new GuiConfirmAction((result, id) ->
+            {
+                if (result){
+                    deleteScreenshots();
+                }
+                mc.displayGuiScreen(this);
+            }, "Confirm", new TextComponentTranslation("imageutil.gui.delete_screenshot").getUnformattedComponentText(), new TextComponentTranslation("imageutil.gui.delete_screenshot_line2").getUnformattedComponentText(), 0, this){
+                @Override
+                public void drawScreen (int mouseX, int mouseY, float partialTicks){
+                    this.parent.drawScreen(-1, -1, partialTicks);
+                    super.drawScreen(mouseX, mouseY, partialTicks);
+                }
+            };
+            mc.displayGuiScreen(guiConfirmDelete);
         }else if (button == optionsButton){
             mc.displayGuiScreen(new GuiScreenshotOptions((result, id) -> {
                 mc.displayGuiScreen(this);
-            }, "Screenshot Settings", "Save", "Cancel", 0, this){
+            }, "Screenshot Settings", "Save","Cancel", 0, this){
                 @Override
                 public void drawScreen (int mouseX, int mouseY, float partialTicks){
                     parent.drawScreen(-1, -1, partialTicks);

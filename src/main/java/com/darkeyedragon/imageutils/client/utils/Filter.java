@@ -15,7 +15,9 @@ import java.util.regex.Pattern;
 public class Filter{
 
     private static final String urlRegex = "(https?:((//)|(\\\\))+[\\w\\d:#@%/;$()~_?+-=\\\\.&]*)";
+    private static final String fileUrlRegex = "(https?:((//)|(\\\\))+[\\w\\d:#@%/;$()~_?+-=\\\\.&]*)";
     private static Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
+    private static Pattern fileRegex = Pattern.compile(fileUrlRegex);
 
     public static List<String> extractUrls (String text){
         List<String> containedUrls = new ArrayList<>();

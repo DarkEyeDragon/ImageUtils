@@ -12,8 +12,10 @@ public class ImageResource{
     private BufferedImage image;
     private boolean selected;
     private String path;
+    private String url;
 
     private String extension;
+
     public String getExtension (){
         return extension;
     }
@@ -21,6 +23,12 @@ public class ImageResource{
     public ImageResource (String name, BufferedImage image){
         this.name = name;
         this.image = image;
+    }
+
+    public ImageResource (String name, BufferedImage image, String url){
+        this.name = name;
+        this.image = image;
+        this.url = url;
     }
 
     public ImageResource (String name, BufferedImage image, boolean selected, String path){
@@ -39,7 +47,7 @@ public class ImageResource{
         this.name = name;
         File oldFile = new File(path);
         File newFile = Paths.get(oldFile.getParent(), name).toFile();
-        boolean addExtention = !FilenameUtils.getExtension(name).equalsIgnoreCase(".png");
+        boolean addExtention = !FilenameUtils.getExtension(name).endsWith("png");
         if (newFile.exists()){
             ImageUtilsMain.logger.warn("Image already exists!");
         }else{
@@ -47,10 +55,10 @@ public class ImageResource{
                 newFile = Paths.get(oldFile.getParent(), name + ".png").toFile();
             }
             if (oldFile.renameTo(newFile)){
-                ImageUtilsMain.logger.info("Image renamed successfully.");
+                ImageUtilsMain.logger.info("Image "+ oldFile.getName() +" renamed to "+newFile.getName()+" successfully.");
                 return true;
             }else{
-                ImageUtilsMain.logger.warn("Could not rename image!");
+                ImageUtilsMain.logger.warn("Could not rename "+oldFile.getName()+"!");
                 return false;
             }
         }
@@ -71,5 +79,13 @@ public class ImageResource{
 
     public String getPath (){
         return path;
+    }
+
+    public String getUrl (){
+        return url;
+    }
+
+    public void setUrl (String url){
+        this.url = url;
     }
 }

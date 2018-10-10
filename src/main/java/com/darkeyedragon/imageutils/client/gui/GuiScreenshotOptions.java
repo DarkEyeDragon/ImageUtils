@@ -15,21 +15,13 @@ public class GuiScreenshotOptions extends GuiConfirmAction{
     private GuiLocalScreenshots guiLocalScreenshots;
     private ImageResource imageResource;
 
-    GuiScreenshotOptions (GuiYesNoCallback parentScreenIn, String title, String messageLine1In, String messageLine2In, int parentButtonClickedIdIn, GuiScreen parent){
-        super(parentScreenIn, title, messageLine1In, messageLine2In, parentButtonClickedIdIn, parent);
+    GuiScreenshotOptions (GuiYesNoCallback parentScreenIn, String title, String confirm, String cancel, int parentButtonClickedIdIn, GuiScreen parent){
+        super(parentScreenIn, title, "", "", confirm,cancel, parentButtonClickedIdIn, parent);
         this.title = title;
         this.parent = parent;
         this.guiLocalScreenshots = (GuiLocalScreenshots) parent;
         imageResource = guiLocalScreenshots.getImageResource();
     }
-
-
-    /*GuiScreenshotOptions (GuiLocalScreenshots parent, String title, String buttonConfirm, String buttonCancel, ImageResource imageResource){
-        super(parent, "", "", buttonConfirm, buttonCancel);
-        this.imageResource = imageResource;
-        this.title = title;
-        this.parentScreen = parent;
-    }*/
 
     @Override
     public void initGui (){
@@ -38,6 +30,7 @@ public class GuiScreenshotOptions extends GuiConfirmAction{
         labelList.add(new GuiLabel(mc.fontRenderer, width / 2 - 100, 66, 200, 20, 20, 20));
         imageName = new GuiTextField(0, this.fontRenderer, this.width / 2 - 100, height / 2 - 20, 200, 17);
         imageName.setText(imageResource.getName());
+        buttonList.get(0).enabled = false;
     }
 
     @Override
@@ -63,7 +56,7 @@ public class GuiScreenshotOptions extends GuiConfirmAction{
             if (imageName.getText().equalsIgnoreCase("") || imageName.getText().length() > 255 || imageName.getText().equalsIgnoreCase(imageResource.getName())){
                 return;
             }
-            imageResource.setName(imageName.getText()+"."+imageResource.getExtension());
+            imageResource.setName(imageName.getText());
         }
     }
 

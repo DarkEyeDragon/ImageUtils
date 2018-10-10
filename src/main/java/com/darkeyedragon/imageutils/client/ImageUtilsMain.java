@@ -30,7 +30,7 @@ public class ImageUtilsMain{
     public static LinkedHashMap<String, BufferedImage> validLinks = new LinkedHashMap<String, BufferedImage>(){
         @Override
         protected boolean removeEldestEntry (Map.Entry<String, BufferedImage> eldest){
-            return size() > 3;
+            return size() > 7;
         }
     };
     public static List<UploaderFile> uploaders;
