@@ -13,10 +13,8 @@ import java.awt.image.BufferedImage;
 public class GuiPartialScreenshot extends GuiScreen{
 
     private final int res = new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
-    private boolean clicked = false;
     private boolean dragging = false;
     private Point mouseClicked;
-    private Point mouseReleased;
     private RegionSelector regionSelector = new RegionSelector();
 
     @Override
@@ -36,12 +34,11 @@ public class GuiPartialScreenshot extends GuiScreen{
 
     @Override
     public boolean doesGuiPauseGame (){
-        return super.doesGuiPauseGame();
+        return true;
     }
 
     @Override
     public void initGui (){
-
         super.initGui();
     }
 
@@ -53,7 +50,6 @@ public class GuiPartialScreenshot extends GuiScreen{
     @Override
     protected void mouseClicked (int mouseX, int mouseY, int mouseButton){
         if (mouseButton == 0){
-            clicked = true;
             dragging = true;
             mouseClicked = new Point(mouseX, mouseY);
         }
@@ -61,7 +57,7 @@ public class GuiPartialScreenshot extends GuiScreen{
 
     @Override
     protected void mouseReleased (int mouseX, int mouseY, int state){
-        mouseReleased = new Point(mouseX, mouseY);
+        Point mouseReleased = new Point(mouseX, mouseY);
         dragging = false;
         mouseClicked.y *= res;
         mouseClicked.x *= res;
