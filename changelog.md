@@ -1,3 +1,7 @@
+## Version 1.0.4
+##### Changes
+- Partial screenshots(F6) now look better.
+
 ## Version 1.0.3
 ##### Bug fixes
 - Fixed popup menu's showing out of place text.

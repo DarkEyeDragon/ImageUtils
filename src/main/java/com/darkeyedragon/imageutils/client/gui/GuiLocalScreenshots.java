@@ -111,7 +111,7 @@ public class GuiLocalScreenshots extends GuiScreen{
                 String location = "Location: " + imageResource.getPath();
                 mc.fontRenderer.drawString(name, width / 2, imgOffsetY + imgHeight + 10, 0xffffff);
                 mc.fontRenderer.drawString(dimensions, width / 2, imgOffsetY + imgHeight + 20, 0xffffff);
-                mc.fontRenderer.drawSplitString(location, width / 2, imgOffsetY + imgHeight + 30, width - mc.fontRenderer.getStringWidth(location), 0xffffff);
+                mc.fontRenderer.drawSplitString(location, width / 2, imgOffsetY + imgHeight + 30, 200, 0xffffff);
                 GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
                 Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
                 drawModalRectWithCustomSizedTexture(width / 2, imgOffsetY, 0, 0, imgWidth, imgHeight, imgWidth, imgHeight);
