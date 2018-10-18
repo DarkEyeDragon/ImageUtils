@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -20,12 +21,17 @@ public class GuiPartialScreenshot extends GuiScreen{
     @Override
     public void drawScreen (int mouseX, int mouseY, float partialTicks){
         if (dragging){
+            regionSelector.drawBackground(Math.min(mouseClicked.x, mouseX), Math.min(mouseClicked.y, mouseY), Math.max(mouseClicked.x, mouseX), Math.max(mouseClicked.y, mouseY));
             regionSelector.drawRegion(Math.min(mouseClicked.x, mouseX), Math.min(mouseClicked.y, mouseY), Math.max(mouseClicked.x, mouseX), Math.max(mouseClicked.y, mouseY));
 
             int x = Math.abs(mouseClicked.x - mouseX);
             int y = Math.abs(mouseClicked.y - mouseY);
             drawHoveringText(x + "x" + y, mouseClicked.x, mouseClicked.y);
         }else{
+            //GlStateManager.disableTexture2D();
+            //GlStateManager.enableAlpha();
+            //drawBackground(0xAB000000);
+            drawRect(0,0, width, height, 0x66000000);
             drawHoveringText("Select an area", mouseX, mouseY);
         }
 

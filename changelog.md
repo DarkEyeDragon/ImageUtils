@@ -1,6 +1,8 @@
 ## Version 1.0.4
 ##### Changes
 - Partial screenshots(F6) now look better.
+##### Bug Fixes
+- Fixed a bug that crashes the game in local screenshots when using modified font render's
 
 ## Version 1.0.3
 ##### Bug fixes
