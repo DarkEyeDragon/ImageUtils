@@ -25,13 +25,22 @@ public class ImageUtil{
     }
 
     public static BufferedImage downloadFromUrl (URL imgUrl) throws IOException{
-        URLConnection conn;
-        conn = imgUrl.openConnection();
-        conn.setRequestProperty("User-Agent", "ScreenshotUploader/1.2");
-        InputStream image = conn.getInputStream();
-        BufferedImage img = ImageIO.read(image);
-        addToLinkList(imgUrl.toString(), img);
-        return img;
+
+        if (Filter.isValidUrl(imgUrl.toString())){
+            if (!Filter.isValidImage(imgUrl.toString())){
+                imgUrl = new URL(imgUrl.toString() + ".png");
+            }
+            if (Filter.isValidImage(imgUrl.toString())){
+                URLConnection conn;
+                conn = imgUrl.openConnection();
+                conn.setRequestProperty("User-Agent", "ScreenshotUploader/" + ImageUtilsMain.VERSION);
+                InputStream image = conn.getInputStream();
+                BufferedImage img = ImageIO.read(image);
+                addToLinkList(imgUrl.toString(), img);
+                return img;
+            }
+        }
+        return null;
     }
 
     public static synchronized void addToLinkList (String urlString, BufferedImage downloadedImage){
@@ -40,7 +49,7 @@ public class ImageUtil{
         });
     }
 
-    public static BufferedImage getLocal(File location) throws IOException{
+    public static BufferedImage getLocal (File location) throws IOException{
         return ImageIO.read(location);
     }
 }

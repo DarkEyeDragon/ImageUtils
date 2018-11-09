@@ -7,18 +7,19 @@ public class GuiConfirmAction extends GuiYesNo{
     final GuiScreen parent;
     private final String messageLine1;
     private final String messageLine2;
+    private final String title;
     private String buttonConfirm = "Yes";
     private String buttonCancel = "Cancel";
-    private final String title;
 
-    GuiConfirmAction (GuiYesNoCallback parentScreenIn,String title ,String messageLine1In, String messageLine2In, int parentButtonClickedIdIn, GuiScreen parent){
+    GuiConfirmAction (GuiYesNoCallback parentScreenIn, String title, String messageLine1In, String messageLine2In, int parentButtonClickedIdIn, GuiScreen parent){
         super(parentScreenIn, messageLine1In, messageLine2In, parentButtonClickedIdIn);
         this.parent = parent;
         this.messageLine1 = messageLine1In;
         this.messageLine2 = messageLine2In;
         this.title = title;
     }
-    GuiConfirmAction (GuiYesNoCallback parentScreenIn,String title ,String messageLine1In, String messageLine2In, String buttonConfirm, String buttonCancel, int parentButtonClickedIdIn, GuiScreen parent){
+
+    GuiConfirmAction (GuiYesNoCallback parentScreenIn, String title, String messageLine1In, String messageLine2In, String buttonConfirm, String buttonCancel, int parentButtonClickedIdIn, GuiScreen parent){
         super(parentScreenIn, "", "", parentButtonClickedIdIn);
         this.messageLine1 = messageLine1In;
         this.messageLine2 = messageLine2In;
@@ -44,8 +45,12 @@ public class GuiConfirmAction extends GuiYesNo{
         drawVerticalLine(width / 2 - 150, height / 2 - 70, height / 2 + 70, 0xffffffff);
         drawVerticalLine(width / 2 + 150, height / 2 - 70, height / 2 + 70, 0xffffffff);
         drawCenteredString(mc.fontRenderer, title, width / 2, height / 2 - 60, 0xffffffff);
-        if(!messageLine1.isEmpty()) drawCenteredString(mc.fontRenderer, messageLine1, width / 2, height /2 - 40, 0xffffffff);
-        if(!messageLine2.isEmpty()) drawCenteredString(mc.fontRenderer, messageLine2, width / 2 , height /2 -30, 0xffffffff);
+        if (!messageLine1.isEmpty()){
+            drawCenteredString(mc.fontRenderer, messageLine1, width / 2, height / 2 - 40, 0xffffffff);
+        }
+        if (!messageLine2.isEmpty()){
+            drawCenteredString(mc.fontRenderer, messageLine2, width / 2, height / 2 - 30, 0xffffffff);
+        }
 
         for (GuiButton aButtonList : this.buttonList){
             aButtonList.drawButton(this.mc, mouseX, mouseY, partialTicks);

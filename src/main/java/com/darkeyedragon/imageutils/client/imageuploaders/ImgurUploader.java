@@ -42,7 +42,6 @@ public class ImgurUploader{
                 con.setDoInput(true);
                 con.setRequestMethod("POST");
                 con.setRequestProperty("Authorization", "Client-ID bfea9c11835d95c");
-                con.setRequestMethod("POST");
                 con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 con.connect();
                 Minecraft.getMinecraft().ingameGUI.setOverlayMessage("Uploading image...", true);

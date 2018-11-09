@@ -42,21 +42,18 @@ public class GuiLocalScreenshots extends GuiScreen{
     private GuiButton cancelButton;
     private BufferedImage finalImage;
     private ResourceLocation resource;
-
-    ImageResource getImageResource (){
-        return imageResource;
-    }
-
     private ImageResource imageResource;
     private boolean completedLoading;
     private boolean deleteImage;
     private boolean deleteImageConfirm;
     private int imageIndex;
-
     public GuiLocalScreenshots (GuiScreen parentScreen){
         this.parentScreen = parentScreen;
     }
 
+    ImageResource getImageResource (){
+        return imageResource;
+    }
 
     @Override
     public void initGui (){
@@ -175,7 +172,7 @@ public class GuiLocalScreenshots extends GuiScreen{
         }else if (button == optionsButton){
             mc.displayGuiScreen(new GuiScreenshotOptions((result, id) -> {
                 mc.displayGuiScreen(this);
-            }, "Screenshot Settings", "Save","Cancel", 0, this){
+            }, "Screenshot Settings", "Save", "Cancel", 0, this){
                 @Override
                 public void drawScreen (int mouseX, int mouseY, float partialTicks){
                     parent.drawScreen(-1, -1, partialTicks);
@@ -314,7 +311,7 @@ public class GuiLocalScreenshots extends GuiScreen{
         }
 
         protected void drawSlot (int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks){
-            GuiLocalScreenshots.this.drawString(GuiLocalScreenshots.this.fontRenderer, (screenshots.get(slotIndex).getName()), this.width / 5- (this.getListWidth() / 3)+5, yPos + 1, 16777215);
+            GuiLocalScreenshots.this.drawString(GuiLocalScreenshots.this.fontRenderer, (screenshots.get(slotIndex).getName()), this.width / 5 - (this.getListWidth() / 3) + 5, yPos + 1, 16777215);
         }
 
         public void handleMouseInput (){

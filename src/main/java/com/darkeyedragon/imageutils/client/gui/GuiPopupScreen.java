@@ -36,7 +36,7 @@ public abstract class GuiPopupScreen extends GuiScreen{
 
     @Override
     public void drawScreen (int mouseX, int mouseY, float partialTicks){
-        GlStateManager.color(1f,1f,1f,1f);
+        GlStateManager.color(1f, 1f, 1f, 1f);
         drawRect(width / 2 - 150, height / 2 - 70, width / 2 + 150, height / 2 + 70, 0xff000000);
         drawHorizontalLine(width / 2 - 150, width / 2 + 149, height / 2 - 70, 0x90ffffff);
         drawHorizontalLine(width / 2 - 149, width / 2 + 149, height / 2 + 69, 0x90ffffff);

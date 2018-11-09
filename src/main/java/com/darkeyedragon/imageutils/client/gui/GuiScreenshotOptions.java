@@ -9,14 +9,14 @@ import java.io.IOException;
 
 public class GuiScreenshotOptions extends GuiConfirmAction{
 
+    final GuiScreen parent;
     private GuiTextField imageName;
     private String title;
-    final GuiScreen parent;
     private GuiLocalScreenshots guiLocalScreenshots;
     private ImageResource imageResource;
 
     GuiScreenshotOptions (GuiYesNoCallback parentScreenIn, String title, String confirm, String cancel, int parentButtonClickedIdIn, GuiScreen parent){
-        super(parentScreenIn, title, "", "", confirm,cancel, parentButtonClickedIdIn, parent);
+        super(parentScreenIn, title, "", "", confirm, cancel, parentButtonClickedIdIn, parent);
         this.title = title;
         this.parent = parent;
         this.guiLocalScreenshots = (GuiLocalScreenshots) parent;

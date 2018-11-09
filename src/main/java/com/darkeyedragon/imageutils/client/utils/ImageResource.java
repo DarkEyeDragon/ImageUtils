@@ -16,10 +16,6 @@ public class ImageResource{
 
     private String extension;
 
-    public String getExtension (){
-        return extension;
-    }
-
     public ImageResource (String name, BufferedImage image){
         this.name = name;
         this.image = image;
@@ -39,6 +35,10 @@ public class ImageResource{
         this.extension = FilenameUtils.getExtension(name);
     }
 
+    public String getExtension (){
+        return extension;
+    }
+
     public String getName (){
         return name;
     }
@@ -55,10 +55,10 @@ public class ImageResource{
                 newFile = Paths.get(oldFile.getParent(), name + ".png").toFile();
             }
             if (oldFile.renameTo(newFile)){
-                ImageUtilsMain.logger.info("Image "+ oldFile.getName() +" renamed to "+newFile.getName()+" successfully.");
+                ImageUtilsMain.logger.info("Image " + oldFile.getName() + " renamed to " + newFile.getName() + " successfully.");
                 return true;
             }else{
-                ImageUtilsMain.logger.warn("Could not rename "+oldFile.getName()+"!");
+                ImageUtilsMain.logger.warn("Could not rename " + oldFile.getName() + "!");
                 return false;
             }
         }

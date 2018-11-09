@@ -21,10 +21,11 @@ import java.net.URISyntaxException;
 
 public class GuiImagePreviewer extends GuiScreen{
     private final String urlStr;
-    private ImageResource imgResource;
+    private final ImageResource imgResource;
+    private final int scale = new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
     private BufferedImage bufferedImage;
     private ResourceLocation resourceLocation;
-    private final int scale = new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
+    private boolean preview = true;
 
     public GuiImagePreviewer (ImageResource imgResource){
         this.imgResource = imgResource;
@@ -36,10 +37,12 @@ public class GuiImagePreviewer extends GuiScreen{
     @Override
     public void drawScreen (int mouseX, int mouseY, float partialTicks){
         drawDefaultBackground();
-        int x = (width / 2 - (bufferedImage.getWidth() / 2) / scale);
-        int y = (height / 2 - (bufferedImage.getHeight() / 2) / scale);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation);
-        drawModalRectWithCustomSizedTexture(x, y, 0, 0, bufferedImage.getWidth() / scale, bufferedImage.getHeight() / scale, bufferedImage.getWidth() / scale, bufferedImage.getHeight() / scale);
+        if (preview){
+            int x = (width / 2 - (bufferedImage.getWidth() / 2) / scale);
+            int y = (height / 2 - (bufferedImage.getHeight() / 2) / scale);
+            Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation);
+            drawModalRectWithCustomSizedTexture(x, y, 0, 0, bufferedImage.getWidth() / scale, bufferedImage.getHeight() / scale, bufferedImage.getWidth() / scale, bufferedImage.getHeight() / scale);
+        }
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -66,10 +69,14 @@ public class GuiImagePreviewer extends GuiScreen{
         this.buttonList.add(new GuiButton(0, this.width / 2 - 50 - 105, 10, 100, 20, "Copy Image"));
         this.buttonList.add(new GuiButton(1, this.width / 2 - 50, 10, 100, 20, "Open Image"));
         GuiButton urlButton = new GuiButton(2, this.width / 2 - 50 + 105, 10, 100, 20, "Copy Url");
-        if(urlStr == null){
+        if (urlStr == null){
             urlButton.enabled = false;
         }
         this.buttonList.add(urlButton);
+        if (bufferedImage == null){
+
+            preview = false;
+        }
     }
 
     @Override
@@ -81,14 +88,14 @@ public class GuiImagePreviewer extends GuiScreen{
                 ClientMessage.basic("Unable to copy image to clipboard");
             }
         }else if (button.id == 1){
-            if(imgResource.getPath() != null){
+            if (imgResource.getPath() != null){
                 try{
                     Desktop.getDesktop().open(new File(imgResource.getPath()));
                 }
                 catch (IOException e){
                     e.printStackTrace();
                 }
-            }else if(imgResource.getUrl() != null){
+            }else if (imgResource.getUrl() != null){
                 try{
                     Desktop.getDesktop().browse(new URI(urlStr));
                 }

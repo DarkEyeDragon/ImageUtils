@@ -5,10 +5,13 @@ import com.darkeyedragon.imageutils.client.ModConfig;
 import com.darkeyedragon.imageutils.client.config.UploaderFile;
 import com.darkeyedragon.imageutils.client.message.Messages;
 import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
+import com.darkeyedragon.imageutils.client.utils.Filter;
 import com.darkeyedragon.imageutils.client.utils.JsonHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -16,11 +19,14 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class CustomUploader{
@@ -57,7 +63,7 @@ public class CustomUploader{
             try{
                 ImageIO.write(bufferedImage, "png", baos);
                 byte[] bytes = baos.toByteArray();
-                Minecraft.getMinecraft().ingameGUI.setOverlayMessage("Uploading image to custom server...", true);
+                Minecraft.getMinecraft().ingameGUI.setOverlayMessage("Uploading to " + ImageUtilsMain.activeUploader.getDisplayName(), true);
                 builder.addBinaryBody("image", bytes, ContentType.IMAGE_JPEG, uploaderFile.getUploader().getFileFormName());
                 HttpEntity multipart = builder.build();
                 httpPost.setEntity(multipart);
@@ -66,15 +72,18 @@ public class CustomUploader{
                 if (uploaderFile.isJsonResponse()){
                     Map<String, String> responseJson = JsonHelper.readJsonFromUrl(response.getEntity().getContent());
                     urlString = responseJson.get(uploaderFile.getJsonResponseKey());
-                    //chat.printChatMessage(new ClientMessage().link("Image Link", urlString, TextFormatting.BLUE));
                     Messages.uploadMessage(urlString);
                 }else{
                     //TODO do some further testing
-                    System.out.println(response.getAllHeaders().length);
-                    //responseCode = response.getStatusLine().getStatusCode();
-                    //responseMessage = response.getStatusLine().getReasonPhrase();
-                    urlString = response.getHeaders("Location")[0].toString().split("\\s+")[1];
-                    //chat.printChatMessage(new ClientMessage().link("Image Link", urlString, TextFormatting.BLUE));
+                    Header header = response.getFirstHeader("Content-Type");
+                    if (header.toString().contains("html")){
+                        HttpEntity body = response.getEntity();
+                        String content = EntityUtils.toString(body);
+                        List<String> contentUrl = Filter.extractUrls(content);
+                        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Response: " + content));
+                        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Possible matches: " + Arrays.toString(contentUrl.toArray())));
+
+                    }
                     Messages.uploadMessage(urlString);
                 }
 
@@ -89,10 +98,10 @@ public class CustomUploader{
                 }
 
             }
-            catch (Exception e){
+            catch (IOException ex){
                 //In case something goes wrong!
-                e.printStackTrace();
-                Messages.errorMessage(e.getMessage());
+                ex.printStackTrace();
+                Messages.errorMessage(ex.getMessage());
             }finally{
                 try{
                     client.close();

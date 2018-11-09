@@ -24,6 +24,9 @@ public class Messages{
     public static void uploadMessage (String result){
 
         ITextComponent uploadstr = new TextComponentTranslation("imageutil.message.upload.success").appendSibling(new TextComponentString(" "));
+        if (!result.endsWith(".png") && !result.endsWith(".jpg")){
+            result += ".png";
+        }
         ITextComponent linkText = new TextComponentString(result);
         try{
             ImageUtil.downloadFromUrl(new URL(result));
