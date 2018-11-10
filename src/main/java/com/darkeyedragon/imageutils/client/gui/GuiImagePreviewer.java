@@ -69,8 +69,10 @@ public class GuiImagePreviewer extends GuiScreen{
         this.buttonList.add(new GuiButton(0, this.width / 2 - 50 - 105, 10, 100, 20, "Copy Image"));
         this.buttonList.add(new GuiButton(1, this.width / 2 - 50, 10, 100, 20, "Open Image"));
         GuiButton urlButton = new GuiButton(2, this.width / 2 - 50 + 105, 10, 100, 20, "Copy Url");
+        GuiButton webhookButton = new GuiButton(2, this.width / 2 - 50 + 105, 10, 100, 20, "Upload to webhook");
         if (urlStr == null){
             urlButton.enabled = false;
+            webhookButton.enabled = false;
         }
         this.buttonList.add(urlButton);
         if (bufferedImage == null){
