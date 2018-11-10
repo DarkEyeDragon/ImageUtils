@@ -1,16 +1,20 @@
 package com.darkeyedragon.imageutils.client.gui;
 
-import com.darkeyedragon.imageutils.client.message.ClientMessage;
+import com.darkeyedragon.imageutils.client.ModConfig;
 import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
 import com.darkeyedragon.imageutils.client.utils.ImageResource;
 import com.darkeyedragon.imageutils.client.utils.ImageUtil;
+import com.darkeyedragon.imageutils.client.webhooks.DiscordWebhook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,16 +22,27 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.TreeMap;
 
 public class GuiImagePreviewer extends GuiScreen{
     private final String urlStr;
     private final ImageResource imgResource;
-    private final int scale = new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
+    private final int scale;
     private BufferedImage bufferedImage;
     private ResourceLocation resourceLocation;
     private boolean preview = true;
+    private final Minecraft mc;
+    private final GuiNewChat chat;
 
     public GuiImagePreviewer (ImageResource imgResource){
+        mc = Minecraft.getMinecraft();
+        chat = mc.ingameGUI.getChatGUI();
+        scale = new ScaledResolution(mc).getScaleFactor();
         this.imgResource = imgResource;
         this.bufferedImage = imgResource.getImage();
         this.urlStr = imgResource.getUrl();
@@ -40,7 +55,7 @@ public class GuiImagePreviewer extends GuiScreen{
         if (preview){
             int x = (width / 2 - (bufferedImage.getWidth() / 2) / scale);
             int y = (height / 2 - (bufferedImage.getHeight() / 2) / scale);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation);
+            mc.getTextureManager().bindTexture(resourceLocation);
             drawModalRectWithCustomSizedTexture(x, y, 0, 0, bufferedImage.getWidth() / scale, bufferedImage.getHeight() / scale, bufferedImage.getWidth() / scale, bufferedImage.getHeight() / scale);
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -69,12 +84,13 @@ public class GuiImagePreviewer extends GuiScreen{
         this.buttonList.add(new GuiButton(0, this.width / 2 - 50 - 105, 10, 100, 20, "Copy Image"));
         this.buttonList.add(new GuiButton(1, this.width / 2 - 50, 10, 100, 20, "Open Image"));
         GuiButton urlButton = new GuiButton(2, this.width / 2 - 50 + 105, 10, 100, 20, "Copy Url");
-        GuiButton webhookButton = new GuiButton(2, this.width / 2 - 50 + 105, 10, 100, 20, "Upload to webhook");
+        GuiButton webhookButton = new GuiButton(3, this.width / 2 - 50 + 160, 10, 100, 20, "Upload to webhook");
         if (urlStr == null){
             urlButton.enabled = false;
             webhookButton.enabled = false;
         }
         this.buttonList.add(urlButton);
+        this.buttonList.add(webhookButton);
         if (bufferedImage == null){
 
             preview = false;
@@ -83,11 +99,13 @@ public class GuiImagePreviewer extends GuiScreen{
 
     @Override
     protected void actionPerformed (GuiButton button){
+        TextComponentTranslation clipboard = new TextComponentTranslation("imageutil.message.copy_to_clipboard");
+        TextComponentTranslation clipboard_error = new TextComponentTranslation("imageutil.message.copy_to_clipboard_error");
         if (button.id == 0){
             if (CopyToClipboard.copy(bufferedImage)){
-                ClientMessage.basic("Copied image to clipboard");
+                chat.printChatMessage(clipboard);
             }else{
-                ClientMessage.basic("Unable to copy image to clipboard");
+                chat.printChatMessage(clipboard_error);
             }
         }else if (button.id == 1){
             if (imgResource.getPath() != null){
@@ -103,14 +121,40 @@ public class GuiImagePreviewer extends GuiScreen{
                 }
                 catch (IOException | URISyntaxException e){
                     e.printStackTrace();
-                    mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Unable to open browser!"));
+                    chat.printChatMessage(new TextComponentTranslation("imageutil.message.browser_error"));
                 }
             }
         }else if (button.id == 2){
             if (CopyToClipboard.copy(urlStr)){
-                ClientMessage.basic("Copied link to clipboard");
+                chat.printChatMessage(clipboard);
             }else{
-                ClientMessage.basic("Unable to copy link to clipboard");
+                chat.printChatMessage(clipboard_error);
+            }
+        }else if (button.id == 3){
+            EntityPlayer player = mc.player;
+            if (!ModConfig.webhookUrl.isEmpty()){
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                DiscordWebhook discordWebhook = new DiscordWebhook(ModConfig.webhookUrl);
+                discordWebhook.setUsername("Image Utils");
+                DiscordWebhook.EmbedObject embedObject = new DiscordWebhook.EmbedObject();
+                embedObject.setUrl(urlStr);
+                embedObject.setImage(urlStr);
+                embedObject.setTitle("Uploaded image");
+                embedObject.setTimestamp(dateFormat.format(new Date()));
+                embedObject.setFooter("Requested by " + player.getName(), "https://mc-heads.net/avatar/" + player.getUniqueID() + "/32");
+                discordWebhook.setAvatarUrl("https://media.forgecdn.net/avatars/168/845/636711656195462582.png");
+                discordWebhook.addEmbed(embedObject);
+                try{
+                    discordWebhook.execute();
+                    chat.printChatMessage(new TextComponentTranslation("imageutil.message.webhook.sent"));
+                }
+                catch (IOException e){
+                    chat.printChatMessage(new TextComponentTranslation("imageutil.message.webhook.error").appendSibling(new TextComponentString(e.getMessage())));
+                    e.printStackTrace();
+                }
+            }else{
+                chat.printChatMessage(new TextComponentTranslation("imageutil.message.webhook.not_sent"));
             }
         }
     }
@@ -126,6 +170,8 @@ public class GuiImagePreviewer extends GuiScreen{
         if (bufferedImage == null){
             return;
         }
-        resourceLocation = Minecraft.getMinecraft().renderEngine.getDynamicTextureLocation("urlImage", new DynamicTexture(bufferedImage));
+        TreeMap<String, String> treeMap = new TreeMap<>();
+        treeMap.containsKey("ZaP");
+        resourceLocation = mc.renderEngine.getDynamicTextureLocation("urlImage", new DynamicTexture(bufferedImage));
     }
 }

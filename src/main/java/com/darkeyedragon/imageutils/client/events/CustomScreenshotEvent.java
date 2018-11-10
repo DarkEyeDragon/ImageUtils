@@ -7,6 +7,7 @@ import com.darkeyedragon.imageutils.client.imageuploaders.ImgurUploader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -44,7 +45,7 @@ public class CustomScreenshotEvent{
                     }
                 });
                 Minecraft.getMinecraft().addScheduledTask(() -> {
-                    ITextComponent prefix = new TextComponentString("Screenshot saved as: ");
+                    TextComponentTranslation prefix = new TextComponentTranslation("imageutil.message.screenshot_save");
                     ITextComponent itextcomponent = new TextComponentString(screenshotFile.getName());
                     //itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://LINK::"+screenshotFile.getName()));
                     itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/view " + screenshotFile.getName()));

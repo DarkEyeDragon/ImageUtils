@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -31,7 +32,7 @@ public class GuiPartialScreenshot extends GuiScreen{
             //GlStateManager.enableAlpha();
             //drawBackground(0xAB000000);
             drawRect(0, 0, width, height, 0x66000000);
-            drawHoveringText("Select an area", mouseX, mouseY);
+            drawHoveringText(I18n.format("imageutil.gui.partial_screenshot"), mouseX, mouseY);
         }
 
         super.drawScreen(mouseX, mouseY, partialTicks);

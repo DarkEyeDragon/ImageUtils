@@ -89,7 +89,7 @@ public class ImgurUploader{
                 //In case something goes wrong!
                 e.printStackTrace();
                 ITextComponent errorText = new TextComponentTranslation("imageutil.message.upload.error").appendText(" " + responseCode);
-                ITextComponent report = new TextComponentString("If this keeps happening please report the issue ");
+                ITextComponent report = new TextComponentTranslation("imageutil.message.upload.report");
                 ITextComponent link = new TextComponentTranslation("imageutil.message.upload.errorlink");
                 ITextComponent hover = new TextComponentString("github.com/DarkEyeDragon/ImageUtils/issues");
                 link.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/DarkEyeDragon/ImageUtils/issues"));

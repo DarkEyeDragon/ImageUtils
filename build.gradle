@@ -42,7 +42,9 @@ minecraft {
 dependencies {
     compile (group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.5')
     compile (group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.1'){transitive = false}
+
     compile (group: 'net.coobird', name: 'thumbnailator', version: '0.4.8')
+    
 }
 
 processResources {

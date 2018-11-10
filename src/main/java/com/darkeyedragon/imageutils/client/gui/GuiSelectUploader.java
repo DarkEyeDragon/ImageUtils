@@ -17,34 +17,13 @@ public class GuiSelectUploader extends GuiSideBarBase{
     List<String> stringList = new ArrayList<>();
     private GuiScreen parent;
 
+    //TODO implement
     public GuiSelectUploader (GuiScreen parent){
         mc = Minecraft.getMinecraft();
         this.parent = parent;
         width = mc.displayWidth;
         height = mc.displayHeight;
         stringList.add("Imgur");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
-        stringList.add("Flickr");
         stringList.add("Flickr");
         for (UploaderFile uploaderFile : ImageUtilsMain.uploaders){
             stringList.add(uploaderFile.getDisplayName());

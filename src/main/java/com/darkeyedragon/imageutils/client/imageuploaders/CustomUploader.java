@@ -9,6 +9,7 @@ import com.darkeyedragon.imageutils.client.utils.Filter;
 import com.darkeyedragon.imageutils.client.utils.JsonHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import org.apache.http.Header;
@@ -36,12 +37,14 @@ public class CustomUploader{
     private static HttpPost httpPost;
     private static CloseableHttpClient client;
     private static String urlString;
+    private static Minecraft mc;
     private static GuiNewChat chat;
 
     public static void uploadImage (BufferedImage bufferedImage){
         ImageUtilsMain.fixedThreadPool.submit(() -> {
-            Thread.currentThread().setName("Custom ImageUtil Uploading");
-            chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
+            Thread.currentThread().setName(ImageUtilsMain.MODID + "/uploader");
+            mc = Minecraft.getMinecraft();
+            chat = mc.ingameGUI.getChatGUI();
             uploaderFile = ImageUtilsMain.activeUploader;
             if (uploaderFile == null || uploaderFile.getUploader() == null){
                 chat.printChatMessage(new TextComponentTranslation("imageutil.message.invalid_config"));
@@ -63,7 +66,7 @@ public class CustomUploader{
             try{
                 ImageIO.write(bufferedImage, "png", baos);
                 byte[] bytes = baos.toByteArray();
-                Minecraft.getMinecraft().ingameGUI.setOverlayMessage("Uploading to " + ImageUtilsMain.activeUploader.getDisplayName(), true);
+                mc.ingameGUI.setOverlayMessage(I18n.format("imageutil.message.overlay_message.upload") + " " + ImageUtilsMain.activeUploader.getDisplayName(), true);
                 builder.addBinaryBody("image", bytes, ContentType.IMAGE_JPEG, uploaderFile.getUploader().getFileFormName());
                 HttpEntity multipart = builder.build();
                 httpPost.setEntity(multipart);
@@ -80,8 +83,8 @@ public class CustomUploader{
                         HttpEntity body = response.getEntity();
                         String content = EntityUtils.toString(body);
                         List<String> contentUrl = Filter.extractUrls(content);
-                        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Response: " + content));
-                        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Possible matches: " + Arrays.toString(contentUrl.toArray())));
+                        mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Response: " + content));
+                        mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Possible matches: " + Arrays.toString(contentUrl.toArray())));
 
                     }
                     Messages.uploadMessage(urlString);

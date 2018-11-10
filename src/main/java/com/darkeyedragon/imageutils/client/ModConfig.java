@@ -31,6 +31,11 @@ public class ModConfig{
     @Config.Comment ("Set this to true if you want to reload the uploader files when you close this config screen. Useful when you made changes to the config after the game was launched.")
     public static boolean reloadUploaders = false;
 
+    @Config.Name ("webhook")
+    @Config.LangKey ("imageutil.config.webhook") //TODO ADD
+    @Config.Comment ("Set the discord webhook URL ")
+    public static String webhookUrl = "";
+
     @Config.Name ("debug")
     @Config.LangKey ("imageutil.config.debug") //TODO ADD
     @Config.Comment ("Set this to true if you want to reload the uploader files when you close this config screen. Useful when you made changes to the config after the game was launched.")

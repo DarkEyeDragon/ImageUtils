@@ -66,7 +66,7 @@ public class Messages{
                     BufferedImage downloadedImage = ImageUtil.downloadFromUrl(url);
                     addToLinkList(link, downloadedImage);
                     //TODO CLEAN UP
-                    ITextComponent textLink = new TextComponentString("view image");
+                    TextComponentTranslation textLink = new TextComponentTranslation("imageutil.message.view_image");
                     textLink.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
                     textLink.getStyle().setColor(TextFormatting.GOLD);
                     textLink.getStyle().setUnderlined(true);
@@ -96,7 +96,7 @@ public class Messages{
                     BufferedImage downloadedImage = ImageUtil.downloadFromUrl(url);
                     addToLinkList(link, downloadedImage);
                     //TODO CLEAN UP
-                    ITextComponent textLink = new TextComponentString("view image");
+                    TextComponentTranslation textLink = new TextComponentTranslation("imageutil.message.view_image");
                     textLink.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
                     textLink.getStyle().setColor(TextFormatting.GOLD);
                     textLink.getStyle().setUnderlined(true);

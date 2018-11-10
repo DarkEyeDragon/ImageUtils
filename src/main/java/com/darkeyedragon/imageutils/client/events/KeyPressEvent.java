@@ -19,7 +19,6 @@ public class KeyPressEvent{
             Minecraft.getMinecraft().displayGuiScreen(new GuiPartialScreenshot());
             MouseInfo.getPointerInfo().getLocation();
         }else if (KeyBindings.screenshotViewer.isPressed()){
-            //Minecraft.getMinecraft().displayGuiScreen(new GuiLocalScreenshots(Minecraft.getMinecraft().currentScreen));
             Minecraft.getMinecraft().displayGuiScreen(new GuiSelectUploader(null));
 
         }else if (KeyBindings.screenshotUploadKey.isPressed()){

@@ -8,6 +8,7 @@ public class GuiConfirmAction extends GuiYesNo{
     private final String messageLine1;
     private final String messageLine2;
     private final String title;
+    //TODO add possibility to translate
     private String buttonConfirm = "Yes";
     private String buttonCancel = "Cancel";
 
