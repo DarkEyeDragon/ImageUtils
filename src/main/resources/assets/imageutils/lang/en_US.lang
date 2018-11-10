@@ -18,7 +18,7 @@ imageutil.config.debug=Debug Mode
 imageutil.config.debug.tooltip=This will display useful information to the debug screen. For regular gameplay this probably should be set to false.
 
 imageutil.message.upload.success=Image uploaded to
-imageutil.message.upload.hover=Click here to view see a preview of the image
+imageutil.message.upload.hover=Click here to see a preview of the image
 imageutil.message.upload.error=Something went wrong! Last error:
 imageutil.message.upload.error1=Make sure your server/client is configured correctly! You can find more information
 imageutil.message.upload.errorlink=here
