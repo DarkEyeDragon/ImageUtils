@@ -11,11 +11,17 @@ imageutil.config.override.tooltip=Override the default screenshot key.
 imageutil.config.uploader_file=Uploader file
 imageutil.config.uploader_file.tooltip=The URL to your upload file/script
 
+imageutil.config.custom_server=Custom server
+imageutil.config.custom_server.tooltip=The server to upload to
+
 imageutil.config.reload_uploaders=Reload uploaders
 imageutil.config.reload_uploaders.tooltip=Set this to true if you added files after launching the game. This will reload all the upload scripts.
 
 imageutil.config.debug=Debug Mode
 imageutil.config.debug.tooltip=This will display useful information to the debug screen. For regular gameplay this probably should be set to false.
+
+imageutil.config.webhook=Webhook
+imageutil.config.webhook.tooltip=Paste the url of your discord webhook here.
 
 imageutil.message.upload.success=Image uploaded to
 imageutil.message.upload.hover=Click here to see a preview of the image

@@ -1,5 +1,5 @@
-#Translated by Pim
-#Översatt av Pim
+# Translated by Pim
+# Översatt av Pim
 imageutil.config.general=Allmän
 imageutil.config.general.tooltip=Allmäna Inställningar
 
@@ -12,11 +12,17 @@ imageutil.config.override.tooltip=Överskrid standardtangenten till att ta skär
 imageutil.config.uploader_file=Uppladdningsfil
 imageutil.config.uploader_file.tooltip=URL:en till din uppladdnings- fil/skript.
 
+imageutil.config.custom_server=Custom server
+imageutil.config.custom_server.tooltip=The server to upload to
+
 imageutil.config.reload_uploaders=Ladda om uppladdningsfiler
 imageutil.config.reload_uploaders.tooltip=Aktivera denna inställning om du har lagt till filer efter att ha startat spelet. Detta kommer att ladda om alla uppladningsfiler.
 
 imageutil.config.debug=Utvecklarläge
 imageutil.config.debug.tooltip=Sätt denna till sann om du vill visa användbar information till utvecklarskärmen. För normalt spelande brukar detta inte vara aktiverat.
+
+imageutil.config.webhook=Webhook
+imageutil.config.webhook.tooltip=Paste the url of your discord webhook here.
 
 imageutil.message.upload.success=Skärmdump uppladdad till
 imageutil.message.upload.hover=Tryck här för att se en förhandsvisning av skärmdumpen

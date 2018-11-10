@@ -11,11 +11,17 @@ imageutil.config.override.tooltip=Altera a tecla principal.
 imageutil.config.uploader_file=Ficheiro de upload
 imageutil.config.uploader_file.tooltip=O URL para o script de upload
 
+imageutil.config.custom_server=Custom server
+imageutil.config.custom_server.tooltip=The server to upload to
+
 imageutil.config.reload_uploaders=Atualizar uploaders
 imageutil.config.reload_uploaders.tooltip=Defina isto para verdadeiro se adicionou ficheiros depois de abrir o jogo. Isto irá carregar todos os ficheiros.
 
 imageutil.config.debug=Modo de depuração
 imageutil.config.debug.tooltip=Isto irá mostrar informação útil no ecrã de depuração. A não ser que esteja a tentar encontrar algum bug, mantenha este valor como falso.
+
+imageutil.config.webhook=Webhook
+imageutil.config.webhook.tooltip=Paste the url of your discord webhook here.
 
 imageutil.message.upload.success=Imagem enviada para:
 imageutil.message.upload.hover=Faça clique aqui para ver uma pre-visualização da imagem
@@ -45,7 +51,6 @@ imageutil.message.webhook.sent=A imagem foi postada no Discord.
 imageutil.message.webhook.not_sent=A imagem não foi enviada. Verifique se o URL do Webhook está correto.
 imageutil.message.webhook.error=Não foi possivel postar o webhook! Erro:
 imageutil.message.view_image=Ver imagem
-
 imageutil.message.screenshot_save=Imagem guardada como:
 imageutil.message.non_json_uploadResponse=Resposta:
 imageutil.message.non_json_matches=Combinações possíveis:
@@ -57,7 +62,6 @@ imageutil.button.no=Não
 imageutil.button.cancel=Cancelar
 imageutil.button.upload=Enviar
 imageutil.button.options=Opções
-
 imageutil.button.delete=Apagar
 imageutil.button.refresh=Atualizar
 imageutil.button.save=Guardar

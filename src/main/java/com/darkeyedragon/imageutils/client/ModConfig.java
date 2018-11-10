@@ -17,17 +17,17 @@ public class ModConfig{
     public static boolean copyToClipboard = true;
 
     @Config.Name ("useCustomServer")
-    @Config.LangKey ("imageutil.config.custom_server") //TODO ADD
+    @Config.LangKey ("imageutil.config.custom_server")
     @Config.Comment ("Set to true if you wan to use your own webserver")
     public static boolean customServer = false;
 
     @Config.Name ("uploaderFile")
-    @Config.LangKey ("imageutil.config.uploader_file") //TODO ADD
+    @Config.LangKey ("imageutil.config.uploader_file")
     @Config.Comment ("works with any file extension, just make sure the content of the file is in a json format\n More info can be found in the docs")
     public static String uploader = "ExampleName.json";
 
     @Config.Name ("reloadUploaders")
-    @Config.LangKey ("imageutil.config.reload_uploaders") //TODO ADD
+    @Config.LangKey ("imageutil.config.reload_uploaders")
     @Config.Comment ("Set this to true if you want to reload the uploader files when you close this config screen. Useful when you made changes to the config after the game was launched.")
     public static boolean reloadUploaders = false;
 
