@@ -3,23 +3,23 @@ package com.darkeyedragon.imageutils.client.gui;
 import com.darkeyedragon.imageutils.client.utils.ImageResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
 public class GuiScreenshotOptions extends GuiConfirmAction{
 
+    final GuiScreen parent;
     private GuiTextField imageName;
     private String title;
-    final GuiScreen parent;
-    private GuiLocalScreenshots guiLocalScreenshots;
     private ImageResource imageResource;
 
     GuiScreenshotOptions (GuiYesNoCallback parentScreenIn, String title, String confirm, String cancel, int parentButtonClickedIdIn, GuiScreen parent){
-        super(parentScreenIn, title, "", "", confirm,cancel, parentButtonClickedIdIn, parent);
+        super(parentScreenIn, title, "", "", confirm, cancel, parentButtonClickedIdIn, parent);
         this.title = title;
         this.parent = parent;
-        this.guiLocalScreenshots = (GuiLocalScreenshots) parent;
+        GuiLocalScreenshots guiLocalScreenshots = (GuiLocalScreenshots) parent;
         imageResource = guiLocalScreenshots.getImageResource();
     }
 
@@ -37,7 +37,7 @@ public class GuiScreenshotOptions extends GuiConfirmAction{
     public void drawScreen (int mouseX, int mouseY, float partialTicks){
         GuiButton save = buttonList.get(0);
         super.drawScreen(mouseX, mouseY, partialTicks);
-        this.drawString(this.fontRenderer, "Image name", this.width / 2 - 100, height / 2 - 32, 10526880);
+        this.drawString(this.fontRenderer, I18n.format("imageutil.gui.screenshot_options.image_name"), this.width / 2 - 100, height / 2 - 32, 10526880);
         drawCenteredString(mc.fontRenderer, title, width / 2, height / 2 - 60, 0xffffff);
         if (imageName.getText().equalsIgnoreCase(imageResource.getName())){
             save.enabled = false;
@@ -72,6 +72,7 @@ public class GuiScreenshotOptions extends GuiConfirmAction{
         this.imageName.textboxKeyTyped(typedChar, keyCode);
     }
 
+    @SuppressWarnings ("NullableProblems")
     @Override
     public void onResize (Minecraft mcIn, int w, int h){
         super.onResize(mcIn, w, h);

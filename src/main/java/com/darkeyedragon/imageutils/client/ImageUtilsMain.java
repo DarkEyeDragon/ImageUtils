@@ -21,12 +21,12 @@ import java.util.concurrent.Executors;
 @Mod (modid = ImageUtilsMain.MODID, version = ImageUtilsMain.VERSION, updateJSON = ImageUtilsMain.updateJSON, clientSideOnly = true)
 public class ImageUtilsMain{
     public static final String MODID = "imageutils";
-    static final String VERSION = "1.0.4";
+    public static final String VERSION = "@VERSION@";
     static final String updateJSON = "https://darkeyedragon.me/mods/updates/imageutils.json";
 
     public static Logger logger;
     public static ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
-
+    public static List<String> webhookLinks = new ArrayList<>();
     public static LinkedHashMap<String, BufferedImage> validLinks = new LinkedHashMap<String, BufferedImage>(){
         @Override
         protected boolean removeEldestEntry (Map.Entry<String, BufferedImage> eldest){
@@ -71,7 +71,7 @@ public class ImageUtilsMain{
     }
 
     @Mod.EventHandler
-    public void init (FMLInitializationEvent event){
+    public void init (FMLInitializationEvent init){
         MinecraftForge.EVENT_BUS.register(new KeyPressEvent());
         MinecraftForge.EVENT_BUS.register(new CustomScreenshotEvent());
         MinecraftForge.EVENT_BUS.register(new ChatReceivedEvent());

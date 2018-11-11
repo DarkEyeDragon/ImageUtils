@@ -9,6 +9,7 @@ public class UploaderTypeAdaptor{
     private String DeletionURL;
     private Map<String, Object> Arguments;
 
+
     public String getRequestUrl (){
         return RequestURL;
     }

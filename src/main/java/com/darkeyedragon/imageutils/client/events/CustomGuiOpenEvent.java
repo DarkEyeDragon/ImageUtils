@@ -27,17 +27,17 @@ public class CustomGuiOpenEvent{
                 ImageResource imgResource = null;
                 if (ImageUtilsMain.validLinks.containsKey(link)){
                     imgResource = new ImageResource(link, ImageUtilsMain.validLinks.get(link), link);
-                }else if(link.startsWith("http://LINK::")){
-                    String splitStr = link.replace("http://LINK::","");
+                }else if (link.startsWith("http://LINK::")){
+                    String splitStr = link.replace("http://LINK::", "");
                     try{
-                        Path path= Paths.get(Minecraft.getMinecraft().gameDir.getCanonicalPath(),"screenshots", splitStr);
-                        imgResource = new ImageResource(splitStr ,ImageUtil.getLocal(path.toFile()), false, path.toString());
+                        Path path = Paths.get(Minecraft.getMinecraft().gameDir.getCanonicalPath(), "screenshots", splitStr);
+                        imgResource = new ImageResource(splitStr, ImageUtil.getLocal(path.toFile()), false, path.toString());
                     }
                     catch (IOException e1){
                         e1.printStackTrace();
                     }
                 }
-                if(imgResource != null){
+                if (imgResource != null){
                     e.setGui(new GuiImagePreviewer(imgResource));
                 }
             }else{

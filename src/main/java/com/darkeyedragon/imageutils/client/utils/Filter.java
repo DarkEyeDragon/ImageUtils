@@ -1,12 +1,13 @@
 package com.darkeyedragon.imageutils.client.utils;
 
-import javax.imageio.ImageIO;
+import com.darkeyedragon.imageutils.client.ImageUtilsMain;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,9 +16,7 @@ import java.util.regex.Pattern;
 public class Filter{
 
     private static final String urlRegex = "(https?:((//)|(\\\\))+[\\w\\d:#@%/;$()~_?+-=\\\\.&]*)";
-    private static final String fileUrlRegex = "(https?:((//)|(\\\\))+[\\w\\d:#@%/;$()~_?+-=\\\\.&]*)";
-    private static Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
-    private static Pattern fileRegex = Pattern.compile(fileUrlRegex);
+    private static final Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
 
     public static List<String> extractUrls (String text){
         List<String> containedUrls = new ArrayList<>();
@@ -35,20 +34,16 @@ public class Filter{
     }
 
     public static boolean isValidImage (String stringToCheck){
-        URLConnection conn;
-        try{
-            conn = new URL(stringToCheck).openConnection();
-            conn.setRequestProperty("User-Agent", "ScreenshotUploader/1.2");
-            InputStream image = conn.getInputStream();
-            return ImageIO.read(image) != null;
+        try (CloseableHttpClient curClient = HttpClientBuilder.create().setUserAgent("ScreenshotUploader/" + ImageUtilsMain.VERSION).build()){
+            return curClient.execute(new HttpGet(stringToCheck)).getFirstHeader("Content-Type").getValue().startsWith("image/");
         }
         catch (IOException e){
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
-    public static String getHostName (String link) throws URISyntaxException{
+    static String getHostName (String link) throws URISyntaxException{
         URI uri = new URI(link);
         return uri.getHost();
     }

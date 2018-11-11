@@ -16,13 +16,15 @@ Changelog can be found  [here](https://github.com/DarkEyeDragon/ImageUtils/blob/
 - Copy image to clipboard.
 - Open in browser.
 - Upload to custom image servers using the ShareX config files (more information below).
-
+- Post images directly in a discord server.
 
 #### Planned features:
-- ~~Add custom server support to upload to your own server~~ DONE
 - Filters
 - Overlays/watermarks
 
+#### Screenshots
+https://minecraft.curseforge.com/projects/image-utils/images
+(will add some directly here later)
 #### Changing settings
 - you can change your settings by going to mods on the main menu or by going to mod options in the in-game menu.
 ![alt text](https://darkeyedragon.me/images/tut1.png "change settings")

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//TODO look if this is a viable solution
 public class GuiUploaders extends GuiScreen{
 
     private Map<String, List<GuiTextField>> mapTextFields = new HashMap<>();

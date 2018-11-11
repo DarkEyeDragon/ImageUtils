@@ -42,31 +42,28 @@ public class GuiLocalScreenshots extends GuiScreen{
     private GuiButton cancelButton;
     private BufferedImage finalImage;
     private ResourceLocation resource;
-
-    ImageResource getImageResource (){
-        return imageResource;
-    }
-
     private ImageResource imageResource;
     private boolean completedLoading;
     private boolean deleteImage;
     private boolean deleteImageConfirm;
     private int imageIndex;
-
     public GuiLocalScreenshots (GuiScreen parentScreen){
         this.parentScreen = parentScreen;
     }
 
+    ImageResource getImageResource (){
+        return imageResource;
+    }
 
     @Override
     public void initGui (){
         super.initGui();
         this.buttonList.clear();
-        uploadButton = new GuiButton(1, this.width / 2 - 72 - 4 - 35 + 2, this.height - 52, 144, 20, "Upload");
-        optionsButton = new GuiButton(4, this.width / 2 + 35 + 4, this.height - 52, 70, 20, "Options");
-        deleteButton = new GuiButton(2, this.width / 2 - 70 - 35 - 4, this.height - 28, 70, 20, "Delete");
-        refreshButton = new GuiButton(3, this.width / 2 - 35, this.height - 28, 70, 20, "Refresh");
-        cancelButton = new GuiButton(0, this.width / 2 + 35 + 4, this.height - 28, 70, 20, I18n.format("gui.cancel"));
+        uploadButton = new GuiButton(1, this.width / 2 - 72 - 4 - 35 + 2, this.height - 52, 144, 20, I18n.format("imageutil.button.upload"));
+        optionsButton = new GuiButton(4, this.width / 2 + 35 + 4, this.height - 52, 70, 20, I18n.format("imageutil.button.options"));
+        deleteButton = new GuiButton(2, this.width / 2 - 70 - 35 - 4, this.height - 28, 70, 20, I18n.format("imageutil.button.delete"));
+        refreshButton = new GuiButton(3, this.width / 2 - 35, this.height - 28, 70, 20, I18n.format("imageutil.button.refresh"));
+        cancelButton = new GuiButton(0, this.width / 2 + 35 + 4, this.height - 28, 70, 20, I18n.format(I18n.format("imageutil.button.cancel")));
         deleteButton.enabled = false;
         uploadButton.enabled = false;
         optionsButton.enabled = false;
@@ -89,15 +86,15 @@ public class GuiLocalScreenshots extends GuiScreen{
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (completedLoading){
             if (screenshots.size() == 0){
-                this.drawCenteredString(this.fontRenderer, "Screenshots", this.width / 2, 12, 16777215);
-                drawCenteredString(mc.fontRenderer, "You don't have any screenshots yet.", width / 2, height / 2 - 30, 0xffffff);
+                this.drawCenteredString(this.fontRenderer, I18n.format("imageutil.gui.local_screenshots.title"), this.width / 2, 12, 16777215);
+                drawCenteredString(mc.fontRenderer, I18n.format("imageutil.gui.local_screenshots.no_screenshots"), width / 2, height / 2 - 30, 0xffffff);
                 return;
             }
             if (isSelected){
                 if (imageResource == null){
                     return;
                 }
-                this.drawCenteredString(this.fontRenderer, "Screenshots (" + (imageIndex + 1) + "/" + screenshots.size() + ")", this.width / 2, 12, 16777215);
+                this.drawCenteredString(this.fontRenderer, I18n.format("imageutil.gui.local_screenshots.title") + "(" + +(imageIndex + 1) + "/" + screenshots.size() + ")", this.width / 2, 12, 16777215);
                 deleteButton.enabled = true;
                 uploadButton.enabled = true;
                 optionsButton.enabled = true;
@@ -106,9 +103,9 @@ public class GuiLocalScreenshots extends GuiScreen{
                 int imgWidth = (int) Math.round(img.getWidth() * (scaledHeight * 0.00105));
                 int imgHeight = (int) Math.round(img.getHeight() * (scaledHeight * 0.00105));
                 int imgOffsetY = height / 2 - (imgHeight / 2 + height / 8);
-                String name = "Name: " + imageResource.getName();
-                String dimensions = "Dimensions: " + imageResource.getImage().getWidth() + "x" + imageResource.getImage().getHeight();
-                String location = "Location: " + imageResource.getPath();
+                String name = I18n.format("imageutil.gui.local_screenshots.name") + " " + imageResource.getName();
+                String dimensions = I18n.format("imageutil.gui.local_screenshots.dimensions") + " " + imageResource.getImage().getWidth() + "x" + imageResource.getImage().getHeight();
+                String location = I18n.format("imageutil.gui.local_screenshots.location") + " " + imageResource.getPath();
                 mc.fontRenderer.drawString(name, width / 2, imgOffsetY + imgHeight + 10, 0xffffff);
                 mc.fontRenderer.drawString(dimensions, width / 2, imgOffsetY + imgHeight + 20, 0xffffff);
                 mc.fontRenderer.drawSplitString(location, width / 2, imgOffsetY + imgHeight + 30, 200, 0xffffff);
@@ -117,11 +114,11 @@ public class GuiLocalScreenshots extends GuiScreen{
                 drawModalRectWithCustomSizedTexture(width / 2, imgOffsetY, 0, 0, imgWidth, imgHeight, imgWidth, imgHeight);
             }else{
                 list.elementClicked(0, false, 0, 0);
-                this.drawCenteredString(this.fontRenderer, "Screenshots", this.width / 2, 16, 16777215);
+                this.drawCenteredString(this.fontRenderer, I18n.format("imageutil.gui.local_screenshots.name"), this.width / 2, 16, 16777215);
             }
         }else{
-            this.drawCenteredString(this.fontRenderer, "Screenshots", this.width / 2, 16, 16777215);
-            drawCenteredString(mc.fontRenderer, "loading your screenshots...", (int) (Math.round(width / 1.4)), (int) (Math.round(height / 2.3)), 0xffffff);
+            this.drawCenteredString(this.fontRenderer, I18n.format("imageutil.gui.local_screenshots.name"), this.width / 2, 16, 16777215);
+            drawCenteredString(mc.fontRenderer, I18n.format("imageutil.gui.local_screenshots.loading"), (int) (Math.round(width / 1.4)), (int) (Math.round(height / 2.3)), 0xffffff);
         }
     }
 
@@ -175,7 +172,7 @@ public class GuiLocalScreenshots extends GuiScreen{
         }else if (button == optionsButton){
             mc.displayGuiScreen(new GuiScreenshotOptions((result, id) -> {
                 mc.displayGuiScreen(this);
-            }, "Screenshot Settings", "Save","Cancel", 0, this){
+            }, "Screenshot Settings", "Save", "Cancel", 0, this){
                 @Override
                 public void drawScreen (int mouseX, int mouseY, float partialTicks){
                     parent.drawScreen(-1, -1, partialTicks);
@@ -314,7 +311,7 @@ public class GuiLocalScreenshots extends GuiScreen{
         }
 
         protected void drawSlot (int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks){
-            GuiLocalScreenshots.this.drawString(GuiLocalScreenshots.this.fontRenderer, (screenshots.get(slotIndex).getName()), this.width / 5- (this.getListWidth() / 3)+5, yPos + 1, 16777215);
+            GuiLocalScreenshots.this.drawString(GuiLocalScreenshots.this.fontRenderer, (screenshots.get(slotIndex).getName()), this.width / 5 - (this.getListWidth() / 3) + 5, yPos + 1, 16777215);
         }
 
         public void handleMouseInput (){

@@ -1,3 +1,12 @@
+## Version 1.0.5
+##### Changes
+- Added discord web hooks. You can now post your images directly in a discord.
+- Added Swedish, Brazilian and Portuguese translation (thanks to Nickac and Pim).
+##### Bug Fixes
+- Improved the custom uploader quite a bit. Now responses will be a lot more detailed in case of failure.
+It will also display the html body in case there is no JSON response.
+- Fixed some crashes related to malformed custom uploader configs.
+
 ## Version 1.0.4
 ##### Changes
 - Partial screenshots(F6) now look better.

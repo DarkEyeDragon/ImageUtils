@@ -24,6 +24,9 @@ public class Messages{
     public static void uploadMessage (String result){
 
         ITextComponent uploadstr = new TextComponentTranslation("imageutil.message.upload.success").appendSibling(new TextComponentString(" "));
+        if (!result.endsWith(".png") && !result.endsWith(".jpg")){
+            result += ".png";
+        }
         ITextComponent linkText = new TextComponentString(result);
         try{
             ImageUtil.downloadFromUrl(new URL(result));
@@ -63,7 +66,7 @@ public class Messages{
                     BufferedImage downloadedImage = ImageUtil.downloadFromUrl(url);
                     addToLinkList(link, downloadedImage);
                     //TODO CLEAN UP
-                    ITextComponent textLink = new TextComponentString("view image");
+                    TextComponentTranslation textLink = new TextComponentTranslation("imageutil.message.view_image");
                     textLink.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
                     textLink.getStyle().setColor(TextFormatting.GOLD);
                     textLink.getStyle().setUnderlined(true);
@@ -93,7 +96,7 @@ public class Messages{
                     BufferedImage downloadedImage = ImageUtil.downloadFromUrl(url);
                     addToLinkList(link, downloadedImage);
                     //TODO CLEAN UP
-                    ITextComponent textLink = new TextComponentString("view image");
+                    TextComponentTranslation textLink = new TextComponentTranslation("imageutil.message.view_image");
                     textLink.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
                     textLink.getStyle().setColor(TextFormatting.GOLD);
                     textLink.getStyle().setUnderlined(true);

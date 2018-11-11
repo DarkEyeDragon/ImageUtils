@@ -14,7 +14,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
-version = "1.0.4"
+version = "1.0.5"
 group = "com.darkeyedragon.imageutils" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ImageUtils"
 
@@ -24,15 +24,18 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.4.2705"
+    version = "1.12.2-14.23.5.2768"
     runDir = "run"
 
+
+    replace "@VERSION@", project.version
+    replaceIn "ImageUtilsMain.java"
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "stable_39"
+    mappings = "snapshot_20180814"
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 

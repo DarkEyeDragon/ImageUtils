@@ -67,8 +67,8 @@ public class RegionSelector extends GuiScreen{
         int height = Minecraft.getMinecraft().displayHeight;
         int width = Minecraft.getMinecraft().displayWidth;
         drawRect(0, 0, startX, height, backgroundColor);
-        drawRect(startX, 0, width-startX, startY, backgroundColor);
-        drawRect(width, startY, endX+1, height, backgroundColor);
-        drawRect(startX, height, endX+1, endY+1, backgroundColor);
+        drawRect(startX, 0, width - startX, startY, backgroundColor);
+        drawRect(width, startY, endX + 1, height, backgroundColor);
+        drawRect(startX, height, endX + 1, endY + 1, backgroundColor);
     }
 }

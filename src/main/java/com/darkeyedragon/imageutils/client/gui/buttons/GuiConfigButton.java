@@ -9,6 +9,7 @@ public class GuiConfigButton extends GuiButton{
     private Types type;
     private GuiButton button;
     private List<ListElement> list;
+
     public GuiConfigButton (int buttonId, int x, int y, String buttonText, Types type){
         super(buttonId, x, y, buttonText);
         this.type = type;

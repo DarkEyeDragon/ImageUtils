@@ -14,10 +14,14 @@ import java.util.Date;
 
 public class ScreenshotHandler{
 
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+
+    /*Take a full screenshot of the current game window*/
     public static BufferedImage full (){
         return ScreenShotHelper.createScreenshot(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, Minecraft.getMinecraft().getFramebuffer());
     }
 
+    /*Take a partial screenshot of the current game window*/
     public static BufferedImage partial (Point first, Point second){
         BufferedImage screenshot = ScreenShotHelper.createScreenshot(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, Minecraft.getMinecraft().getFramebuffer());
         System.out.println("Values: X:" + (first.x + 3) + " Y:" + (first.y + 3) + " W:" + (second.x - first.x - 3) + " H:" + (second.y - first.y - 3));
@@ -27,6 +31,7 @@ public class ScreenshotHandler{
         //upload(alteredScreenshot);
     }
 
+    /*Upload the image using the current selected uploader*/
     public static void upload (BufferedImage screenshot){
         if (ModConfig.customServer){
             if (!ModConfig.uploader.isEmpty()){
@@ -39,8 +44,6 @@ public class ScreenshotHandler{
         }
     }
 
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-
     public static File getTimestampedPNGFileForDirectory (File gameDirectory){
         String s = DATE_FORMAT.format(new Date());
         int i = 1;
@@ -51,7 +54,6 @@ public class ScreenshotHandler{
             if (!file1.exists()){
                 return file1;
             }
-
             ++i;
         }
     }
