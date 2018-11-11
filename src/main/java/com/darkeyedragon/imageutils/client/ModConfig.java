@@ -32,12 +32,12 @@ public class ModConfig{
     public static boolean reloadUploaders = false;
 
     @Config.Name ("webhook")
-    @Config.LangKey ("imageutil.config.webhook") //TODO ADD
+    @Config.LangKey ("imageutil.config.webhook")
     @Config.Comment ("Set the discord webhook URL ")
     public static String webhookUrl = "";
 
     @Config.Name ("debug")
-    @Config.LangKey ("imageutil.config.debug") //TODO ADD
+    @Config.LangKey ("imageutil.config.debug")
     @Config.Comment ("Set this to true if you want to reload the uploader files when you close this config screen. Useful when you made changes to the config after the game was launched.")
     public static boolean debug = false;
 }

@@ -4,6 +4,7 @@ import com.darkeyedragon.imageutils.client.ImageUtilsMain;
 import com.darkeyedragon.imageutils.client.ModConfig;
 import com.darkeyedragon.imageutils.client.message.Messages;
 import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
+import com.darkeyedragon.imageutils.client.webhooks.WebhookValidation;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
@@ -76,7 +77,6 @@ public class ImgurUploader{
 
                 //Send result to player
                 Messages.uploadMessage(result);
-                //TODO CHANGE
                 if (ModConfig.copyToClipboard){
                     if (CopyToClipboard.copy(result)){
                         chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard"));
@@ -84,6 +84,7 @@ public class ImgurUploader{
                         chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard_error"));
                     }
                 }
+                WebhookValidation.addLink(result);
             }
             catch (IOException e){
                 //In case something goes wrong!
@@ -98,7 +99,6 @@ public class ImgurUploader{
                 link.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover));
                 Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(errorText);
                 Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(report.appendSibling(link));
-
                 Messages.errorMessage(e.getMessage());
             }
         });

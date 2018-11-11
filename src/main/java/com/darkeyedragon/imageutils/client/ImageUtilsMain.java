@@ -26,7 +26,7 @@ public class ImageUtilsMain{
 
     public static Logger logger;
     public static ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
-
+    public static List<String> webhookLinks = new ArrayList<>();
     public static LinkedHashMap<String, BufferedImage> validLinks = new LinkedHashMap<String, BufferedImage>(){
         @Override
         protected boolean removeEldestEntry (Map.Entry<String, BufferedImage> eldest){

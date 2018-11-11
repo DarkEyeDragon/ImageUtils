@@ -5,12 +5,14 @@ import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
 import com.darkeyedragon.imageutils.client.utils.ImageResource;
 import com.darkeyedragon.imageutils.client.utils.ImageUtil;
 import com.darkeyedragon.imageutils.client.webhooks.DiscordWebhook;
+import com.darkeyedragon.imageutils.client.webhooks.WebhookValidation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
@@ -27,7 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.TreeMap;
 
 public class GuiImagePreviewer extends GuiScreen{
     private final String urlStr;
@@ -81,18 +82,19 @@ public class GuiImagePreviewer extends GuiScreen{
     public void initGui (){
         super.initGui();
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(0, this.width / 2 - 50 - 105, 10, 100, 20, "Copy Image"));
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 50, 10, 100, 20, "Open Image"));
-        GuiButton urlButton = new GuiButton(2, this.width / 2 - 50 + 105, 10, 100, 20, "Copy Url");
-        GuiButton webhookButton = new GuiButton(3, this.width / 2 - 50 + 160, 10, 100, 20, "Upload to webhook");
+        this.buttonList.add(new GuiButton(0, this.width / 2 - 50 - 105, 10, 100, 20, I18n.format("imageutil.gui.image_preview.copy_image")));
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 50, 10, 100, 20, I18n.format("imageutil.gui.image_preview.open_image")));
+        GuiButton urlButton = new GuiButton(2, this.width / 2 - 50 + 105, 10, 100, 20, I18n.format("imageutil.gui.image_preview.copy_link"));
+        GuiButton webhookButton = new GuiButton(3, this.width / 2 - 55, height - (height / 10), 110, 20, I18n.format("imageutil.gui.image_preview.upload_webhook"));
         if (urlStr == null){
             urlButton.enabled = false;
+            webhookButton.enabled = false;
+        }else if (!WebhookValidation.validate(urlStr)){
             webhookButton.enabled = false;
         }
         this.buttonList.add(urlButton);
         this.buttonList.add(webhookButton);
         if (bufferedImage == null){
-
             preview = false;
         }
     }
@@ -148,6 +150,7 @@ public class GuiImagePreviewer extends GuiScreen{
                 try{
                     discordWebhook.execute();
                     chat.printChatMessage(new TextComponentTranslation("imageutil.message.webhook.sent"));
+                    WebhookValidation.removeLink(urlStr);
                 }
                 catch (IOException e){
                     chat.printChatMessage(new TextComponentTranslation("imageutil.message.webhook.error").appendSibling(new TextComponentString(e.getMessage())));
@@ -170,8 +173,6 @@ public class GuiImagePreviewer extends GuiScreen{
         if (bufferedImage == null){
             return;
         }
-        TreeMap<String, String> treeMap = new TreeMap<>();
-        treeMap.containsKey("ZaP");
         resourceLocation = mc.renderEngine.getDynamicTextureLocation("urlImage", new DynamicTexture(bufferedImage));
     }
 }

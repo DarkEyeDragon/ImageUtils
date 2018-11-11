@@ -39,6 +39,11 @@ imageutil.gui.local_screenshots.dimensions=Dimensions:
 imageutil.gui.local_screenshots.location=Location:
 imageutil.gui.local_screenshots.loading=loading screenshots...
 
+imageutil.gui.image_preview.copy_image=Copy Image
+imageutil.gui.image_preview.open_image=Open Image
+imageutil.gui.image_preview.copy_link=Copy Link
+imageutil.gui.image_preview.upload_webhook=Upload to webhook
+
 imageutil.gui.partial_screenshot=Select an area
 
 imageutil.gui.screenshot_options.image_name=Image name

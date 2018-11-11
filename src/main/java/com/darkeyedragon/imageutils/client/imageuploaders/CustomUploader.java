@@ -7,6 +7,7 @@ import com.darkeyedragon.imageutils.client.message.Messages;
 import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
 import com.darkeyedragon.imageutils.client.utils.Filter;
 import com.darkeyedragon.imageutils.client.utils.JsonHelper;
+import com.darkeyedragon.imageutils.client.webhooks.WebhookValidation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.resources.I18n;
@@ -89,9 +90,6 @@ public class CustomUploader{
                     }
                     Messages.uploadMessage(urlString);
                 }
-
-                //Send result to player
-                //new Messages().uploadMessage(result);
                 if (ModConfig.copyToClipboard){
                     if (CopyToClipboard.copy(urlString)){
                         chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard"));
@@ -99,7 +97,7 @@ public class CustomUploader{
                         chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard_error"));
                     }
                 }
-
+                WebhookValidation.addLink(urlString);
             }
             catch (IOException ex){
                 //In case something goes wrong!
