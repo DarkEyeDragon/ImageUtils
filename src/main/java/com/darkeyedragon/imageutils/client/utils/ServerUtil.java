@@ -23,7 +23,7 @@ public class ServerUtil{
         try{
             isPinging = true;
             lastPing = currentTime;
-            InetAddress address = InetAddress.getByName(Filter.getHostName(ImageUtilsMain.activeUploader.getUploader().getRequestUrl()));
+            InetAddress address = InetAddress.getByName(StringFilter.getHostName(ImageUtilsMain.activeUploader.getUploader().getRequestUrl()));
             isReachable = address.isReachable(300);
             isPinging = false;
         }

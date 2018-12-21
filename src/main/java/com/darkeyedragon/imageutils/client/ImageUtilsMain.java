@@ -108,18 +108,5 @@ public class ImageUtilsMain{
                 }
             }
         }
-        //debug(ModConfig.debug);
     }
-    //TODO CHANGE TO FUTURETASK
-    /*public static void debug(boolean enable){
-        ScheduledExecutorService timedTask = Executors.newScheduledThreadPool(1);
-        if(enable){
-            if(timedTask.isShutdown() || timedTask.isTerminated()){
-                logger.info("Enabling debug mode...");
-                timedTask.scheduleAtFixedRate(() -> Minecraft.getMinecraft().addScheduledTask(ServerUtil::ping), 0, 30L, TimeUnit.SECONDS);
-            }
-        }else{
-            //timedTask.shutdown();
-        }
-    }*/
 }

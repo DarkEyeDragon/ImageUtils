@@ -24,13 +24,14 @@ public class ImageUtil{
         }
     }
 
-    public static BufferedImage downloadFromUrl (URL imgUrl) throws IOException{
+    public static BufferedImage downloadFromUrl (String url) throws IOException{
 
-        if (Filter.isValidUrl(imgUrl.toString())){
-            if (!Filter.isValidImage(imgUrl.toString())){
-                imgUrl = new URL(imgUrl.toString() + ".png");
+        if (StringFilter.isValidUrl(url)){
+            URL imgUrl = new URL(url);
+            if (!StringFilter.isValidImage(url)){
+                imgUrl = new URL(url + ".png");
             }
-            if (Filter.isValidImage(imgUrl.toString())){
+            if (StringFilter.isValidImage(url)){
                 URLConnection conn;
                 conn = imgUrl.openConnection();
                 conn.setRequestProperty("User-Agent", "ScreenshotUploader/" + ImageUtilsMain.VERSION);

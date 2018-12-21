@@ -1,8 +1,8 @@
 package com.darkeyedragon.imageutils.client.message;
 
 import com.darkeyedragon.imageutils.client.ImageUtilsMain;
-import com.darkeyedragon.imageutils.client.utils.Filter;
 import com.darkeyedragon.imageutils.client.utils.ImageUtil;
+import com.darkeyedragon.imageutils.client.utils.StringFilter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -29,7 +29,7 @@ public class Messages{
         }
         ITextComponent linkText = new TextComponentString(result);
         try{
-            ImageUtil.downloadFromUrl(new URL(result));
+            ImageUtil.downloadFromUrl(result);
         }
         catch (IOException e){
             e.printStackTrace();
@@ -60,10 +60,9 @@ public class Messages{
 
     public static void imageLink (String link, String unformattedText){
         ImageUtilsMain.fixedThreadPool.submit(() -> {
-            if (Filter.isValidImage(link)){
+            if (StringFilter.isValidImage(link)){
                 try{
-                    URL url = new URL(link);
-                    BufferedImage downloadedImage = ImageUtil.downloadFromUrl(url);
+                    BufferedImage downloadedImage = ImageUtil.downloadFromUrl(link);
                     addToLinkList(link, downloadedImage);
                     //TODO CLEAN UP
                     TextComponentTranslation textLink = new TextComponentTranslation("imageutil.message.view_image");
@@ -90,10 +89,10 @@ public class Messages{
 
     public static void imageLink (String link){
         ImageUtilsMain.fixedThreadPool.submit(() -> {
-            if (Filter.isValidImage(link)){
+            if (StringFilter.isValidImage(link)){
                 try{
                     URL url = new URL(link);
-                    BufferedImage downloadedImage = ImageUtil.downloadFromUrl(url);
+                    BufferedImage downloadedImage = ImageUtil.downloadFromUrl(link);
                     addToLinkList(link, downloadedImage);
                     //TODO CLEAN UP
                     TextComponentTranslation textLink = new TextComponentTranslation("imageutil.message.view_image");

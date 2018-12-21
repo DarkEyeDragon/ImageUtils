@@ -16,7 +16,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -27,7 +26,7 @@ import java.util.Base64;
 public class ImgurUploader{
 
 
-    public static void uploadImage (BufferedImage bufferedImage){
+    public static void uploadImage (BufferedImage image){
 
         ImageUtilsMain.fixedThreadPool.submit(() -> {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -46,9 +45,6 @@ public class ImgurUploader{
                 con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 con.connect();
                 Minecraft.getMinecraft().ingameGUI.setOverlayMessage("Uploading image...", true);
-
-
-                ImageIO.write(bufferedImage, "png", baos);
                 baos.flush();
 
 

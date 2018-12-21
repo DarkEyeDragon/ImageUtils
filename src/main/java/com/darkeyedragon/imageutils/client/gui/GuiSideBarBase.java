@@ -10,6 +10,7 @@ public abstract class GuiSideBarBase extends GuiScreen{
     int barWidth = 150;
     private String title = "title";
     private int titleColor = 0xffffff;
+    //private List<ListItem>
 
     @Override
     public void initGui (){

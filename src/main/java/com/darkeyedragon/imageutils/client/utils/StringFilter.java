@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Filter{
+public class StringFilter{
 
     private static final String urlRegex = "(https?:((//)|(\\\\))+[\\w\\d:#@%/;$()~_?+-=\\\\.&]*)";
     private static final Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);

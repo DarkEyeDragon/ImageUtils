@@ -5,8 +5,8 @@ import com.darkeyedragon.imageutils.client.ModConfig;
 import com.darkeyedragon.imageutils.client.config.UploaderFile;
 import com.darkeyedragon.imageutils.client.message.Messages;
 import com.darkeyedragon.imageutils.client.utils.CopyToClipboard;
-import com.darkeyedragon.imageutils.client.utils.Filter;
 import com.darkeyedragon.imageutils.client.utils.JsonHelper;
+import com.darkeyedragon.imageutils.client.utils.StringFilter;
 import com.darkeyedragon.imageutils.client.webhooks.WebhookValidation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
@@ -83,7 +83,7 @@ public class CustomUploader{
                     if (header.toString().contains("html")){
                         HttpEntity body = response.getEntity();
                         String content = EntityUtils.toString(body);
-                        List<String> contentUrl = Filter.extractUrls(content);
+                        List<String> contentUrl = StringFilter.extractUrls(content);
                         mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Response: " + content));
                         mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Possible matches: " + Arrays.toString(contentUrl.toArray())));
 
