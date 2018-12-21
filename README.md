@@ -4,6 +4,8 @@ Minecraft forge mod that does exactly as it name indicates. Help you with images
 Latest version can be found on [CurseForge](https://minecraft.curseforge.com/projects/image-utils/files)
 
 Changelog can be found  [here](https://github.com/DarkEyeDragon/ImageUtils/blob/1.12.2/changelog.md)
+
+Feel free to join the discord  [here](https://discord.gg/p9YrN53). This is mainly for notifications regarding updates and commits.
 #### Default keys:
 - F4 Upload image
 - F2 Save and upload image (override has to be enabled to upload)
