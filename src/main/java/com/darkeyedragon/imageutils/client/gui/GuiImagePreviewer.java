@@ -40,6 +40,13 @@ public class GuiImagePreviewer extends GuiScreen{
     private final Minecraft mc;
     private final GuiNewChat chat;
 
+    GuiButton webhookButton;
+
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+    private DiscordWebhook discordWebhook = new DiscordWebhook(ModConfig.webhookUrl);
+    private DiscordWebhook.EmbedObject embedObject = new DiscordWebhook.EmbedObject();
+
+
     public GuiImagePreviewer (ImageResource imgResource){
         mc = Minecraft.getMinecraft();
         chat = mc.ingameGUI.getChatGUI();
@@ -70,7 +77,7 @@ public class GuiImagePreviewer extends GuiScreen{
         catch (IOException e){
             e.printStackTrace();
         }
-        mc.displayGuiScreen(null);
+        //mc.displayGuiScreen(null);
     }
 
     @Override
@@ -85,7 +92,7 @@ public class GuiImagePreviewer extends GuiScreen{
         this.buttonList.add(new GuiButton(0, this.width / 2 - 50 - 105, 10, 100, 20, I18n.format("imageutil.gui.image_preview.copy_image")));
         this.buttonList.add(new GuiButton(1, this.width / 2 - 50, 10, 100, 20, I18n.format("imageutil.gui.image_preview.open_image")));
         GuiButton urlButton = new GuiButton(2, this.width / 2 - 50 + 105, 10, 100, 20, I18n.format("imageutil.gui.image_preview.copy_link"));
-        GuiButton webhookButton = new GuiButton(3, this.width / 2 - 55, height - (height / 10), 110, 20, I18n.format("imageutil.gui.image_preview.upload_webhook"));
+        webhookButton = new GuiButton(3, this.width / 2 - 55, height - (height / 10), 110, 20, I18n.format("imageutil.gui.image_preview.upload_webhook"));
         if (urlStr == null){
             urlButton.enabled = false;
             webhookButton.enabled = false;
@@ -135,27 +142,38 @@ public class GuiImagePreviewer extends GuiScreen{
         }else if (button.id == 3){
             EntityPlayer player = mc.player;
             if (!ModConfig.webhookUrl.isEmpty()){
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-                DiscordWebhook discordWebhook = new DiscordWebhook(ModConfig.webhookUrl);
-                discordWebhook.setUsername("Image Utils");
-                DiscordWebhook.EmbedObject embedObject = new DiscordWebhook.EmbedObject();
-                embedObject.setUrl(urlStr);
-                embedObject.setImage(urlStr);
-                embedObject.setTitle("Uploaded image");
-                embedObject.setTimestamp(dateFormat.format(new Date()));
-                embedObject.setFooter("Requested by " + player.getName(), "https://mc-heads.net/avatar/" + player.getUniqueID() + "/32");
-                discordWebhook.setAvatarUrl("https://media.forgecdn.net/avatars/168/845/636711656195462582.png");
-                discordWebhook.addEmbed(embedObject);
-                try{
-                    discordWebhook.execute();
-                    chat.printChatMessage(new TextComponentTranslation("imageutil.message.webhook.sent"));
-                    WebhookValidation.removeLink(urlStr);
-                }
-                catch (IOException e){
-                    chat.printChatMessage(new TextComponentTranslation("imageutil.message.webhook.error").appendSibling(new TextComponentString(e.getMessage())));
-                    e.printStackTrace();
-                }
+
+                mc.displayGuiScreen(new GuiWebhook((result, id) -> {
+                    mc.displayGuiScreen(this);
+                    webhookButton.enabled = !result;
+                    if (result){
+                        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                        discordWebhook.setUsername("Image Utils");
+                        embedObject.setUrl(urlStr);
+                        embedObject.setImage(urlStr);
+                        embedObject.setTitle("Uploaded image");
+                        embedObject.setDescription(GuiWebhook.getDescription());
+                        embedObject.setTimestamp(dateFormat.format(new Date()));
+                        embedObject.setFooter("Requested by " + player.getName(), "https://mc-heads.net/avatar/" + player.getUniqueID() + "/32");
+                        discordWebhook.setAvatarUrl("https://media.forgecdn.net/avatars/168/845/636711656195462582.png");
+                        discordWebhook.addEmbed(embedObject);
+                        try{
+                            discordWebhook.execute();
+                            chat.printChatMessage(new TextComponentTranslation("imageutil.message.webhook.sent"));
+                            WebhookValidation.removeLink(urlStr);
+                        }
+                        catch (IOException e){
+                            chat.printChatMessage(new TextComponentTranslation("imageutil.message.webhook.error").appendSibling(new TextComponentString(e.getMessage())));
+                            e.printStackTrace();
+                        }
+                    }
+                }, "Description", 0, this){
+                    @Override
+                    public void drawScreen (int mouseX, int mouseY, float partialTicks){
+                        parent.drawScreen(-1, -1, partialTicks);
+                        super.drawScreen(mouseX, mouseY, partialTicks);
+                    }
+                });
             }else{
                 chat.printChatMessage(new TextComponentTranslation("imageutil.message.webhook.not_sent"));
             }

@@ -170,9 +170,7 @@ public class GuiLocalScreenshots extends GuiScreen{
             };
             mc.displayGuiScreen(guiConfirmDelete);
         }else if (button == optionsButton){
-            mc.displayGuiScreen(new GuiScreenshotOptions((result, id) -> {
-                mc.displayGuiScreen(this);
-            }, "Screenshot Settings", "Save", "Cancel", 0, this){
+            mc.displayGuiScreen(new GuiScreenshotOptions((result, id) -> mc.displayGuiScreen(this), "Screenshot Settings", "Save", "Cancel", 0, this){
                 @Override
                 public void drawScreen (int mouseX, int mouseY, float partialTicks){
                     parent.drawScreen(-1, -1, partialTicks);

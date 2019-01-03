@@ -1,5 +1,6 @@
 package com.darkeyedragon.imageutils.client.gui;
 
+import com.darkeyedragon.imageutils.client.gui.components.Location;
 import com.darkeyedragon.imageutils.client.gui.lists.ListItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -28,6 +29,19 @@ public class GuiFilter extends GuiScreen{
         this.fr = mc.fontRenderer;
     }
 
+
+    @Override
+    public void initGui (){
+        super.initGui();
+        for (int i = 0; i < listItems.size(); i++){
+            ListItem item = listItems.get(i);
+            int length = Math.max(fr.getStringWidth(item.getDescription()), fr.getStringWidth(item.getTitle()));
+            int height = OFFSET_Y * i;
+            listItems.get(i).setStartLocation(new Location(OFFSET_X, height));
+            listItems.get(i).setEndLocation(new Location(OFFSET_X + length, OFFSET_Y * i + length));
+        }
+    }
+
     @Override
     public void drawScreen (int mouseX, int mouseY, float partialTicks){
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -51,7 +65,7 @@ public class GuiFilter extends GuiScreen{
                 length = fr.getStringWidth(v.getTitle());
             }
             if (mouseX >= OFFSET_X && mouseX <= OFFSET_X + length){
-                //drawSelection(OFFSET_X, );
+                drawSelection(OFFSET_X, OFFSET_X + length, 0, 0xffffff);
             }
         });
     }
@@ -62,7 +76,6 @@ public class GuiFilter extends GuiScreen{
 
     //TODO FINISH SETTING UP SELECTION
     private void drawSelection (int startX, int endX, int y, int color){
-        drawHorizontalLine(startX, endX, y, color);
-        drawHorizontalLine(startX, endX, y + OFFSET_Y, color);
+        //drawRect();
     }
 }
