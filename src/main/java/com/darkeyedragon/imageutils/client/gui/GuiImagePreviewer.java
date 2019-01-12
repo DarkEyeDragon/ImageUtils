@@ -40,7 +40,7 @@ public class GuiImagePreviewer extends GuiScreen{
     private final Minecraft mc;
     private final GuiNewChat chat;
 
-    GuiButton webhookButton;
+    private GuiButton webhookButton;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
     private DiscordWebhook discordWebhook = new DiscordWebhook(ModConfig.webhookUrl);

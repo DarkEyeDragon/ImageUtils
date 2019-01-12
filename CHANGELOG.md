@@ -1,3 +1,7 @@
+## Version 1.0.6
+#### Changes
+- You can now add a description to images that are being uploaded to discord webhook.
+
 ## Version 1.0.5
 ##### Changes
 - Added discord web hooks. You can now post your images directly in a discord.

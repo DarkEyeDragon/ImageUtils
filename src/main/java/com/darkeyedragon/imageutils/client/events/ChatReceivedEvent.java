@@ -12,7 +12,7 @@ public class ChatReceivedEvent{
 
 
     @SubscribeEvent
-    public void ChatReceived (ClientChatReceivedEvent e){
+    public void chatReceived (ClientChatReceivedEvent e){
         String text = e.getMessage().getUnformattedText();
         List<String> urls = StringFilter.extractUrls(text);
         if (urls.size() > 0){

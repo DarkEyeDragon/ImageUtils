@@ -7,12 +7,13 @@ Changelog can be found  [here](https://github.com/DarkEyeDragon/ImageUtils/blob/
 
 Feel free to join the discord  [here](https://discord.gg/p9YrN53). This is mainly for notifications regarding updates and commits.
 #### Default keys:
-- F4 Upload image
-- F2 Save and upload image (override has to be enabled to upload)
+- F2 Save screenshot (and upload if the override setting is enabled)
+- F4 Upload screenshot
 - F6 Take partial screenshot.
-
+- F7 Open local screenshot GUI
 #### Features:
 - View images in-game.
+- Direct upload to discord trough discord webhook.
 - Direct upload to [Imgur](https://imgur.com/).
 - Copy link to clipboard.
 - Copy image to clipboard.
@@ -29,7 +30,6 @@ https://minecraft.curseforge.com/projects/image-utils/images
 (will add some directly here later)
 #### Changing settings
 - you can change your settings by going to mods on the main menu or by going to mod options in the in-game menu.
-![alt text](https://darkeyedragon.me/images/tut1.png "change settings")
 ## Uploading to a custom server
 To upload to a custom image server you'll need to enable `use custom server` otherwise it'll just use Imgur as uploader.
 
