@@ -35,9 +35,9 @@ imageutil.gui.delete_screenshot_line2=Detta kan inte bli ogjort!
 
 imageutil.gui.local_screenshots.title=Skärmdumpar
 imageutil.gui.local_screenshots.no_screenshots=Du har inga skärmdumpar än
-imageutil.gui.local_screenshots.name=Namn:
-imageutil.gui.local_screenshots.dimensions=Dimensioner:
-imageutil.gui.local_screenshots.location=Plats:
+imageutil.gui.local_screenshots.name=Namn
+imageutil.gui.local_screenshots.dimensions=Dimensioner
+imageutil.gui.local_screenshots.location=Plats
 imageutil.gui.local_screenshots.loading=laddar skärmdumpar...
 
 imageutil.gui.image_preview.copy_image=Copy Image

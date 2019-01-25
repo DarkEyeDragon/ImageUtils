@@ -34,9 +34,9 @@ imageutil.gui.delete_screenshot_line2=This action can't be undone!
 
 imageutil.gui.local_screenshots.title=Screenshots
 imageutil.gui.local_screenshots.no_screenshots=You don't have any screenshots yet.
-imageutil.gui.local_screenshots.name=Name:
-imageutil.gui.local_screenshots.dimensions=Dimensions:
-imageutil.gui.local_screenshots.location=Location:
+imageutil.gui.local_screenshots.name=Name
+imageutil.gui.local_screenshots.dimensions=Dimensions
+imageutil.gui.local_screenshots.location=Location
 imageutil.gui.local_screenshots.loading=loading screenshots...
 
 imageutil.gui.image_preview.copy_image=Copy Image

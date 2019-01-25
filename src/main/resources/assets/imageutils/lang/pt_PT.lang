@@ -34,9 +34,9 @@ imageutil.gui.delete_screenshot_line2=Esta ação não pode ser revertida!
 
 imageutil.gui.local_screenshots.title=Screenshots
 imageutil.gui.local_screenshots.no_screenshots=Você tão tem nenhum screenshot!
-imageutil.gui.local_screenshots.name=Nome:
-imageutil.gui.local_screenshots.dimensions=Tamanho:
-imageutil.gui.local_screenshots.location=Local:
+imageutil.gui.local_screenshots.name=Nome
+imageutil.gui.local_screenshots.dimensions=Tamanho
+imageutil.gui.local_screenshots.location=Local
 imageutil.gui.local_screenshots.loading=Carregando imagens...
 
 imageutil.gui.image_preview.copy_image=Copy Image
