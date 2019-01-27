@@ -34,7 +34,11 @@ public class Progressbar extends GuiScreen {
         int value = (int)((progress/maxProgress)*length);
         this.drawGradientRect(x, y, x+value, y + height, 0xFFE24C19, 0xFFE24C19);
         this.drawCenteredString(mc.fontRenderer, (int)progress+"/"+(int)maxProgress, x+(length/2), y + (height/2)-4, 0xFFFFFF);
-        this.drawCenteredString(mc.fontRenderer, I18n.format("imageutil.gui.local_screenshots.loading"),x+(length/2), y - (height/2)-4, 0xFFFFFF);
+        if(value <= length-(length/20)){
+            this.drawCenteredString(mc.fontRenderer, I18n.format("imageutil.gui.local_screenshots.loading"),x+(length/2), y - (height/2)-4, 0xFFFFFF);
+        }else{
+            drawCenteredString(mc.fontRenderer, "Binding resources...", x+(length/2), y - (height/2)-4, 0xFFFFFF);
+        }
     }
 
     public int getX() {

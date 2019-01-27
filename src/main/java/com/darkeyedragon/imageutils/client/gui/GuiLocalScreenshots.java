@@ -4,6 +4,7 @@ import com.darkeyedragon.imageutils.client.ImageUtilsMain;
 import com.darkeyedragon.imageutils.client.ModConfig;
 import com.darkeyedragon.imageutils.client.gui.util.ImagePreview;
 import com.darkeyedragon.imageutils.client.gui.util.Margin;
+import com.darkeyedragon.imageutils.client.gui.util.Row;
 import com.darkeyedragon.imageutils.client.imageuploaders.CustomUploader;
 import com.darkeyedragon.imageutils.client.imageuploaders.ImgurUploader;
 import com.darkeyedragon.imageutils.client.utils.ImageResource;
@@ -53,6 +54,7 @@ public class GuiLocalScreenshots extends GuiScreen {
 
     private Margin margin;
     private Progressbar progressbar;
+    private Row row;
 
     private final short IMAGES_PER_ROW = 4;
     private final short ROWS = 3;
@@ -105,7 +107,7 @@ public class GuiLocalScreenshots extends GuiScreen {
                         resources.put(imagePreview.getImageResource().getName(), Minecraft.getMinecraft().renderEngine.getDynamicTextureLocation(imagePreview.getImageResource().getName(), new DynamicTexture(imagePreview.getImageResource().getImage())));
                 }
             }
-            String imgName;
+            /*String imgName;
             for (ImagePreview imagePreview : previewList) {
                 imgName = imagePreview.getImageResource().getName();
                 margin = imagePreview.getMargin();
@@ -115,7 +117,15 @@ public class GuiLocalScreenshots extends GuiScreen {
                 drawModalRectWithCustomSizedTexture(x, y, 0, 0, imagePreview.getWidth(), imagePreview.getHeight(), imagePreview.getWidth(), imagePreview.getHeight());
                 drawCenteredString(mc.fontRenderer, imgName, x + fontRenderer.getStringWidth(imgName) / 2, y + imagePreview.getHeight() + 10, 0xffffff);
                 amount++;
+            }*/
+            row = new Row(width, 40, resources);
+            if(row.getAllowedImages() == 0){
+                row.calculateAllowedImages();
             }
+            for (short x = 0; x < row.getAllowedImages(); x++) {
+                row.addElement(previewList.get(x));
+            }
+            row.drawScreen(mouseX, mouseY, partialTicks);
         } else {
             if (amountOfScreenshots == 0) {
                 return;
@@ -215,6 +225,7 @@ public class GuiLocalScreenshots extends GuiScreen {
             loadedScreenshots++;
         });
     }
+
     private synchronized void addPreview(ImagePreview[] imagePreviews) {
         mc.addScheduledTask(() -> {
             for (ImagePreview preview : imagePreviews) {
@@ -280,7 +291,6 @@ public class GuiLocalScreenshots extends GuiScreen {
 
         List(Minecraft mcIn) {
             super(mcIn, GuiLocalScreenshots.this.width, GuiLocalScreenshots.this.height, 32, GuiLocalScreenshots.this.height - 65 + 4, 20);
-
         }
 
         @Override
