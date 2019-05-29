@@ -2,9 +2,6 @@ package com.darkeyedragon.imageutils.client.gui;
 
 import com.darkeyedragon.imageutils.client.ImageUtilsMain;
 import com.darkeyedragon.imageutils.client.ModConfig;
-import com.darkeyedragon.imageutils.client.gui.util.ImagePreview;
-import com.darkeyedragon.imageutils.client.gui.util.Margin;
-import com.darkeyedragon.imageutils.client.gui.util.Row;
 import com.darkeyedragon.imageutils.client.imageuploaders.CustomUploader;
 import com.darkeyedragon.imageutils.client.imageuploaders.ImgurUploader;
 import com.darkeyedragon.imageutils.client.utils.ImageResource;
@@ -13,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -29,42 +27,33 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class GuiLocalScreenshots extends GuiScreen {
 
     private final GuiScreen parentScreen;
     private File screenshotDirectory = new File(Minecraft.getMinecraft().gameDir, "screenshots");
-    private java.util.List<ImagePreview> previewList = new ArrayList<>();
-    private java.util.Map<String, ResourceLocation> resources = new HashMap<>();
+    private java.util.List<ImageResource> screenshots = new ArrayList<>();
+    private GuiLocalScreenshots.List list;
     private boolean isSelected = false;
     private GuiButton deleteButton;
     private GuiButton uploadButton;
     private GuiButton refreshButton;
     private GuiButton optionsButton;
     private GuiButton cancelButton;
-    private ImagePreview imagePreview;
-    private boolean completedLoading = false;
+    private BufferedImage finalImage;
+    private ResourceLocation resource;
+    private ImageResource imageResource;
+    private boolean completedLoading;
     private boolean deleteImage;
     private boolean deleteImageConfirm;
     private int imageIndex;
-    private boolean bindingComplete = false;
-    private int amountOfScreenshots;
-    private int loadedScreenshots;
-
-    private Margin margin;
-    private Progressbar progressbar;
-    private Row row;
-
-    private final short IMAGES_PER_ROW = 4;
-    private final short ROWS = 3;
 
     public GuiLocalScreenshots(GuiScreen parentScreen) {
         this.parentScreen = parentScreen;
     }
 
-    ImagePreview getImagePreview() {
-        return imagePreview;
+    ImageResource getImageResource() {
+        return imageResource;
     }
 
     @Override
@@ -84,62 +73,62 @@ public class GuiLocalScreenshots extends GuiScreen {
         this.buttonList.add(refreshButton);
         this.buttonList.add(cancelButton);
         this.buttonList.add(optionsButton);
-        margin = new Margin(20);
-        ImageUtilsMain.fixedThreadPool.submit(this::loadScreenshots);
-        progressbar = new Progressbar(width / 2 - 100, height / 2 - 10, 200, 20);
-        progressbar.initGui();
+        if (!completedLoading) {
+            ImageUtilsMain.fixedThreadPool.submit(this::loadScreenshots);
+        }
+        this.list = new GuiLocalScreenshots.List(this.mc);
+        this.list.registerScrollButtons(7, 8);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
+        BufferedImage img = finalImage;
+        this.list.drawScreen(mouseX, mouseY, partialTicks);
         super.drawScreen(mouseX, mouseY, partialTicks);
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        int imgOffsetY = 0;
-        int amount = 0;
-
         if (completedLoading) {
-            loadedScreenshots = 0;
-            amountOfScreenshots = 0;
-            if (previewList.size() != resources.size()) {
-                for (ImagePreview imagePreview : previewList) {
-                    if (!resources.containsKey(imagePreview.getImageResource().getName()))
-                        resources.put(imagePreview.getImageResource().getName(), Minecraft.getMinecraft().renderEngine.getDynamicTextureLocation(imagePreview.getImageResource().getName(), new DynamicTexture(imagePreview.getImageResource().getImage())));
-                }
-            }
-            /*String imgName;
-            for (ImagePreview imagePreview : previewList) {
-                imgName = imagePreview.getImageResource().getName();
-                margin = imagePreview.getMargin();
-                Minecraft.getMinecraft().getTextureManager().bindTexture(resources.get(imgName));
-                int x = margin.getLeft() + (imagePreview.getWidth() + 40) * amount + margin.getRight();
-                int y = imgOffsetY + margin.getTop();
-                drawModalRectWithCustomSizedTexture(x, y, 0, 0, imagePreview.getWidth(), imagePreview.getHeight(), imagePreview.getWidth(), imagePreview.getHeight());
-                drawCenteredString(mc.fontRenderer, imgName, x + fontRenderer.getStringWidth(imgName) / 2, y + imagePreview.getHeight() + 10, 0xffffff);
-                amount++;
-            }*/
-            row = new Row(width, 40, resources);
-            if(row.getAllowedImages() == 0){
-                row.calculateAllowedImages();
-            }
-            for (short x = 0; x < row.getAllowedImages(); x++) {
-                row.addElement(previewList.get(x));
-            }
-            row.drawScreen(mouseX, mouseY, partialTicks);
-        } else {
-            if (amountOfScreenshots == 0) {
+            if (screenshots.size() == 0) {
+                this.drawCenteredString(this.fontRenderer, I18n.format("imageutil.gui.local_screenshots.title"), this.width / 2, 12, 16777215);
+                drawCenteredString(mc.fontRenderer, I18n.format("imageutil.gui.local_screenshots.no_screenshots"), width / 2, height / 2 - 30, 0xffffff);
                 return;
             }
-            progressbar.setMaxProgress(amountOfScreenshots);
-            progressbar.setProgress(loadedScreenshots);
-            progressbar.drawScreen(mouseX, mouseY, partialTicks);
+            if (isSelected) {
+                if (imageResource == null) {
+                    return;
+                }
+                this.drawCenteredString(this.fontRenderer, I18n.format("imageutil.gui.local_screenshots.title") + "(" + +(imageIndex + 1) + "/" + screenshots.size() + ")", this.width / 2, 12, 16777215);
+                deleteButton.enabled = true;
+                uploadButton.enabled = true;
+                optionsButton.enabled = true;
+                int scaledHeight = new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
+
+                int imgWidth = (int) Math.round(img.getWidth() * (scaledHeight * 0.00105));
+                int imgHeight = (int) Math.round(img.getHeight() * (scaledHeight * 0.00105));
+                int imgOffsetY = height / 2 - (imgHeight / 2 + height / 8);
+                String name = I18n.format("imageutil.gui.local_screenshots.name") + " " + imageResource.getName();
+                String dimensions = I18n.format("imageutil.gui.local_screenshots.dimensions") + " " + imageResource.getImage().getWidth() + "x" + imageResource.getImage().getHeight();
+                String location = I18n.format("imageutil.gui.local_screenshots.location") + " " + imageResource.getPath();
+                mc.fontRenderer.drawString(name, width / 2, imgOffsetY + imgHeight + 10, 0xffffff);
+                mc.fontRenderer.drawString(dimensions, width / 2, imgOffsetY + imgHeight + 20, 0xffffff);
+                mc.fontRenderer.drawSplitString(location, width / 2, imgOffsetY + imgHeight + 30, 200, 0xffffff);
+                GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+                Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
+                drawModalRectWithCustomSizedTexture(width / 2, imgOffsetY, 0, 0, imgWidth, imgHeight, imgWidth, imgHeight);
+            } else {
+                list.elementClicked(0, false, 0, 0);
+                this.drawCenteredString(this.fontRenderer, I18n.format("imageutil.gui.local_screenshots.name"), this.width / 2, 16, 16777215);
+            }
+        } else {
+            this.drawCenteredString(this.fontRenderer, I18n.format("imageutil.gui.local_screenshots.name"), this.width / 2, 16, 16777215);
+            drawCenteredString(mc.fontRenderer, I18n.format("imageutil.gui.local_screenshots.loading"), (int) (Math.round(width / 1.4)), (int) (Math.round(height / 2.3)), 0xffffff);
         }
     }
 
-    @Override
-    public void onResize(Minecraft mcIn, int w, int h) {
-        super.onResize(mcIn, w, h);
-        this.initGui();
+    /**
+     * Handles mouse input.
+     */
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        this.list.handleMouseInput();
     }
 
     @Override
@@ -148,18 +137,18 @@ public class GuiLocalScreenshots extends GuiScreen {
             this.mc.displayGuiScreen(this.parentScreen);
         } else if (button == refreshButton) {
             completedLoading = false;
-            previewList.clear();
+            screenshots.clear();
             ImageUtilsMain.fixedThreadPool.submit(this::loadScreenshots);
         } else if (button == uploadButton) {
 
             //TODO make upload screen
             uploadButton.displayString = "Uploading...";
             uploadButton.enabled = false;
-            if (imagePreview.getImageResource().getImage() != null) {
+            if (imageResource.getImage() != null) {
                 if (ModConfig.customServer) {
-                    ImgurUploader.uploadImage(imagePreview.getImageResource().getImage());
+                    ImgurUploader.uploadImage(imageResource.getImage());
                 } else {
-                    CustomUploader.uploadImage(imagePreview.getImageResource().getImage());
+                    CustomUploader.uploadImage(imageResource.getImage());
                 }
             } else {
                 uploadButton.displayString = "Unable to upload screenshot!";
@@ -170,7 +159,7 @@ public class GuiLocalScreenshots extends GuiScreen {
             GuiConfirmAction guiConfirmDelete = new GuiConfirmAction((result, id) ->
             {
                 if (result) {
-                    deleteScreenshots();
+                    deleteScreenshot();
                 }
                 mc.displayGuiScreen(this);
             }, "Confirm", new TextComponentTranslation("imageutil.gui.delete_screenshot").getUnformattedComponentText(), new TextComponentTranslation("imageutil.gui.delete_screenshot_line2").getUnformattedComponentText(), 0, this) {
@@ -200,43 +189,29 @@ public class GuiLocalScreenshots extends GuiScreen {
             completedLoading();
             return;
         }
-        setAmountOfScreenshots(files.length);
         for (File file : files) {
             String fileName = file.getName();
             try {
                 BufferedImage image = ImageIO.read(file);
                 if (image != null) {
-                    ImageResource imageResource = new ImageResource(fileName, image, false, file.getPath());
-                    margin = new Margin(20);
-                    ImagePreview imagePreview = new ImagePreview(imageResource, 144, 96);
-                    imagePreview.setMargin(margin);
-                    addPreview(imagePreview);
+                    addScreenshot(new ImageResource(fileName, image, false, file.getPath()));
                 }
             } catch (IOException e) {
                 ImageUtilsMain.logger.error(e);
+            } finally {
+                completedLoading();
             }
         }
-        completedLoading();
     }
 
-    private synchronized void addPreview(ImagePreview imagePreview) {
+    private synchronized void addScreenshot(ImageResource imageResource) {
         mc.addScheduledTask(() -> {
-            previewList.add(imagePreview);
-            loadedScreenshots++;
-        });
-    }
-
-    private synchronized void addPreview(ImagePreview[] imagePreviews) {
-        mc.addScheduledTask(() -> {
-            for (ImagePreview preview : imagePreviews) {
-                previewList.add(preview);
-                loadedScreenshots++;
-            }
+            screenshots.add(imageResource);
         });
     }
 
     synchronized void clearScreenshotsList() {
-        mc.addScheduledTask(() -> previewList.clear());
+        mc.addScheduledTask(() -> screenshots.clear());
     }
 
     private synchronized void completedLoading() {
@@ -245,52 +220,34 @@ public class GuiLocalScreenshots extends GuiScreen {
         });
     }
 
-    private synchronized void setAmountOfScreenshots(int amount) {
-        mc.addScheduledTask(() -> {
-            amountOfScreenshots = amount;
-        });
-    }
+private void deleteScreenshot() {
 
-    private void deleteScreenshots() {
-        java.util.List<ImagePreview> toDelete = new ArrayList<>();
-        previewList.forEach((preview) -> {
-            if (preview.getImageResource().isSelected()) {
-                File file = new File(preview.getImageResource().getPath());
-                if (file.delete()) {
-                    ImageUtilsMain.logger.info("Removed image " + file.getName() + " successfully!");
-                    toDelete.add(preview);
-                } else {
-                    ImageUtilsMain.logger.warn("Could not remove image " + file.getName() + "!");
+    for (int i = 0; i < screenshots.size(); i++) {
+        ImageResource imageResource = screenshots.get(i);
+        if (imageResource.isSelected()) {
+            File file = new File(imageResource.getPath());
+            if (file.delete()) {
+                screenshots.remove(i);
+                int selectIndex = i;
+                if (i >= screenshots.size()) {
+                    selectIndex = screenshots.size() - 1;
                 }
-            }
-        });
-        if (previewList.indexOf(imagePreview) + toDelete.size() < previewList.size()) {
-            int index = previewList.indexOf(imagePreview) + toDelete.size();
-            imagePreview = previewList.get(index);
-            //list.elementClicked(index, false, list.getScrollBarX(), list.getSlotHeight() * index);
-        } else {
-            if (previewList.size() == 1) {
-                imagePreview = null;
+                ImageUtilsMain.logger.info("Removed image " + file.getName() + " successfully!");
+                if (screenshots.size() == 0) return;
+                list.elementClicked(selectIndex, false, list.getScrollBarX(), list.getSlotHeight() * selectIndex);
+                break;
             } else {
-                imagePreview = previewList.get(previewList.size() - 2);
-                //list.elementClicked(previewList.size() - 2, false, list.getScrollBarX(), list.getSlotHeight());
+                ImageUtilsMain.logger.warn("Could not remove image " + file.getName() + "!");
             }
         }
-        previewList.removeAll(toDelete);
     }
-
-    @Override
-    public void onGuiClosed() {
-        super.onGuiClosed();
-        previewList.clear();
-        resources.forEach((key, value) -> Minecraft.getMinecraft().getTextureManager().deleteTexture(value));
-        resources.clear();
-    }
+}
 
     class List extends GuiSlot {
 
         List(Minecraft mcIn) {
             super(mcIn, GuiLocalScreenshots.this.width, GuiLocalScreenshots.this.height, 32, GuiLocalScreenshots.this.height - 65 + 4, 20);
+
         }
 
         @Override
@@ -313,25 +270,27 @@ public class GuiLocalScreenshots extends GuiScreen {
         }
 
         protected int getSize() {
-            return GuiLocalScreenshots.this.previewList.size();
+            return GuiLocalScreenshots.this.screenshots.size();
         }
 
         /**
          * The element in the slot that was clicked, boolean for whether it was double clicked or not
          */
         public void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY) {
-            previewList.forEach((item) -> item.getImageResource().setSelected(false));
-            imagePreview = previewList.get(slotIndex);
-            boolean toggle = !imagePreview.getImageResource().isSelected();
-            imagePreview.getImageResource().setSelected(toggle);
+            screenshots.forEach((item) -> item.setSelected(false));
+            imageResource = screenshots.get(slotIndex);
+            boolean toggle = !imageResource.isSelected();
+            imageResource.setSelected(toggle);
             GuiLocalScreenshots.this.isSelected = true;
+            finalImage = ImageUtil.resize(imageResource.getImage(), 800, 800);
+            resource = Minecraft.getMinecraft().renderEngine.getDynamicTextureLocation(imageResource.getName(), new DynamicTexture(finalImage));
             imageIndex = slotIndex;
         }
 
         @Override
         protected boolean isSelected(int slotIndex) {
-            ImagePreview selected = previewList.get(slotIndex);
-            return selected != null && previewList.get(slotIndex).getImageResource().isSelected();
+            ImageResource selected = screenshots.get(slotIndex);
+            return selected != null && screenshots.get(slotIndex).isSelected();
         }
 
 
@@ -347,7 +306,7 @@ public class GuiLocalScreenshots extends GuiScreen {
         }
 
         protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
-            GuiLocalScreenshots.this.drawString(GuiLocalScreenshots.this.fontRenderer, (previewList.get(slotIndex).getImageResource().getName()), this.width / 5 - (this.getListWidth() / 3) + 5, yPos + 1, 16777215);
+            GuiLocalScreenshots.this.drawString(GuiLocalScreenshots.this.fontRenderer, (screenshots.get(slotIndex).getName()), this.width / 5 - (this.getListWidth() / 3) + 5, yPos + 1, 16777215);
         }
 
         public void handleMouseInput() {
