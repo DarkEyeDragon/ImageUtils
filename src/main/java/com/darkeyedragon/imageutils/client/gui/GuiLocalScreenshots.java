@@ -44,8 +44,6 @@ public class GuiLocalScreenshots extends GuiScreen {
     private ResourceLocation resource;
     private ImageResource imageResource;
     private boolean completedLoading;
-    private boolean deleteImage;
-    private boolean deleteImageConfirm;
     private int imageIndex;
 
     public GuiLocalScreenshots(GuiScreen parentScreen) {

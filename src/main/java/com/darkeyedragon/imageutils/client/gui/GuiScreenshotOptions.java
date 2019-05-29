@@ -20,7 +20,7 @@ public class GuiScreenshotOptions extends GuiConfirmAction{
         this.title = title;
         this.parent = parent;
         GuiLocalScreenshots guiLocalScreenshots = (GuiLocalScreenshots) parent;
-        imageResource = guiLocalScreenshots.getImagePreview().getImageResource();
+        imageResource = guiLocalScreenshots.getImageResource();
     }
 
     @Override
