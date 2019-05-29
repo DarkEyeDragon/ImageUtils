@@ -63,15 +63,17 @@ public class GuiPartialScreenshot extends GuiScreen{
 
     @Override
     protected void mouseReleased (int mouseX, int mouseY, int state){
-        Point mouseReleased = new Point(mouseX, mouseY);
-        dragging = false;
-        mouseClicked.y *= res;
-        mouseClicked.x *= res;
-        mouseReleased.y *= res;
-        mouseReleased.x *= res;
+        if (state == 0) {
+            Point mouseReleased = new Point(mouseX, mouseY);
+            dragging = false;
+            mouseClicked.y *= res;
+            mouseClicked.x *= res;
+            mouseReleased.y *= res;
+            mouseReleased.x *= res;
 
-        BufferedImage image = ScreenshotHandler.partial(new Point(Math.min(mouseClicked.x, mouseReleased.x), Math.min(mouseClicked.y, mouseReleased.y)), new Point(Math.max(mouseClicked.x, mouseReleased.x), Math.max(mouseClicked.y, mouseReleased.y)));
-        ScreenshotHandler.upload(image);
-        mc.displayGuiScreen(null);
+            BufferedImage image = ScreenshotHandler.partial(new Point(Math.min(mouseClicked.x, mouseReleased.x), Math.min(mouseClicked.y, mouseReleased.y)), new Point(Math.max(mouseClicked.x, mouseReleased.x), Math.max(mouseClicked.y, mouseReleased.y)));
+            ScreenshotHandler.upload(image);
+            mc.displayGuiScreen(null);
+        }
     }
 }
