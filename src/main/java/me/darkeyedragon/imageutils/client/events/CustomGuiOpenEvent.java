@@ -2,7 +2,7 @@ package me.darkeyedragon.imageutils.client.events;
 
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 import me.darkeyedragon.imageutils.client.gui.GuiImagePreviewer;
-import me.darkeyedragon.imageutils.client.image.ImageResource;
+import me.darkeyedragon.imageutils.client.utils.ImageResource;
 import me.darkeyedragon.imageutils.client.utils.ImageUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiConfirmOpenLink;

@@ -2,7 +2,7 @@ package me.darkeyedragon.imageutils.client.gui;
 
 import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.utils.CopyToClipboard;
-import me.darkeyedragon.imageutils.client.image.ImageResource;
+import me.darkeyedragon.imageutils.client.utils.ImageResource;
 import me.darkeyedragon.imageutils.client.utils.ImageUtil;
 import me.darkeyedragon.imageutils.client.webhooks.DiscordWebhook;
 import me.darkeyedragon.imageutils.client.webhooks.WebhookValidation;
