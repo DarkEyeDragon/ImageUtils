@@ -15,7 +15,7 @@ apply plugin: 'java'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 version = "1.0.6"
-group = "com.darkeyedragon.imageutils" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "me.darkeyedragon.imageutils" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ImageUtils"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -64,6 +64,6 @@ processResources {
     }
 }
 shadowJar {
-    relocate 'org.apache.http.entity', 'com.darkeyedragon.imageutils.apache'
+    relocate 'org.apache.http.entity', 'me.darkeyedragon.imageutils.apache'
 }
 reobf{shadowJar {} }
