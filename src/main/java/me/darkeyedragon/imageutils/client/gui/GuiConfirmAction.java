@@ -1,7 +1,5 @@
 package me.darkeyedragon.imageutils.client.gui;
 
-import net.minecraft.client.gui.*;
-
 public class GuiConfirmAction extends GuiYesNo{
 
     final GuiScreen parent;

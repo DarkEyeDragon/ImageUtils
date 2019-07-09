@@ -3,20 +3,29 @@ package me.darkeyedragon.imageutils.client.gui;
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
 import me.darkeyedragon.imageutils.client.utils.RegionSelector;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.ITextComponent;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class GuiPartialScreenshot extends GuiScreen{
+public class GuiPartialScreenshot extends Screen {
 
-    private final int res = new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
+    private final int res = new ScaledResolution(Minecraft.getInstance()).getScaleFactor();
     private boolean dragging = false;
     private Point mouseClicked;
     private RegionSelector regionSelector = new RegionSelector();
+
+    protected GuiPartialScreenshot(ITextComponent p_i51108_1_) {
+        super(p_i51108_1_);
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return super.isPauseScreen();
+    }
 
     @Override
     public void drawScreen (int mouseX, int mouseY, float partialTicks){
@@ -38,19 +47,17 @@ public class GuiPartialScreenshot extends GuiScreen{
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
+
+
     @Override
-    public boolean doesGuiPauseGame (){
-        return true;
+    public void init() {
+        super.init();
     }
 
-    @Override
-    public void initGui (){
-        super.initGui();
-    }
 
     @Override
-    protected void actionPerformed (GuiButton button){
-
+    public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
+        return false;
     }
 
     @Override
@@ -62,16 +69,23 @@ public class GuiPartialScreenshot extends GuiScreen{
     }
 
     @Override
-    protected void mouseReleased (int mouseX, int mouseY, int state){
-        Point mouseReleased = new Point(mouseX, mouseY);
-        dragging = false;
-        mouseClicked.y *= res;
-        mouseClicked.x *= res;
-        mouseReleased.y *= res;
-        mouseReleased.x *= res;
+    public boolean shouldCloseOnEsc() {
+        return true;
+    }
 
-        BufferedImage image = ScreenshotHandler.partial(new Point(Math.min(mouseClicked.x, mouseReleased.x), Math.min(mouseClicked.y, mouseReleased.y)), new Point(Math.max(mouseClicked.x, mouseReleased.x), Math.max(mouseClicked.y, mouseReleased.y)));
-        ScreenshotHandler.upload(image);
-        mc.displayGuiScreen(null);
+    @Override
+    protected void mouseReleased (int mouseX, int mouseY, int state){
+        if (state == 0) {
+            Point mouseReleased = new Point(mouseX, mouseY);
+            dragging = false;
+            mouseClicked.y *= res;
+            mouseClicked.x *= res;
+            mouseReleased.y *= res;
+            mouseReleased.x *= res;
+
+            BufferedImage image = ScreenshotHandler.partial(new Point(Math.min(mouseClicked.x, mouseReleased.x), Math.min(mouseClicked.y, mouseReleased.y)), new Point(Math.max(mouseClicked.x, mouseReleased.x), Math.max(mouseClicked.y, mouseReleased.y)));
+            ScreenshotHandler.upload(image);
+            Minecraft.getInstance().displayGuiScreen(null);
+        }
     }
 }

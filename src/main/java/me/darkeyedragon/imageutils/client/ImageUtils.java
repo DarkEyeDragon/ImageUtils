@@ -3,24 +3,23 @@ package me.darkeyedragon.imageutils.client;
 
 import me.darkeyedragon.imageutils.client.config.UploaderFile;
 import me.darkeyedragon.imageutils.client.events.*;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Mod (modid = ImageUtilsMain.MODID, version = ImageUtilsMain.VERSION, updateJSON = ImageUtilsMain.updateJSON, clientSideOnly = true)
-public class ImageUtilsMain{
+@Mod(ImageUtils.MODID)
+public class ImageUtils {
     public static final String MODID = "imageutils";
     public static final String VERSION = "@VERSION@";
     static final String updateJSON = "https://darkeyedragon.me/mods/updates/imageutils.json";
@@ -40,16 +39,47 @@ public class ImageUtilsMain{
     private static File uploadDir;
     private KeyBindings keybinds;
 
+    public ImageUtils() {
+        // Register the setup method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+    }
+
     public static void setActiveUploader (){
         if (ModConfig.customServer){
 
-            ImageUtilsMain.uploaders.forEach(uf -> {
+            ImageUtils.uploaders.forEach(uf -> {
                 if (uf.getFileName().equalsIgnoreCase(ModConfig.uploader)){
                     logger.info("Setting active uploader script.");
                     activeUploader = uf;
                 }
             });
         }
+    }
+
+    public void clientSetup(final FMLCommonSetupEvent event) {
+        logger = LogManager.getLogger();
+        //configPath = Paths.get(Minecraft.getInstance().gameDir.getPath(), MODID);
+        configPath = FMLPaths.MODSDIR.get().resolve(MODID);
+        //configPath = Paths.get(event.getModConfigurationDirectory().getPath(), MODID);
+
+        registerEvents();
+        registerKeybinds();
+        registerUploaders();
+    }
+
+    public void registerEvents() {
+        MinecraftForge.EVENT_BUS.register(new KeyPressEvent());
+        MinecraftForge.EVENT_BUS.register(new CustomScreenshotEvent());
+        MinecraftForge.EVENT_BUS.register(new ChatReceivedEvent());
+        MinecraftForge.EVENT_BUS.register(new CustomGuiOpenEvent());
+        MinecraftForge.EVENT_BUS.register(new GuiMenuHook());
+        MinecraftForge.EVENT_BUS.register(new IngameGuiEvent());
+        MinecraftForge.EVENT_BUS.register(ConfigChanged.class);
+    }
+
+    public void registerKeybinds() {
+        keybinds = new KeyBindings();
+        keybinds.RegisterKeybinds();
     }
 
     public static void loadUploaders (){
@@ -71,28 +101,7 @@ public class ImageUtilsMain{
         }
     }
 
-    @Mod.EventHandler
-    public void init (FMLInitializationEvent init){
-        MinecraftForge.EVENT_BUS.register(new KeyPressEvent());
-        MinecraftForge.EVENT_BUS.register(new CustomScreenshotEvent());
-        MinecraftForge.EVENT_BUS.register(new ChatReceivedEvent());
-        MinecraftForge.EVENT_BUS.register(new CustomGuiOpenEvent());
-        MinecraftForge.EVENT_BUS.register(new GuiMenuHookEvent());
-        MinecraftForge.EVENT_BUS.register(new IngameGuiEvent());
-        MinecraftForge.EVENT_BUS.register(ConfigUpdateEvent.class);
-        keybinds = new KeyBindings();
-        keybinds.RegisterKeybinds();
-
-    }
-
-    @Mod.EventHandler
-    public void preInit (FMLPreInitializationEvent pre){
-        logger = pre.getModLog();
-        configPath = Paths.get(pre.getModConfigurationDirectory().getPath(), MODID);
-    }
-
-    @Mod.EventHandler
-    public void postInit (FMLPostInitializationEvent post){
+    public void registerUploaders() {
         uploaders = new ArrayList<>();
         uploadDir = new File(configPath.toFile(), "uploaders");
         if (!uploadDir.exists()){
@@ -109,9 +118,18 @@ public class ImageUtilsMain{
                 }
             }
         }
+        //debug(ModConfig.debug);
     }
-
-    public static Path getScreenshotDir(){
-        return Paths.get(Minecraft.getMinecraft().gameDir.getAbsolutePath(), "screenshots");
-    }
+    //TODO CHANGE TO FUTURETASK
+    /*public static void debug(boolean enable){
+        ScheduledExecutorService timedTask = Executors.newScheduledThreadPool(1);
+        if(enable){
+            if(timedTask.isShutdown() || timedTask.isTerminated()){
+                logger.info("Enabling debug mode...");
+                timedTask.scheduleAtFixedRate(() -> Minecraft.getInstance().addScheduledTask(ServerUtil::ping), 0, 30L, TimeUnit.SECONDS);
+            }
+        }else{
+            //timedTask.shutdown();
+        }
+    }*/
 }

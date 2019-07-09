@@ -11,9 +11,9 @@ public class KeyBindings{
     public static KeyBinding screenshotViewer;
 
     void RegisterKeybinds (){
-        screenshotUploadKey = new KeyBinding("Upload screenshot", Keyboard.KEY_F4, "Screenshot UploaderFile");
+        screenshotUploadKey = new KeyBinding("Screenshot UploaderFile", Keyboard.KEY_F4, "Screenshot UploaderFile");
         ClientRegistry.registerKeyBinding(screenshotUploadKey);
-        screenshotPartialUploadKey = new KeyBinding("Partial Screenshots", Keyboard.KEY_F6, "Screenshot UploaderFile");
+        screenshotPartialUploadKey = new KeyBinding("Partial Screenshot UploaderFile", Keyboard.KEY_F6, "Screenshot UploaderFile");
         ClientRegistry.registerKeyBinding(screenshotPartialUploadKey);
         screenshotViewer = new KeyBinding("View local screenshots", Keyboard.KEY_F7, "Screenshot UploaderFile");
         ClientRegistry.registerKeyBinding(screenshotViewer);

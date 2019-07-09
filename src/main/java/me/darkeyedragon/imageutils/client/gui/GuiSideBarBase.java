@@ -1,6 +1,6 @@
 package me.darkeyedragon.imageutils.client.gui;
 
-import me.darkeyedragon.imageutils.client.ImageUtilsMain;
+import me.darkeyedragon.imageutils.client.ImageUtils;
 import me.darkeyedragon.imageutils.client.config.UploaderFile;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
@@ -10,7 +10,6 @@ public abstract class GuiSideBarBase extends GuiScreen{
     int barWidth = 150;
     private String title = "title";
     private int titleColor = 0xffffff;
-    //private List<ListItem>
 
     @Override
     public void initGui (){
@@ -20,7 +19,7 @@ public abstract class GuiSideBarBase extends GuiScreen{
         label.addLine("Imgur");
         label.setCentered();
         labelList.add(label);
-        for (UploaderFile uploaderFile : ImageUtilsMain.uploaders){
+        for (UploaderFile uploaderFile : ImageUtils.uploaders) {
             label = new GuiLabel(mc.fontRenderer, index++, width - barWidth, index * 10 + 15, 100, 30, titleColor);
             label.addLine(uploaderFile.getFileName());
             label.setCentered();

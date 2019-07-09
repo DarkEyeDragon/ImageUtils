@@ -1,18 +1,18 @@
 package me.darkeyedragon.imageutils.client.imageuploaders;
 
-import me.darkeyedragon.imageutils.client.ImageUtilsMain;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import me.darkeyedragon.imageutils.client.ImageUtils;
 import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.message.Messages;
 import me.darkeyedragon.imageutils.client.utils.CopyToClipboard;
 import me.darkeyedragon.imageutils.client.webhooks.WebhookValidation;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.client.gui.NewChatGui;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 
@@ -28,13 +28,14 @@ public class ImgurUploader{
 
 
     public static void uploadImage (BufferedImage bufferedImage){
-        ImageUtilsMain.fixedThreadPool.submit(() -> {
+
+        ImageUtils.fixedThreadPool.submit(() -> {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
             Thread.currentThread().setName("Imgur ImageUtil Uploading");
             int responseCode = 0;
             try{
-                GuiNewChat chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
+                NewChatGui chat = Minecraft.getInstance().ingameGUI.getChatGUI();
                 URL url = new URL("https://api.imgur.com/3/image");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
@@ -44,7 +45,7 @@ public class ImgurUploader{
                 con.setRequestProperty("Authorization", "Client-ID bfea9c11835d95c");
                 con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 con.connect();
-                Minecraft.getMinecraft().ingameGUI.setOverlayMessage("Uploading image...", true);
+                Minecraft.getInstance().ingameGUI.setOverlayMessage("Uploading image...", true);
 
 
                 ImageIO.write(bufferedImage, "png", baos);
@@ -78,9 +79,9 @@ public class ImgurUploader{
                 Messages.uploadMessage(result);
                 if (ModConfig.copyToClipboard){
                     if (CopyToClipboard.copy(result)){
-                        chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard"));
+                        chat.printChatMessage(new TranslationTextComponent("imageutil.message.copy_to_clipboard"));
                     }else{
-                        chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard_error"));
+                        chat.printChatMessage(new TranslationTextComponent("imageutil.message.copy_to_clipboard_error"));
                     }
                 }
                 WebhookValidation.addLink(result);
@@ -88,16 +89,16 @@ public class ImgurUploader{
             catch (IOException e){
                 //In case something goes wrong!
                 e.printStackTrace();
-                ITextComponent errorText = new TextComponentTranslation("imageutil.message.upload.error").appendText(" " + responseCode);
-                ITextComponent report = new TextComponentTranslation("imageutil.message.upload.report");
-                ITextComponent link = new TextComponentTranslation("imageutil.message.upload.errorlink");
-                ITextComponent hover = new TextComponentString("github.com/DarkEyeDragon/ImageUtils/issues");
+                ITextComponent errorText = new TranslationTextComponent("imageutil.message.upload.error").appendText(" " + responseCode);
+                ITextComponent report = new TranslationTextComponent("imageutil.message.upload.report");
+                ITextComponent link = new TranslationTextComponent("imageutil.message.upload.errorlink");
+                ITextComponent hover = new StringTextComponent("github.com/DarkEyeDragon/ImageUtils/issues");
                 link.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/DarkEyeDragon/ImageUtils/issues"));
                 link.getStyle().setColor(TextFormatting.AQUA);
                 link.getStyle().setUnderlined(true);
                 link.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover));
-                Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(errorText);
-                Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(report.appendSibling(link));
+                Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(errorText);
+                Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(report.appendSibling(link));
                 Messages.errorMessage(e.getMessage());
             }
         });

@@ -1,18 +1,18 @@
 package me.darkeyedragon.imageutils.client.imageuploaders;
 
-import me.darkeyedragon.imageutils.client.ImageUtilsMain;
+import me.darkeyedragon.imageutils.client.ImageUtils;
 import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.config.UploaderFile;
 import me.darkeyedragon.imageutils.client.message.Messages;
 import me.darkeyedragon.imageutils.client.utils.CopyToClipboard;
+import me.darkeyedragon.imageutils.client.utils.Filter;
 import me.darkeyedragon.imageutils.client.utils.JsonHelper;
-import me.darkeyedragon.imageutils.client.utils.StringFilter;
 import me.darkeyedragon.imageutils.client.webhooks.WebhookValidation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -42,13 +42,13 @@ public class CustomUploader{
     private static GuiNewChat chat;
 
     public static void uploadImage (BufferedImage bufferedImage){
-        ImageUtilsMain.fixedThreadPool.submit(() -> {
-            Thread.currentThread().setName(ImageUtilsMain.MODID + "/uploader");
-            mc = Minecraft.getMinecraft();
+        ImageUtils.fixedThreadPool.submit(() -> {
+            Thread.currentThread().setName(ImageUtils.MODID + "/uploader");
+            mc = Minecraft.getInstance();
             chat = mc.ingameGUI.getChatGUI();
-            uploaderFile = ImageUtilsMain.activeUploader;
+            uploaderFile = ImageUtils.activeUploader;
             if (uploaderFile == null || uploaderFile.getUploader() == null){
-                chat.printChatMessage(new TextComponentTranslation("imageutil.message.invalid_config"));
+                chat.printChatMessage(new TranslationTextComponent("imageutil.message.invalid_config"));
                 return;
             }
             builder = MultipartEntityBuilder.create();
@@ -67,7 +67,7 @@ public class CustomUploader{
             try{
                 ImageIO.write(bufferedImage, "png", baos);
                 byte[] bytes = baos.toByteArray();
-                mc.ingameGUI.setOverlayMessage(I18n.format("imageutil.message.overlay_message.upload") + " " + ImageUtilsMain.activeUploader.getDisplayName(), true);
+                mc.ingameGUI.setOverlayMessage(I18n.format("imageutil.message.overlay_message.upload") + " " + ImageUtils.activeUploader.getDisplayName(), true);
                 builder.addBinaryBody("image", bytes, ContentType.IMAGE_JPEG, uploaderFile.getUploader().getFileFormName());
                 HttpEntity multipart = builder.build();
                 httpPost.setEntity(multipart);
@@ -83,18 +83,18 @@ public class CustomUploader{
                     if (header.toString().contains("html")){
                         HttpEntity body = response.getEntity();
                         String content = EntityUtils.toString(body);
-                        List<String> contentUrl = StringFilter.extractUrls(content);
-                        mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Response: " + content));
-                        mc.ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Possible matches: " + Arrays.toString(contentUrl.toArray())));
+                        List<String> contentUrl = Filter.extractUrls(content);
+                        mc.ingameGUI.getChatGUI().printChatMessage(new StringTextComponent("Response: " + content));
+                        mc.ingameGUI.getChatGUI().printChatMessage(new StringTextComponent("Possible matches: " + Arrays.toString(contentUrl.toArray())));
 
                     }
                     Messages.uploadMessage(urlString);
                 }
                 if (ModConfig.copyToClipboard){
                     if (CopyToClipboard.copy(urlString)){
-                        chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard"));
+                        chat.printChatMessage(new TranslationTextComponent("imageutil.message.copy_to_clipboard"));
                     }else{
-                        chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard_error"));
+                        chat.printChatMessage(new TranslationTextComponent("imageutil.message.copy_to_clipboard_error"));
                     }
                 }
                 WebhookValidation.addLink(urlString);

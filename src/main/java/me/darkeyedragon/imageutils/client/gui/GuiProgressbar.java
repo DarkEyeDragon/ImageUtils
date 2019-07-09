@@ -21,6 +21,6 @@ public class GuiProgressbar extends GuiScreen{
     public void drawProgressbar (){
         drawHorizontalLine(20, 80, 50, 0xff00bfff);
         drawRect(width / 2 - 100, height / 2 - 2, width / 2 + 100, height / 2 + 10, 0xff00bfff);
-        drawCenteredString(Minecraft.getMinecraft().fontRenderer, "Uploading...", width / 2, height / 2, 0xffffffff);
+        drawCenteredString(Minecraft.getInstance().fontRenderer, "Uploading...", width / 2, height / 2, 0xffffffff);
     }
 }

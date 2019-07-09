@@ -1,7 +1,7 @@
 package me.darkeyedragon.imageutils.client.config;
 
-import me.darkeyedragon.imageutils.client.adaptors.ConfigTypeAdaptor;
 import com.google.gson.Gson;
+import me.darkeyedragon.imageutils.client.adaptors.ConfigTypeAdaptor;
 
 import java.io.File;
 import java.nio.file.Files;

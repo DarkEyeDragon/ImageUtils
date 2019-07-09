@@ -1,13 +1,13 @@
 package me.darkeyedragon.imageutils.client.events;
 
-import me.darkeyedragon.imageutils.client.ImageUtilsMain;
+import me.darkeyedragon.imageutils.client.ImageUtils;
 import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
 import me.darkeyedragon.imageutils.client.imageuploaders.ImgurUploader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -32,11 +32,11 @@ public class CustomScreenshotEvent{
         }else{
             event.setCanceled(true);
             BufferedImage screenshot = ScreenshotHandler.full();
-            ImageUtilsMain.fixedThreadPool.submit(() -> {
-                Path dir = ImageUtilsMain.getScreenshotDir();
+            ImageUtils.fixedThreadPool.submit(() -> {
+                Path dir = Paths.get(Minecraft.getInstance().gameDir.getAbsolutePath(), "screenshots");
                 File screenshotFile = ScreenshotHandler.getTimestampedPNGFileForDirectory(dir.toFile());
                 //TODO PR Event to intercept Actions
-                ImageUtilsMain.fixedThreadPool.submit(() -> {
+                ImageUtils.fixedThreadPool.submit(() -> {
                     try{
                         ImageIO.write(screenshot, "png", screenshotFile.getAbsoluteFile());
                     }
@@ -44,15 +44,15 @@ public class CustomScreenshotEvent{
                         e.printStackTrace();
                     }
                 });
-                Minecraft.getMinecraft().addScheduledTask(() -> {
-                    TextComponentTranslation prefix = new TextComponentTranslation("imageutil.message.screenshot_save");
-                    ITextComponent itextcomponent = new TextComponentString(screenshotFile.getName());
+                Minecraft.getInstance().addScheduledTask(() -> {
+                    TranslationTextComponent prefix = new TranslationTextComponent("imageutil.message.screenshot_save");
+                    ITextComponent itextcomponent = new StringTextComponent(screenshotFile.getName());
                     //itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://LINK::"+screenshotFile.getName()));
                     itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/view " + screenshotFile.getName()));
-                    ImageUtilsMain.validLinks.put(event.getScreenshotFile().getName(), screenshot);
+                    ImageUtils.validLinks.put(event.getScreenshotFile().getName(), screenshot);
                     itextcomponent.getStyle().setUnderlined(true);
-                    itextcomponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("View image in-game")));
-                    Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(prefix.appendSibling(itextcomponent));
+                    itextcomponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new StringTextComponent("View image in-game")));
+                    Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(prefix.appendSibling(itextcomponent));
                 });
             });
         }

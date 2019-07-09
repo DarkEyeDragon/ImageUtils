@@ -1,6 +1,6 @@
 package me.darkeyedragon.imageutils.client.gui;
 
-import me.darkeyedragon.imageutils.client.ImageUtilsMain;
+import me.darkeyedragon.imageutils.client.ImageUtils;
 import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.imageuploaders.CustomUploader;
 import me.darkeyedragon.imageutils.client.imageuploaders.ImgurUploader;
@@ -19,7 +19,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.input.Mouse;
 
 import javax.imageio.ImageIO;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class GuiLocalScreenshots extends GuiScreen {
 
     private final GuiScreen parentScreen;
-    private File screenshotDirectory = new File(Minecraft.getMinecraft().gameDir, "screenshots");
+    private File screenshotDirectory = new File(Minecraft.getInstance().gameDir, "screenshots");
     private java.util.List<ImageResource> screenshots = new ArrayList<>();
     private GuiLocalScreenshots.List list;
     private boolean isSelected = false;
@@ -44,6 +44,8 @@ public class GuiLocalScreenshots extends GuiScreen {
     private ResourceLocation resource;
     private ImageResource imageResource;
     private boolean completedLoading;
+    private boolean deleteImage;
+    private boolean deleteImageConfirm;
     private int imageIndex;
 
     public GuiLocalScreenshots(GuiScreen parentScreen) {
@@ -72,7 +74,7 @@ public class GuiLocalScreenshots extends GuiScreen {
         this.buttonList.add(cancelButton);
         this.buttonList.add(optionsButton);
         if (!completedLoading) {
-            ImageUtilsMain.fixedThreadPool.submit(this::loadScreenshots);
+            ImageUtils.fixedThreadPool.submit(this::loadScreenshots);
         }
         this.list = new GuiLocalScreenshots.List(this.mc);
         this.list.registerScrollButtons(7, 8);
@@ -97,7 +99,7 @@ public class GuiLocalScreenshots extends GuiScreen {
                 deleteButton.enabled = true;
                 uploadButton.enabled = true;
                 optionsButton.enabled = true;
-                int scaledHeight = new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
+                int scaledHeight = new ScaledResolution(Minecraft.getInstance()).getScaledHeight();
 
                 int imgWidth = (int) Math.round(img.getWidth() * (scaledHeight * 0.00105));
                 int imgHeight = (int) Math.round(img.getHeight() * (scaledHeight * 0.00105));
@@ -109,7 +111,7 @@ public class GuiLocalScreenshots extends GuiScreen {
                 mc.fontRenderer.drawString(dimensions, width / 2, imgOffsetY + imgHeight + 20, 0xffffff);
                 mc.fontRenderer.drawSplitString(location, width / 2, imgOffsetY + imgHeight + 30, 200, 0xffffff);
                 GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-                Minecraft.getMinecraft().getTextureManager().bindTexture(resource);
+                Minecraft.getInstance().getTextureManager().bindTexture(resource);
                 drawModalRectWithCustomSizedTexture(width / 2, imgOffsetY, 0, 0, imgWidth, imgHeight, imgWidth, imgHeight);
             } else {
                 list.elementClicked(0, false, 0, 0);
@@ -136,7 +138,7 @@ public class GuiLocalScreenshots extends GuiScreen {
         } else if (button == refreshButton) {
             completedLoading = false;
             screenshots.clear();
-            ImageUtilsMain.fixedThreadPool.submit(this::loadScreenshots);
+            ImageUtils.fixedThreadPool.submit(this::loadScreenshots);
         } else if (button == uploadButton) {
 
             //TODO make upload screen
@@ -157,10 +159,10 @@ public class GuiLocalScreenshots extends GuiScreen {
             GuiConfirmAction guiConfirmDelete = new GuiConfirmAction((result, id) ->
             {
                 if (result) {
-                    deleteScreenshot();
+                    deleteScreenshots();
                 }
                 mc.displayGuiScreen(this);
-            }, "Confirm", new TextComponentTranslation("imageutil.gui.delete_screenshot").getUnformattedComponentText(), new TextComponentTranslation("imageutil.gui.delete_screenshot_line2").getUnformattedComponentText(), 0, this) {
+            }, "Confirm", new TranslationTextComponent("imageutil.gui.delete_screenshot").getUnformattedComponentText(), new TranslationTextComponent("imageutil.gui.delete_screenshot_line2").getUnformattedComponentText(), 0, this) {
                 @Override
                 public void drawScreen(int mouseX, int mouseY, float partialTicks) {
                     this.parent.drawScreen(-1, -1, partialTicks);
@@ -195,7 +197,7 @@ public class GuiLocalScreenshots extends GuiScreen {
                     addScreenshot(new ImageResource(fileName, image, false, file.getPath()));
                 }
             } catch (IOException e) {
-                ImageUtilsMain.logger.error(e);
+                ImageUtils.logger.error(e);
             } finally {
                 completedLoading();
             }
@@ -218,28 +220,33 @@ public class GuiLocalScreenshots extends GuiScreen {
         });
     }
 
-private void deleteScreenshot() {
-
-    for (int i = 0; i < screenshots.size(); i++) {
-        ImageResource imageResource = screenshots.get(i);
-        if (imageResource.isSelected()) {
-            File file = new File(imageResource.getPath());
-            if (file.delete()) {
-                screenshots.remove(i);
-                int selectIndex = i;
-                if (i >= screenshots.size()) {
-                    selectIndex = screenshots.size() - 1;
+    private void deleteScreenshots() {
+        java.util.List<ImageResource> toDelete = new ArrayList<>();
+        screenshots.forEach((screenshot) -> {
+            if (screenshot.isSelected()) {
+                File file = new File(screenshot.getPath());
+                if (file.delete()) {
+                    ImageUtils.logger.info("Removed image " + file.getName() + " successfully!");
+                    toDelete.add(screenshot);
+                } else {
+                    ImageUtils.logger.warn("Could not remove image " + file.getName() + "!");
                 }
-                ImageUtilsMain.logger.info("Removed image " + file.getName() + " successfully!");
-                if (screenshots.size() == 0) return;
-                list.elementClicked(selectIndex, false, list.getScrollBarX(), list.getSlotHeight() * selectIndex);
-                break;
+            }
+        });
+        if (screenshots.indexOf(imageResource) + toDelete.size() < screenshots.size()) {
+            int index = screenshots.indexOf(imageResource) + toDelete.size();
+            imageResource = screenshots.get(index);
+            list.elementClicked(index, false, list.getScrollBarX(), list.getSlotHeight() * index);
+        } else {
+            if (screenshots.size() == 1) {
+                imageResource = null;
             } else {
-                ImageUtilsMain.logger.warn("Could not remove image " + file.getName() + "!");
+                imageResource = screenshots.get(screenshots.size() - 2);
+                list.elementClicked(screenshots.size() - 2, false, list.getScrollBarX(), list.getSlotHeight());
             }
         }
+        screenshots.removeAll(toDelete);
     }
-}
 
     class List extends GuiSlot {
 
@@ -281,7 +288,7 @@ private void deleteScreenshot() {
             imageResource.setSelected(toggle);
             GuiLocalScreenshots.this.isSelected = true;
             finalImage = ImageUtil.resize(imageResource.getImage(), 800, 800);
-            resource = Minecraft.getMinecraft().renderEngine.getDynamicTextureLocation(imageResource.getName(), new DynamicTexture(finalImage));
+            resource = Minecraft.getInstance().renderEngine.getDynamicTextureLocation(imageResource.getName(), new DynamicTexture(finalImage));
             imageIndex = slotIndex;
         }
 

@@ -2,7 +2,7 @@ package me.darkeyedragon.imageutils.client;
 
 import net.minecraftforge.common.config.Config;
 
-@Config (modid = ImageUtilsMain.MODID, name = ImageUtilsMain.MODID + "/general")
+@Config(modid = ImageUtils.MODID, name = ImageUtils.MODID + "/general")
 @Config.LangKey ("imageutil.config.general")
 public class ModConfig{
 
