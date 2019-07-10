@@ -3,13 +3,18 @@ package me.darkeyedragon.imageutils.client.gui;
 import me.darkeyedragon.imageutils.client.ImageUtils;
 import me.darkeyedragon.imageutils.client.config.UploaderFile;
 import net.minecraft.client.gui.GuiLabel;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.ITextComponent;
 
-public abstract class GuiSideBarBase extends GuiScreen{
+public abstract class GuiSideBarBase extends Screen {
 
     int barWidth = 150;
     private String title = "title";
     private int titleColor = 0xffffff;
+
+    protected GuiSideBarBase(ITextComponent p_i51108_1_) {
+        super(p_i51108_1_);
+    }
 
     @Override
     public void initGui (){

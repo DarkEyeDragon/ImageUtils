@@ -1,13 +1,13 @@
 package me.darkeyedragon.imageutils.client.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 
-public class GuiProgressbar extends GuiScreen{
+public class GuiProgressbar extends Screen {
 
-    private GuiScreen parent;
+    private Screen parent;
 
-    public GuiProgressbar (GuiScreen parent){
+    public GuiProgressbar(Screen parent) {
         this.parent = parent;
     }
 

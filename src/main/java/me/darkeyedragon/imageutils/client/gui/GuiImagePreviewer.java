@@ -9,8 +9,8 @@ import me.darkeyedragon.imageutils.client.webhooks.WebhookValidation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class GuiImagePreviewer extends GuiScreen{
+public class GuiImagePreviewer extends Screen {
     private final String urlStr;
     private final ImageResource imgResource;
     private final int scale;
@@ -70,7 +70,7 @@ public class GuiImagePreviewer extends GuiScreen{
         catch (IOException e){
             e.printStackTrace();
         }
-        mc.displayGuiScreen(null);
+        mc.displayScreen(null);
     }
 
     @Override

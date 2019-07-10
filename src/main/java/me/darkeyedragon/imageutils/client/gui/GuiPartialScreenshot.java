@@ -1,9 +1,7 @@
 package me.darkeyedragon.imageutils.client.gui;
 
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
-import me.darkeyedragon.imageutils.client.utils.RegionSelector;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
@@ -13,10 +11,11 @@ import java.awt.image.BufferedImage;
 
 public class GuiPartialScreenshot extends Screen {
 
-    private final int res = new ScaledResolution(Minecraft.getInstance()).getScaleFactor();
+    //TODO see if scalred resolution is needed
+    //private final int res = new ScaledResolution(Minecraft.getInstance()).getScaleFactor();
     private boolean dragging = false;
     private Point mouseClicked;
-    private RegionSelector regionSelector = new RegionSelector();
+    //private RegionSelector regionSelector = new RegionSelector();
 
     protected GuiPartialScreenshot(ITextComponent p_i51108_1_) {
         super(p_i51108_1_);
@@ -85,7 +84,7 @@ public class GuiPartialScreenshot extends Screen {
 
             BufferedImage image = ScreenshotHandler.partial(new Point(Math.min(mouseClicked.x, mouseReleased.x), Math.min(mouseClicked.y, mouseReleased.y)), new Point(Math.max(mouseClicked.x, mouseReleased.x), Math.max(mouseClicked.y, mouseReleased.y)));
             ScreenshotHandler.upload(image);
-            Minecraft.getInstance().displayGuiScreen(null);
+            Minecraft.getInstance().displayScreen(null);
         }
     }
 }

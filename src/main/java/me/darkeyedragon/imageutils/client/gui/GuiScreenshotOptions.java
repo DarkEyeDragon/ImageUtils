@@ -7,14 +7,14 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
-public class GuiScreenshotOptions extends GuiConfirmAction {
+public class ScreenshotOptions extends GuiConfirmAction {
 
-    final GuiScreen parent;
+    final Screen parent;
     private GuiTextField imageName;
     private String title;
     private ImageResource imageResource;
 
-    GuiScreenshotOptions (GuiYesNoCallback parentScreenIn, String title, String confirm, String cancel, int parentButtonClickedIdIn, GuiScreen parent){
+    ScreenshotOptions(GuiYesNoCallback parentScreenIn, String title, String confirm, String cancel, int parentButtonClickedIdIn, Screen parent) {
         super(parentScreenIn, title, "", "", confirm, cancel, parentButtonClickedIdIn, parent);
         this.title = title;
         this.parent = parent;
@@ -75,8 +75,8 @@ public class GuiScreenshotOptions extends GuiConfirmAction {
     @Override
     public void onResize (Minecraft mcIn, int w, int h){
         super.onResize(mcIn, w, h);
-        mc.displayGuiScreen(parent);
-        mc.displayGuiScreen(this);
+        mc.displayScreen(parent);
+        mc.displayScreen(this);
     }
 
     public void updateScreen (){

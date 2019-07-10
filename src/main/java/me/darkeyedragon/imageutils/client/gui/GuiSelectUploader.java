@@ -3,7 +3,7 @@ package me.darkeyedragon.imageutils.client.gui;
 import me.darkeyedragon.imageutils.client.ImageUtils;
 import me.darkeyedragon.imageutils.client.config.UploaderFile;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +15,10 @@ public class GuiSelectUploader extends GuiSideBarBase {
     int width;
     int height;
     List<String> stringList = new ArrayList<>();
-    private GuiScreen parent;
+    private Screen parent;
 
     //TODO implement
-    public GuiSelectUploader(GuiScreen parent) {
+    public GuiSelectUploader(Screen parent) {
         mc = Minecraft.getInstance();
         this.parent = parent;
         width = mc.displayWidth;

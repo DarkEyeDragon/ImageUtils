@@ -17,10 +17,10 @@ public class KeyPressEvent{
     @SubscribeEvent
     public void onKeyInput (InputEvent.KeyInputEvent event){
         if (KeyBindings.screenshotPartialUploadKey.isPressed()){
-            Minecraft.getInstance().displayGuiScreen(new GuiPartialScreenshot());
+            Minecraft.getInstance().displayScreen(new GuiPartialScreenshot());
             MouseInfo.getPointerInfo().getLocation();
         }else if (KeyBindings.screenshotViewer.isPressed()){
-            Minecraft.getInstance().displayGuiScreen(new GuiSelectUploader(null));
+            Minecraft.getInstance().displayScreen(new GuiSelectUploader(null));
 
         }else if (KeyBindings.screenshotUploadKey.isPressed()){
             BufferedImage screenshot = ScreenshotHandler.full();

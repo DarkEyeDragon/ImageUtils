@@ -1,24 +1,24 @@
 package me.darkeyedragon.imageutils.client.gui;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.GlStateManager;
 
-public abstract class GuiPopupScreen extends GuiScreen{
+public abstract class GuiPopupScreen extends Screen {
 
-    final GuiScreen parent;
+    final Screen parent;
     private final String messageLine1;
     private final String messageLine2;
     private String buttonConfirm = "Yes";
     private String buttonCancel = "Cancel";
 
-    GuiPopupScreen (GuiScreen parent, String messageLine1, String messageLine2){
+    GuiPopupScreen(Screen parent, String messageLine1, String messageLine2) {
         this.parent = parent;
         this.messageLine1 = messageLine1;
         this.messageLine2 = messageLine2;
     }
 
-    GuiPopupScreen (GuiScreen parent, String messageLine1, String messageLine2, String buttonConfirm, String buttonCancel){
+    GuiPopupScreen(Screen parent, String messageLine1, String messageLine2, String buttonConfirm, String buttonCancel) {
         this.parent = parent;
         this.messageLine1 = messageLine1;
         this.messageLine2 = messageLine2;

@@ -2,7 +2,7 @@ package me.darkeyedragon.imageutils.client.gui;
 
 public class GuiConfirmAction extends GuiYesNo{
 
-    final GuiScreen parent;
+    final Screen parent;
     private final String messageLine1;
     private final String messageLine2;
     private final String title;
@@ -10,7 +10,7 @@ public class GuiConfirmAction extends GuiYesNo{
     private String buttonConfirm = "Yes";
     private String buttonCancel = "Cancel";
 
-    GuiConfirmAction (GuiYesNoCallback parentScreenIn, String title, String messageLine1In, String messageLine2In, int parentButtonClickedIdIn, GuiScreen parent){
+    GuiConfirmAction(GuiYesNoCallback parentScreenIn, String title, String messageLine1In, String messageLine2In, int parentButtonClickedIdIn, Screen parent) {
         super(parentScreenIn, messageLine1In, messageLine2In, parentButtonClickedIdIn);
         this.parent = parent;
         this.messageLine1 = messageLine1In;
@@ -18,7 +18,7 @@ public class GuiConfirmAction extends GuiYesNo{
         this.title = title;
     }
 
-    GuiConfirmAction (GuiYesNoCallback parentScreenIn, String title, String messageLine1In, String messageLine2In, String buttonConfirm, String buttonCancel, int parentButtonClickedIdIn, GuiScreen parent){
+    GuiConfirmAction(GuiYesNoCallback parentScreenIn, String title, String messageLine1In, String messageLine2In, String buttonConfirm, String buttonCancel, int parentButtonClickedIdIn, Screen parent) {
         super(parentScreenIn, "", "", parentButtonClickedIdIn);
         this.messageLine1 = messageLine1In;
         this.messageLine2 = messageLine2In;

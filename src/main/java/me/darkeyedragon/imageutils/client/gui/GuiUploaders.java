@@ -2,8 +2,8 @@ package me.darkeyedragon.imageutils.client.gui;
 
 import me.darkeyedragon.imageutils.client.ImageUtils;
 import me.darkeyedragon.imageutils.client.config.UploaderFile;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.screen.Screen;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 //TODO look if this is a viable solution
-public class GuiUploaders extends GuiScreen{
+public class GuiUploaders extends Screen {
 
     private Map<String, List<GuiTextField>> mapTextFields = new HashMap<>();
 
