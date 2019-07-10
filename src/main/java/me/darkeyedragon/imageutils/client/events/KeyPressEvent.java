@@ -5,14 +5,15 @@ import me.darkeyedragon.imageutils.client.ScreenshotHandler;
 import me.darkeyedragon.imageutils.client.gui.GuiPartialScreenshot;
 import me.darkeyedragon.imageutils.client.gui.GuiSelectUploader;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 
 public class KeyPressEvent{
+
     @SubscribeEvent
     public void onKeyInput (InputEvent.KeyInputEvent event){
         if (KeyBindings.screenshotPartialUploadKey.isPressed()){
