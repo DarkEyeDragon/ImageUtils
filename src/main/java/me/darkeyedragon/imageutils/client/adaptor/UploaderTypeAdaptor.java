@@ -1,8 +1,8 @@
-package me.darkeyedragon.imageutils.client.adaptors;
+package me.darkeyedragon.imageutils.client.adaptor;
 
 import java.util.Map;
 
-public class UploaderTypeAdaptor{
+public class UploaderTypeAdaptor {
     private String RequestURL;
     private String FileFormName;
     private String URL;
@@ -10,19 +10,19 @@ public class UploaderTypeAdaptor{
     private Map<String, Object> Arguments;
 
 
-    public String getRequestUrl (){
+    public String getRequestUrl() {
         return RequestURL;
     }
 
-    public String getFileFormName (){
+    public String getFileFormName() {
         return FileFormName;
     }
 
-    public Map<String, Object> getArgumentsTypeAdaptor (){
+    public Map<String, Object> getArgumentsTypeAdaptor() {
         return Arguments;
     }
 
-    public String getURL (){
+    public String getURL() {
         return URL;
     }
 

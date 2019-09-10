@@ -1,6 +1,6 @@
-package me.darkeyedragon.imageutils.client.events;
+package me.darkeyedragon.imageutils.client.event;
 
-public class IngameGuiEvent{
+public class IngameGuiEvent {
     /*@SubscribeEvent
     public void event(RenderGameOverlayEvent.Text event){
         if(ModConfig.debug){

@@ -1,11 +1,6 @@
 package me.darkeyedragon.imageutils.client.gui;
 
-import me.darkeyedragon.imageutils.client.ImageUtilsMain;
-import me.darkeyedragon.imageutils.client.config.UploaderFile;
-import net.minecraft.client.gui.GuiLabel;
-import net.minecraft.client.gui.GuiScreen;
-
-public abstract class GuiSideBarBase extends GuiScreen{
+/*public abstract class GuiSideBarBase extends GuiScreen{
 
     int barWidth = 150;
     private String title = "title";
@@ -64,3 +59,4 @@ public abstract class GuiSideBarBase extends GuiScreen{
         return false;
     }
 }
+*/

@@ -1,31 +1,31 @@
-package me.darkeyedragon.imageutils.client.adaptors;
+package me.darkeyedragon.imageutils.client.adaptor;
 
-public class ConfigTypeAdaptor{
+public class ConfigTypeAdaptor {
     private boolean Copy;
     private boolean CustomUploader;
     private boolean Override;
     private String Uploader;
 
-    public ConfigTypeAdaptor (boolean copy, boolean customServer, boolean override, String uploader){
+    public ConfigTypeAdaptor(boolean copy, boolean customServer, boolean override, String uploader) {
         this.Override = override;
         this.Copy = copy;
         this.CustomUploader = customServer;
         this.Uploader = uploader;
     }
 
-    public boolean isOverride (){
+    public boolean isOverride() {
         return Override;
     }
 
-    public boolean isCopy (){
+    public boolean isCopy() {
         return Copy;
     }
 
-    public boolean isCustomUploader (){
+    public boolean isCustomUploader() {
         return CustomUploader;
     }
 
-    public String getUploader (){
+    public String getUploader() {
         return Uploader;
     }
 }

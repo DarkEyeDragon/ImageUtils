@@ -10,8 +10,8 @@ import java.nio.file.Path;
 
 public class Screenshot {
 
-    private String imageName;
     private final File file;
+    private String imageName;
     private Path path;
 
     public Screenshot(String imageName) {
@@ -20,7 +20,7 @@ public class Screenshot {
         path = ImageUtilsMain.getScreenshotDir();
     }
 
-    public boolean exists(){
+    public boolean exists() {
         return file.exists();
     }
 

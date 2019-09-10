@@ -1,9 +1,8 @@
 package me.darkeyedragon.imageutils.client.gui;
 
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
-import me.darkeyedragon.imageutils.client.ModConfig;
-import me.darkeyedragon.imageutils.client.imageuploaders.CustomUploader;
-import me.darkeyedragon.imageutils.client.imageuploaders.ImgurUploader;
+import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
+import me.darkeyedragon.imageutils.client.imageuploader.UploaderFactory;
 import me.darkeyedragon.imageutils.client.utils.ImageResource;
 import me.darkeyedragon.imageutils.client.utils.ImageUtil;
 import net.minecraft.client.Minecraft;
@@ -27,10 +26,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
 
 public class GuiLocalScreenshots extends GuiScreen {
 
     private final GuiScreen parentScreen;
+    private final ImageUtilsMain main;
+    private final ExecutorService executorService;
     private File screenshotDirectory = new File(Minecraft.getMinecraft().gameDir, "screenshots");
     private java.util.List<ImageResource> screenshots = new ArrayList<>();
     private GuiLocalScreenshots.List list;
@@ -45,14 +47,19 @@ public class GuiLocalScreenshots extends GuiScreen {
     private ImageResource imageResource;
     private boolean completedLoading;
     private int imageIndex;
+    private Uploader uploader;
 
-    public GuiLocalScreenshots(GuiScreen parentScreen) {
+    public GuiLocalScreenshots(GuiScreen parentScreen, ImageUtilsMain main) {
         this.parentScreen = parentScreen;
+        this.main = main;
+        this.executorService = main.getUploadHandler().getFixedThreadPool();
+        this.uploader = new UploaderFactory(main).getUploader();
     }
 
     ImageResource getImageResource() {
         return imageResource;
     }
+
 
     @Override
     public void initGui() {
@@ -72,7 +79,7 @@ public class GuiLocalScreenshots extends GuiScreen {
         this.buttonList.add(cancelButton);
         this.buttonList.add(optionsButton);
         if (!completedLoading) {
-            ImageUtilsMain.fixedThreadPool.submit(this::loadScreenshots);
+            executorService.submit(this::loadScreenshots);
         }
         this.list = new GuiLocalScreenshots.List(this.mc);
         this.list.registerScrollButtons(7, 8);
@@ -136,19 +143,17 @@ public class GuiLocalScreenshots extends GuiScreen {
         } else if (button == refreshButton) {
             completedLoading = false;
             screenshots.clear();
-            ImageUtilsMain.fixedThreadPool.submit(this::loadScreenshots);
+            executorService.submit(this::loadScreenshots);
         } else if (button == uploadButton) {
 
             //TODO make upload screen
             uploadButton.displayString = "Uploading...";
             uploadButton.enabled = false;
-            if (imageResource.getImage() != null) {
-                if (ModConfig.customServer) {
-                    ImgurUploader.uploadImage(imageResource.getImage());
-                } else {
-                    CustomUploader.uploadImage(imageResource.getImage());
-                }
+            BufferedImage img = imageResource.getImage();
+            if (img != null) {
+                uploader.upload(img);
             } else {
+                //TODO show popup instead
                 uploadButton.displayString = "Unable to upload screenshot!";
             }
             //mc.displayGuiScreen(new GuiProgressbar(this));
@@ -192,10 +197,10 @@ public class GuiLocalScreenshots extends GuiScreen {
             try {
                 BufferedImage image = ImageIO.read(file);
                 if (image != null) {
-                    addScreenshot(new ImageResource(fileName, image, false, file.getPath()));
+                    addScreenshot(new ImageResource(main, fileName, image, false, file.getPath()));
                 }
             } catch (IOException e) {
-                ImageUtilsMain.logger.error(e);
+                main.getLogger().error(e);
             } finally {
                 completedLoading();
             }
@@ -218,28 +223,28 @@ public class GuiLocalScreenshots extends GuiScreen {
         });
     }
 
-private void deleteScreenshot() {
+    private void deleteScreenshot() {
 
-    for (int i = 0; i < screenshots.size(); i++) {
-        ImageResource imageResource = screenshots.get(i);
-        if (imageResource.isSelected()) {
-            File file = new File(imageResource.getPath());
-            if (file.delete()) {
-                screenshots.remove(i);
-                int selectIndex = i;
-                if (i >= screenshots.size()) {
-                    selectIndex = screenshots.size() - 1;
+        for (int i = 0; i < screenshots.size(); i++) {
+            ImageResource imageResource = screenshots.get(i);
+            if (imageResource.isSelected()) {
+                File file = new File(imageResource.getPath());
+                if (file.delete()) {
+                    screenshots.remove(i);
+                    int selectIndex = i;
+                    if (i >= screenshots.size()) {
+                        selectIndex = screenshots.size() - 1;
+                    }
+                    main.getLogger().info("Removed image " + file.getName() + " successfully!");
+                    if (screenshots.size() == 0) return;
+                    list.elementClicked(selectIndex, false, list.getScrollBarX(), list.getSlotHeight() * selectIndex);
+                    break;
+                } else {
+                    main.getLogger().warn("Could not remove image " + file.getName() + "!");
                 }
-                ImageUtilsMain.logger.info("Removed image " + file.getName() + " successfully!");
-                if (screenshots.size() == 0) return;
-                list.elementClicked(selectIndex, false, list.getScrollBarX(), list.getSlotHeight() * selectIndex);
-                break;
-            } else {
-                ImageUtilsMain.logger.warn("Could not remove image " + file.getName() + "!");
             }
         }
     }
-}
 
     class List extends GuiSlot {
 

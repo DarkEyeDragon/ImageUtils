@@ -14,6 +14,7 @@ public class Progressbar extends GuiScreen {
     private float maxProgress;
     private float progress;
     private float actualValue;
+
     public Progressbar(int x, int y, int length, int height) {
         this.x = x;
         this.y = y;
@@ -31,13 +32,13 @@ public class Progressbar extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.drawGradientRect(x, y, x + length, y + height, 0xffffffff, 0xffffffff);
-        int value = (int)((progress/maxProgress)*length);
-        this.drawGradientRect(x, y, x+value, y + height, 0xFFE24C19, 0xFFE24C19);
-        this.drawCenteredString(mc.fontRenderer, (int)progress+"/"+(int)maxProgress, x+(length/2), y + (height/2)-4, 0xFFFFFF);
-        if(value <= length-(length/20)){
-            this.drawCenteredString(mc.fontRenderer, I18n.format("imageutil.gui.local_screenshots.loading"),x+(length/2), y - (height/2)-4, 0xFFFFFF);
-        }else{
-            drawCenteredString(mc.fontRenderer, "Binding resources...", x+(length/2), y - (height/2)-4, 0xFFFFFF);
+        int value = (int) ((progress / maxProgress) * length);
+        this.drawGradientRect(x, y, x + value, y + height, 0xFFE24C19, 0xFFE24C19);
+        this.drawCenteredString(mc.fontRenderer, (int) progress + "/" + (int) maxProgress, x + (length / 2), y + (height / 2) - 4, 0xFFFFFF);
+        if (value <= length - (length / 20)) {
+            this.drawCenteredString(mc.fontRenderer, I18n.format("imageutil.gui.local_screenshots.loading"), x + (length / 2), y - (height / 2) - 4, 0xFFFFFF);
+        } else {
+            drawCenteredString(mc.fontRenderer, "Binding resources...", x + (length / 2), y - (height / 2) - 4, 0xFFFFFF);
         }
     }
 
@@ -80,6 +81,7 @@ public class Progressbar extends GuiScreen {
     public void setMaxProgress(int maxProgress) {
         this.maxProgress = maxProgress;
     }
+
     public void setProgress(int progress) {
         this.progress = progress;
     }

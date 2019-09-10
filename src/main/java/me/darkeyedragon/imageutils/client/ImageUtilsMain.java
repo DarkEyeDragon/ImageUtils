@@ -1,117 +1,116 @@
 package me.darkeyedragon.imageutils.client;
 
 
-import me.darkeyedragon.imageutils.client.config.UploaderFile;
-import me.darkeyedragon.imageutils.client.events.*;
+import me.darkeyedragon.imageutils.client.event.*;
+import me.darkeyedragon.imageutils.client.imageuploader.UploaderFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.ArrayList;
+import java.util.List;
 
-@Mod (modid = ImageUtilsMain.MODID, version = ImageUtilsMain.VERSION, updateJSON = ImageUtilsMain.updateJSON, clientSideOnly = true)
-public class ImageUtilsMain{
+@Mod(modid = ImageUtilsMain.MODID, version = ImageUtilsMain.VERSION, updateJSON = ImageUtilsMain.updateJSON, clientSideOnly = true)
+public class ImageUtilsMain {
+
+    //Mod information
     public static final String MODID = "imageutils";
     public static final String VERSION = "@VERSION@";
     static final String updateJSON = "https://darkeyedragon.me/mods/updates/imageutils.json";
-
-    public static Logger logger;
-    public static ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
+    //keep track of webhooks to prevent spam on discord
     public static List<String> webhookLinks = new ArrayList<>();
-    public static LinkedHashMap<String, BufferedImage> validLinks = new LinkedHashMap<String, BufferedImage>(){
-        @Override
-        protected boolean removeEldestEntry (Map.Entry<String, BufferedImage> eldest){
-            return size() > 7;
-        }
-    };
-    public static List<UploaderFile> uploaders;
-    public static UploaderFile activeUploader;
-    private static Path configPath;
-    private static File uploadDir;
+    private final UploaderFactory uploaderFactory = new UploaderFactory(this);
+    private Logger logger;
+    private Path configPath;
+    private File uploadDir;
     private KeyBindings keybinds;
+    private UploadHandler uploadHandler = new UploadHandler(this);
 
-    public static void setActiveUploader (){
-        if (ModConfig.customServer){
-
-            ImageUtilsMain.uploaders.forEach(uf -> {
-                if (uf.getFileName().equalsIgnoreCase(ModConfig.uploader)){
-                    logger.info("Setting active uploader script.");
-                    activeUploader = uf;
-                }
-            });
-        }
+    public static String getMODID() {
+        return MODID;
     }
 
-    public static void loadUploaders (){
-        logger.info("Uploaders directory found, loading uploaders...");
-        String[] list = uploadDir.list();
-        if (list != null && list.length > 0){
-            List<String> displayName = new ArrayList<>();
-            for (File file : Objects.requireNonNull(uploadDir.listFiles())){
-                try{
-                    UploaderFile uf = new UploaderFile(file);
-                    uploaders.add(uf);
-                    displayName.add(uf.getDisplayName());
-                    logger.info("Loaded: " + file.getName());
-                }
-                catch (Exception e){
-                    logger.warn("Unable to load " + file.getName() + e.getMessage() + "!");
-                }
-            }
-        }
+    public static String getVERSION() {
+        return VERSION;
+    }
+
+    public static String getUpdateJSON() {
+        return updateJSON;
+    }
+
+    public static List<String> getWebhookLinks() {
+        return webhookLinks;
+    }
+
+    public static Path getScreenshotDir() {
+        return Paths.get(Minecraft.getMinecraft().gameDir.getAbsolutePath(), "screenshots");
     }
 
     @Mod.EventHandler
-    public void init (FMLInitializationEvent init){
-        MinecraftForge.EVENT_BUS.register(new KeyPressEvent());
-        MinecraftForge.EVENT_BUS.register(new CustomScreenshotEvent());
+    public void init(FMLInitializationEvent init) {
+        uploadDir = new File(configPath.toFile(), "uploaders");
+        if (!uploadDir.exists()) {
+            if (uploadDir.mkdir()) {
+                logger.info("No uploaders directory, creating one...");
+            } else {
+                logger.warn("Unable to create uploaders directory! This will cause problems later on.");
+            }
+        } else {
+            logger.warn(uploadHandler);
+            uploadHandler.loadUploaders();
+            if (ModConfig.uploader != null) {
+                if (!ModConfig.uploader.equalsIgnoreCase("")) {
+                    uploadHandler.setActiveUploader();
+                }
+            }
+        }
+
+
+        MinecraftForge.EVENT_BUS.register(new KeyPressEvent(this));
+        MinecraftForge.EVENT_BUS.register(new CustomScreenshotEvent(this));
         MinecraftForge.EVENT_BUS.register(new ChatReceivedEvent());
-        MinecraftForge.EVENT_BUS.register(new CustomGuiOpenEvent());
-        MinecraftForge.EVENT_BUS.register(new GuiMenuHookEvent());
+        MinecraftForge.EVENT_BUS.register(new CustomGuiOpenEvent(this));
+        MinecraftForge.EVENT_BUS.register(new GuiMenuHookEvent(this));
         MinecraftForge.EVENT_BUS.register(new IngameGuiEvent());
-        MinecraftForge.EVENT_BUS.register(ConfigUpdateEvent.class);
+        MinecraftForge.EVENT_BUS.register(new ConfigUpdateEvent(getUploadHandler()));
         keybinds = new KeyBindings();
         keybinds.RegisterKeybinds();
 
     }
 
     @Mod.EventHandler
-    public void preInit (FMLPreInitializationEvent pre){
+    public void preInit(FMLPreInitializationEvent pre) {
         logger = pre.getModLog();
         configPath = Paths.get(pre.getModConfigurationDirectory().getPath(), MODID);
     }
 
-    @Mod.EventHandler
-    public void postInit (FMLPostInitializationEvent post){
-        uploaders = new ArrayList<>();
-        uploadDir = new File(configPath.toFile(), "uploaders");
-        if (!uploadDir.exists()){
-            if (uploadDir.mkdir()){
-                logger.info("No uploaders directory, creating one...");
-            }else{
-                logger.warn("Unable to create uploaders directory! This will cause problems later on.");
-            }
-        }else{
-            loadUploaders();
-            if (ModConfig.uploader != null){
-                if (!ModConfig.uploader.equalsIgnoreCase("")){
-                    setActiveUploader();
-                }
-            }
-        }
+    public Logger getLogger() {
+        return logger;
     }
 
-    public static Path getScreenshotDir(){
-        return Paths.get(Minecraft.getMinecraft().gameDir.getAbsolutePath(), "screenshots");
+    public Path getConfigPath() {
+        return configPath;
+    }
+
+    public File getUploadDir() {
+        return uploadDir;
+    }
+
+    public KeyBindings getKeybinds() {
+        return keybinds;
+    }
+
+    public UploadHandler getUploadHandler() {
+        return uploadHandler;
+    }
+
+    public UploaderFactory getUploaderFactory() {
+        return uploaderFactory;
     }
 }

@@ -22,7 +22,7 @@ public class Margin {
         this.right = right;
     }
 
-    public int[] getMargin(){
+    public int[] getMargin() {
         return new int[]{top, bottom, left, right};
     }
 

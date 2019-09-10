@@ -14,8 +14,8 @@ public class Row extends GuiScreen {
 
     private final int WIDTH;
     private final int OFFSET_Y;
-    private short allowedImages;
     private final List<ImagePreview> content;
+    private short allowedImages;
     private Map<String, ResourceLocation> resources;
 
 
@@ -36,7 +36,7 @@ public class Row extends GuiScreen {
         int totalUsedSpace = 0;
         short index = 0;
         while (totalUsedSpace < WIDTH) {
-            totalUsedSpace += width+height;
+            totalUsedSpace += width + height;
             index++;
         }
         return index;

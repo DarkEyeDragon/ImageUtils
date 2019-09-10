@@ -10,6 +10,7 @@ import java.io.IOException;
 
 public class ImagePreview extends GuiScreen {
 
+    private final ImageUtilsMain main;
     private final ImageResource imageResource;
 
     private int width;
@@ -17,20 +18,23 @@ public class ImagePreview extends GuiScreen {
 
     private Margin margin;
 
-    public ImagePreview(ImageResource imageResource, int width, int height) {
+    public ImagePreview(ImageUtilsMain main, ImageResource imageResource, int width, int height) {
+        this.main = main;
         this.imageResource = imageResource;
         this.width = width;
         this.height = height;
     }
-    public BufferedImage getPreview(){
+
+    public BufferedImage getPreview() {
         try {
             return Thumbnails.of(imageResource.getImage()).size(width, height).asBufferedImage();
         } catch (IOException e) {
             e.printStackTrace();
-            ImageUtilsMain.logger.error(e);
+            main.getLogger().error(e);
         }
         return null;
     }
+
     public int getWidth() {
         return width;
     }

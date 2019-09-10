@@ -8,14 +8,14 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 
-public class ClientMessage{
+public class ClientMessage {
 
-    public static void basic (String message){
+    public static void basic(String message) {
         ITextComponent send = new TextComponentTranslation(message);
         Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(send);
     }
 
-    public ITextComponent link (String displayMessage, String link, TextFormatting color){
+    public ITextComponent link(String displayMessage, String link, TextFormatting color) {
         ITextComponent textLink = new TextComponentString(displayMessage);
         textLink.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));
         textLink.getStyle().setColor(color);

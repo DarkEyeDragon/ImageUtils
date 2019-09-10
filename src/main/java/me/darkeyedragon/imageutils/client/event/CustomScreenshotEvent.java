@@ -1,9 +1,10 @@
-package me.darkeyedragon.imageutils.client.events;
+package me.darkeyedragon.imageutils.client.event;
 
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
-import me.darkeyedragon.imageutils.client.imageuploaders.ImgurUploader;
+import me.darkeyedragon.imageutils.client.UploadHandler;
+import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -19,28 +20,34 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
-public class CustomScreenshotEvent{
+public class CustomScreenshotEvent {
+
+    private final Uploader uploader;
+    private final UploadHandler uploadHandler;
+
+    public CustomScreenshotEvent(ImageUtilsMain main) {
+        this.uploader = main.getUploaderFactory().getUploader();
+        this.uploadHandler = main.getUploadHandler();
+    }
 
     @SubscribeEvent
-    @SideOnly (Side.CLIENT)
-    public void onScreenshot (net.minecraftforge.client.event.ScreenshotEvent event){
-        if (ModConfig.Override){
+    @SideOnly(Side.CLIENT)
+    public void onScreenshot(net.minecraftforge.client.event.ScreenshotEvent event) {
+        if (ModConfig.Override) {
             BufferedImage screenshot = event.getImage();
-            ImgurUploader.uploadImage(screenshot);
-        }else{
+            uploader.upload(screenshot);
+        } else {
             event.setCanceled(true);
             BufferedImage screenshot = ScreenshotHandler.full();
-            ImageUtilsMain.fixedThreadPool.submit(() -> {
+            uploadHandler.getFixedThreadPool().submit(() -> {
                 Path dir = ImageUtilsMain.getScreenshotDir();
                 File screenshotFile = ScreenshotHandler.getTimestampedPNGFileForDirectory(dir.toFile());
                 //TODO PR Event to intercept Actions
-                ImageUtilsMain.fixedThreadPool.submit(() -> {
-                    try{
+                uploadHandler.getFixedThreadPool().submit(() -> {
+                    try {
                         ImageIO.write(screenshot, "png", screenshotFile.getAbsoluteFile());
-                    }
-                    catch (IOException e){
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 });
@@ -49,7 +56,7 @@ public class CustomScreenshotEvent{
                     ITextComponent itextcomponent = new TextComponentString(screenshotFile.getName());
                     //itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://LINK::"+screenshotFile.getName()));
                     itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/view " + screenshotFile.getName()));
-                    ImageUtilsMain.validLinks.put(event.getScreenshotFile().getName(), screenshot);
+                    uploadHandler.getValidLinks().put(event.getScreenshotFile().getName(), screenshot);
                     itextcomponent.getStyle().setUnderlined(true);
                     itextcomponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("View image in-game")));
                     Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(prefix.appendSibling(itextcomponent));

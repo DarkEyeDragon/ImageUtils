@@ -1,7 +1,8 @@
-package me.darkeyedragon.imageutils.client.imageuploaders;
+package me.darkeyedragon.imageutils.client.imageuploader;
 
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 import me.darkeyedragon.imageutils.client.ModConfig;
+import me.darkeyedragon.imageutils.client.UploadHandler;
 import me.darkeyedragon.imageutils.client.config.UploaderFile;
 import me.darkeyedragon.imageutils.client.message.Messages;
 import me.darkeyedragon.imageutils.client.utils.CopyToClipboard;
@@ -27,11 +28,13 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
-public class CustomUploader{
+public class CustomUploader implements Uploader {
 
     private static MultipartEntityBuilder builder;
     private static UploaderFile uploaderFile;
@@ -39,15 +42,23 @@ public class CustomUploader{
     private static CloseableHttpClient client;
     private static String urlString;
     private static Minecraft mc;
-    private static GuiNewChat chat;
+    private final UploadHandler uploadHandler;
+    private final ExecutorService executorService;
+    private GuiNewChat chat;
 
-    public static void uploadImage (BufferedImage bufferedImage){
-        ImageUtilsMain.fixedThreadPool.submit(() -> {
+    public CustomUploader(UploadHandler uploadHandler) {
+        this.uploadHandler = uploadHandler;
+        this.executorService = uploadHandler.getFixedThreadPool();
+    }
+
+
+    public void upload(BufferedImage bufferedImage) {
+        executorService.submit(() -> {
             Thread.currentThread().setName(ImageUtilsMain.MODID + "/uploader");
             mc = Minecraft.getMinecraft();
             chat = mc.ingameGUI.getChatGUI();
-            uploaderFile = ImageUtilsMain.activeUploader;
-            if (uploaderFile == null || uploaderFile.getUploader() == null){
+            uploaderFile = uploadHandler.getActiveUploader();
+            if (uploaderFile == null || uploaderFile.getUploader() == null) {
                 chat.printChatMessage(new TextComponentTranslation("imageutil.message.invalid_config"));
                 return;
             }
@@ -55,7 +66,7 @@ public class CustomUploader{
             client = HttpClients.createDefault();
             httpPost = new HttpPost(uploaderFile.getUploader().getRequestUrl());
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-            if (uploaderFile.getArguments() != null){
+            if (uploaderFile.getArguments() != null) {
                 uploaderFile.getArguments().forEach((k, v) ->
                         builder.addTextBody(k, (String) v)
                 );
@@ -64,23 +75,23 @@ public class CustomUploader{
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             //int responseCode = 0;
             //String responseMessage = "";
-            try{
+            try {
                 ImageIO.write(bufferedImage, "png", baos);
                 byte[] bytes = baos.toByteArray();
-                mc.ingameGUI.setOverlayMessage(I18n.format("imageutil.message.overlay_message.upload") + " " + ImageUtilsMain.activeUploader.getDisplayName(), true);
+                mc.ingameGUI.setOverlayMessage(I18n.format("imageutil.message.overlay_message.upload") + " " + uploadHandler.getActiveUploader().getDisplayName(), true);
                 builder.addBinaryBody("image", bytes, ContentType.IMAGE_JPEG, uploaderFile.getUploader().getFileFormName());
                 HttpEntity multipart = builder.build();
                 httpPost.setEntity(multipart);
                 CloseableHttpResponse response = client.execute(httpPost);
 
-                if (uploaderFile.isJsonResponse()){
+                if (uploaderFile.isJsonResponse()) {
                     Map<String, String> responseJson = JsonHelper.readJsonFromUrl(response.getEntity().getContent());
                     urlString = responseJson.get(uploaderFile.getJsonResponseKey());
                     Messages.uploadMessage(urlString);
-                }else{
+                } else {
                     //TODO do some further testing
                     Header header = response.getFirstHeader("Content-Type");
-                    if (header.toString().contains("html")){
+                    if (header.toString().contains("html")) {
                         HttpEntity body = response.getEntity();
                         String content = EntityUtils.toString(body);
                         List<String> contentUrl = StringFilter.extractUrls(content);
@@ -90,28 +101,36 @@ public class CustomUploader{
                     }
                     Messages.uploadMessage(urlString);
                 }
-                if (ModConfig.copyToClipboard){
-                    if (CopyToClipboard.copy(urlString)){
+                if (ModConfig.copyToClipboard) {
+                    if (CopyToClipboard.copy(urlString)) {
                         chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard"));
-                    }else{
+                    } else {
                         chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard_error"));
                     }
                 }
                 WebhookValidation.addLink(urlString);
-            }
-            catch (IOException ex){
+            } catch (IOException ex) {
                 //In case something goes wrong!
                 ex.printStackTrace();
                 Messages.errorMessage(ex.getMessage());
-            }finally{
-                try{
+            } finally {
+                try {
                     client.close();
-                }
-                catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                     Messages.errorMessage(e.getMessage());
                 }
             }
         });
+    }
+
+    @Override
+    public int getResponse(HttpURLConnection urlConnection) {
+        return 0;
+    }
+
+    @Override
+    public void notifyPlayer() {
+
     }
 }

@@ -13,37 +13,36 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringFilter{
+public class StringFilter {
 
     private static final String urlRegex = "(https?:((//)|(\\\\))+[\\w\\d:#@%/;$()~_?+-=\\\\.&]*)";
     private static final Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
 
-    public static List<String> extractUrls (String text){
+    public static List<String> extractUrls(String text) {
         List<String> containedUrls = new ArrayList<>();
         Matcher urlMatcher = pattern.matcher(text);
 
-        while (urlMatcher.find()){
+        while (urlMatcher.find()) {
             containedUrls.add(urlMatcher.group());
         }
         return containedUrls;
     }
 
-    public static boolean isValidUrl (String stringToCheck){
+    public static boolean isValidUrl(String stringToCheck) {
         Matcher urlMatcher = pattern.matcher(stringToCheck);
         return urlMatcher.matches();
     }
 
-    public static boolean isValidImage (String stringToCheck){
-        try (CloseableHttpClient curClient = HttpClientBuilder.create().setUserAgent("ScreenshotUploader/" + ImageUtilsMain.VERSION).build()){
+    public static boolean isValidImage(String stringToCheck) {
+        try (CloseableHttpClient curClient = HttpClientBuilder.create().setUserAgent("ScreenshotUploader/" + ImageUtilsMain.VERSION).build()) {
             return curClient.execute(new HttpGet(stringToCheck)).getFirstHeader("Content-Type").getValue().startsWith("image/");
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    static String getHostName (String link) throws URISyntaxException{
+    static String getHostName(String link) throws URISyntaxException {
         URI uri = new URI(link);
         return uri.getHost();
     }
