@@ -21,15 +21,12 @@ public class JsonHelper {
     }
 
     public static Gson readJsonFromUrl(String url) throws IOException {
-        InputStream is = new URL(url).openStream();
-        try {
+        try (InputStream is = new URL(url).openStream()) {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             String jsonText = readAll(rd);
             Gson gson = new Gson();
             gson.fromJson(jsonText, Map.class);
             return gson;
-        } finally {
-            is.close();
         }
     }
 

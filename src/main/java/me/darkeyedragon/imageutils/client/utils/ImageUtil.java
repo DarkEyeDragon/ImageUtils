@@ -6,6 +6,7 @@ import net.coobird.thumbnailator.Thumbnails;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,8 +46,6 @@ public class ImageUtil {
         return null;
     }
 
-    private static void addToLinkList(String urlString, BufferedImage downloadedImage) {
-    }
 
     public static BufferedImage getLocal(File location) throws IOException {
         return ImageIO.read(location);

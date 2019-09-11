@@ -22,7 +22,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.Base64;
 
 public class ImgurUploader implements Uploader {
@@ -62,7 +62,7 @@ public class ImgurUploader implements Uploader {
 
 
                 OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-                String data = URLEncoder.encode("image", StandardCharsets.UTF_8.name()) + "=" + URLEncoder.encode(encoded, StandardCharsets.UTF_8.name());
+                String data = URLEncoder.encode("image", Charset.forName("UTF-8").name()) + "=" + URLEncoder.encode(encoded, Charset.forName("UTF-8").name());
                 wr.write(data);
                 wr.flush();
 
@@ -107,15 +107,4 @@ public class ImgurUploader implements Uploader {
             }
         });
     }
-
-    @Override
-    public int getResponse(HttpURLConnection urlConnection) {
-        return 0;
-    }
-
-    @Override
-    public void notifyPlayer() {
-
-    }
-
 }

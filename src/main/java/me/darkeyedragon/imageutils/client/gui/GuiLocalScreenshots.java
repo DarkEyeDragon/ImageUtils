@@ -3,8 +3,8 @@ package me.darkeyedragon.imageutils.client.gui;
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
 import me.darkeyedragon.imageutils.client.imageuploader.UploaderFactory;
-import me.darkeyedragon.imageutils.client.utils.ImageResource;
 import me.darkeyedragon.imageutils.client.utils.ImageUtil;
+import me.darkeyedragon.imageutils.client.utils.ImageResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -174,9 +174,7 @@ public class GuiLocalScreenshots extends GuiScreen {
             };
             mc.displayGuiScreen(guiConfirmDelete);
         } else if (button == optionsButton) {
-            mc.displayGuiScreen(new GuiScreenshotOptions((result, id) -> {
-                mc.displayGuiScreen(this);
-            }, "Screenshot Settings", "Save", "Cancel", 0, this) {
+            mc.displayGuiScreen(new GuiScreenshotOptions((result, id) -> mc.displayGuiScreen(this), "Screenshot Settings", "Save", "Cancel", 0, this) {
                 @Override
                 public void drawScreen(int mouseX, int mouseY, float partialTicks) {
                     parent.drawScreen(-1, -1, partialTicks);

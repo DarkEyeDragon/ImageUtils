@@ -19,9 +19,6 @@ group = "me.darkeyedragon.imageutils" // http://maven.apache.org/guides/mini/gui
 archivesBaseName = "ImageUtils"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
 
 minecraft {
     version = "1.12.2-14.23.5.2768"
@@ -42,6 +39,8 @@ minecraft {
 dependencies {
     compile (group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.5')
     compile (group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.1'){transitive = false}
+    compile (group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.12')
+    compile (group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10')
     compile (group: 'net.coobird', name: 'thumbnailator', version: '0.4.8')
 }
 
@@ -64,6 +63,6 @@ processResources {
     }
 }
 shadowJar {
-    relocate 'org.apache.http.entity', 'me.darkeyedragon.imageutils.apache'
+    //relocate 'org.apache.http.entity', 'me.darkeyedragon.imageutils.apache'
 }
 reobf{shadowJar {} }

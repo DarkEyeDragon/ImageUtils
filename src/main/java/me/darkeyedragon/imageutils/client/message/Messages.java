@@ -47,7 +47,7 @@ public class Messages {
         /*ImageUtilsMain.fixedThreadPool.submit(() -> {
             if (StringFilter.isValidImage(link)){
                 try{
-                    BufferedImage downloadedImage = ImageUtil.downloadFromUrl(link);
+                    BufferedImage downloadedImage = Image.downloadFromUrl(link);
                     addToLinkList(link, downloadedImage);
                     //TODO CLEAN UP
                     TextComponentTranslation textLink = new TextComponentTranslation("imageutil.message.view_image");
@@ -77,7 +77,7 @@ public class Messages {
             if (StringFilter.isValidImage(link)){
                 try{
                     URL url = new URL(link);
-                    BufferedImage downloadedImage = ImageUtil.downloadFromUrl(link);
+                    BufferedImage downloadedImage = Image.downloadFromUrl(link);
                     addToLinkList(link, downloadedImage);
                     //TODO CLEAN UP
                     TextComponentTranslation textLink = new TextComponentTranslation("imageutil.message.view_image");
