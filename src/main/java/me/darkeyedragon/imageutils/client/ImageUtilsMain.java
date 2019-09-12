@@ -19,6 +19,8 @@ import java.util.List;
 @Mod(modid = ImageUtilsMain.MODID, version = ImageUtilsMain.VERSION, updateJSON = ImageUtilsMain.updateJSON, clientSideOnly = true)
 public class ImageUtilsMain {
 
+
+
     //Mod information
     public static final String MODID = "imageutils";
     public static final String VERSION = "@VERSION@";

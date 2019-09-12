@@ -11,6 +11,7 @@ import net.minecraft.client.resources.I18n;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class GuiPartialScreenshot extends GuiScreen {
 

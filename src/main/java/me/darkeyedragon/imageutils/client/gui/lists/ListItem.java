@@ -46,27 +46,33 @@ public class ListItem {
 
     /**
      * Get the start location (top left).
+     * @return {@link Location Location}
      */
     public Location getStartLocation() {
         return startLocation;
     }
 
+
     /**
      * Set the start location (top left).
+     * @param startLocation {@link Location Location}
      */
     public void setStartLocation(Location startLocation) {
         this.startLocation = startLocation;
     }
 
+
     /**
      * Get the end location (bottom right).
+     * @return {@link Location Location}
      */
     public Location getEndLocation() {
         return endLocation;
     }
 
+
     /**
-     * Set the end location (bottom right).
+     * @param endLocation {@link Location Location}
      */
     public void setEndLocation(Location endLocation) {
         this.endLocation = endLocation;

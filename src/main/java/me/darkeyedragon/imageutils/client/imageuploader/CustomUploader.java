@@ -16,6 +16,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -34,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
-public class CustomUploader implements Uploader {
+public class CustomUploader extends BaseUploader {
 
     private static MultipartEntityBuilder builder;
     private static UploaderFile uploaderFile;
@@ -47,12 +49,18 @@ public class CustomUploader implements Uploader {
     private GuiNewChat chat;
 
     public CustomUploader(UploadHandler uploadHandler) {
+        super();
         this.uploadHandler = uploadHandler;
         this.executorService = uploadHandler.getFixedThreadPool();
     }
 
+    @Override
+    public HttpResponse upload(BufferedImage bufferedImage) {
+        super.setUrl(uploadHandler.getActiveUploader().getUploader().getURL());
+        return super.upload(bufferedImage);
+    }
 
-    public void upload(BufferedImage bufferedImage) {
+    /*public void upload(BufferedImage bufferedImage) {
         executorService.submit(() -> {
             Thread.currentThread().setName(ImageUtilsMain.MODID + "/uploader");
             mc = Minecraft.getMinecraft();
@@ -122,15 +130,5 @@ public class CustomUploader implements Uploader {
                 }
             }
         });
-    }
-
-    @Override
-    public int getResponse(HttpURLConnection urlConnection) {
-        return 0;
-    }
-
-    @Override
-    public void notifyPlayer() {
-
-    }
+    }*/
 }

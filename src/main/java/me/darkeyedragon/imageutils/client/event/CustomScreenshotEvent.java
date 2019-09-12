@@ -5,6 +5,7 @@ import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
 import me.darkeyedragon.imageutils.client.UploadHandler;
 import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
+import me.darkeyedragon.imageutils.client.utils.JsonHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;

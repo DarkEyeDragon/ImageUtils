@@ -1,31 +1,17 @@
 package me.darkeyedragon.imageutils.client.imageuploader;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.UploadHandler;
-import me.darkeyedragon.imageutils.client.message.Messages;
-import me.darkeyedragon.imageutils.client.utils.CopyToClipboard;
-import me.darkeyedragon.imageutils.client.webhooks.WebhookValidation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.util.text.event.HoverEvent;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.util.Base64;
+import java.nio.charset.StandardCharsets;
 
-public class ImgurUploader implements Uploader {
+public class ImgurUploader extends BaseUploader {
 
     private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
     private final UploadHandler uploadHandler;
@@ -33,10 +19,61 @@ public class ImgurUploader implements Uploader {
     private GuiNewChat chat;
 
     public ImgurUploader(UploadHandler uploadHandler) {
+        super("https://api.imgur.com/3/image");
+        super.getHttpPost().addHeader(HttpHeaders.AUTHORIZATION, "Client-ID bfea9c11835d95c");
         this.uploadHandler = uploadHandler;
     }
 
-    public void upload(BufferedImage bufferedImage) {
+    @Override
+    public HttpResponse upload(BufferedImage bufferedImage) {
+        HttpResponse response = super.upload(bufferedImage);
+        try {
+            super.addParam("type", "base64");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+        chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
+        chat.printChatMessage(new TextComponentString(response.getStatusLine().getStatusCode() + ": " + response.getStatusLine().getReasonPhrase()));
+
+        StringBuilder stringBuilder = new StringBuilder();
+        String line = null;
+
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8))) {
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            chat.printChatMessage(new TextComponentString(stringBuilder.toString()));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return response;
+        /*JsonObject jsonObject;
+        try {
+            jsonObject = new JsonParser().parse(super.getHttpResponse().getEntity().getContent()).getAsJsonObject();
+            String result = jsonObject.get("data").getAsJsonObject().get("link").getAsString();
+            //Send result to player
+            Messages.uploadMessage(result);
+            if (ModConfig.copyToClipboard) {
+                if (CopyToClipboard.copy(result)) {
+                    chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard"));
+                } else {
+                    chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard_error"));
+                }
+            }
+            WebhookValidation.addLink(result);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+
+    }
+
+
+
+    /*public void upload(BufferedImage bufferedImage) {
         uploadHandler.getFixedThreadPool().submit(() -> {
             chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
             Thread.currentThread().setName("Uploader (" + this.getClass().getName() + ")");
@@ -106,5 +143,5 @@ public class ImgurUploader implements Uploader {
                 Messages.errorMessage(e.getMessage());
             }
         });
-    }
+    }*/
 }

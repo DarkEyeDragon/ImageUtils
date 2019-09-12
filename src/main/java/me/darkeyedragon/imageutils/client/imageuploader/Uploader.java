@@ -6,5 +6,6 @@ import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
 
 public interface Uploader {
-    void upload(BufferedImage bufferedImage);
+    HttpResponse upload(BufferedImage bufferedImage);
+    HttpResponse getHttpResponse();
 }
