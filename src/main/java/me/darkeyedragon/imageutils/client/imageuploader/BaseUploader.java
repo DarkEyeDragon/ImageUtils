@@ -16,9 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -39,7 +37,7 @@ public abstract class BaseUploader implements Uploader {
         httpClient = HttpClients.createDefault();
         params = new ArrayList<>(1);
         httpPost = new HttpPost();
-        httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "image/png");
+        httpPost.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
         httpPost.addHeader(HttpHeaders.ACCEPT, "text/html,json");
         httpPost.addHeader(HttpHeaders.USER_AGENT, ImageUtilsMain.getMODID()+"/"+ImageUtilsMain.getVERSION());
     }
