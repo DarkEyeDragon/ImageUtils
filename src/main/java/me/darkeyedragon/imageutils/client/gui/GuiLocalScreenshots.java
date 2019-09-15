@@ -3,8 +3,9 @@ package me.darkeyedragon.imageutils.client.gui;
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
 import me.darkeyedragon.imageutils.client.imageuploader.UploaderFactory;
-import me.darkeyedragon.imageutils.client.utils.ImageUtil;
-import me.darkeyedragon.imageutils.client.utils.ImageResource;
+import me.darkeyedragon.imageutils.client.util.ImageResource;
+import me.darkeyedragon.imageutils.client.util.ImageUtil;
+import me.darkeyedragon.imageutils.client.util.OutputHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import org.lwjgl.input.Mouse;
 
@@ -151,7 +153,18 @@ public class GuiLocalScreenshots extends GuiScreen {
             uploadButton.enabled = false;
             BufferedImage img = imageResource.getImage();
             if (img != null) {
-                uploader.upload(img);
+                uploader.uploadAsync(img, (response, error) -> {
+                    ITextComponent errorComponent = new TextComponentTranslation("imageutil.message.upload.error").appendSibling(new TextComponentTranslation("imageutil.message.upload.error1"));
+                    if (response == null && error != null) {
+                        OutputHandler.sendMessage(errorComponent.appendText(error.getMessage()), this);
+                    } else if (response != null) {
+                        try {
+                            OutputHandler.sendUploadResponseMessage(response, this);
+                        } catch (IOException e) {
+                            OutputHandler.sendMessage(errorComponent.appendText(e.getMessage()), this);
+                        }
+                    }
+                });
             } else {
                 //TODO show popup instead
                 uploadButton.displayString = "Unable to upload screenshot!";
@@ -415,14 +428,14 @@ public class GuiLocalScreenshots extends GuiScreen {
                     GlStateManager.color(1.0F, 0F, 1.0F, 0F);
                     GlStateManager.disableTexture2D();
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-                    bufferbuilder.pos((double) i1, (double) (k + l + 2), 0.0D).tex(0.0D, 1.0D).color(128, 128, 128, 255).endVertex();
-                    bufferbuilder.pos((double) j1, (double) (k + l + 2), 0.0D).tex(1.0D, 1.0D).color(128, 128, 128, 255).endVertex();
-                    bufferbuilder.pos((double) j1, (double) (k - 2), 0.0D).tex(1.0D, 0.0D).color(128, 128, 128, 255).endVertex();
-                    bufferbuilder.pos((double) i1, (double) (k - 2), 0.0D).tex(0.0D, 0.0D).color(128, 128, 128, 255).endVertex();
-                    bufferbuilder.pos((double) (i1 + 1), (double) (k + l + 1), 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-                    bufferbuilder.pos((double) (j1 - 1), (double) (k + l + 1), 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-                    bufferbuilder.pos((double) (j1 - 1), (double) (k - 1), 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
-                    bufferbuilder.pos((double) (i1 + 1), (double) (k - 1), 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos(i1, k + l + 2, 0.0D).tex(0.0D, 1.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos(j1, k + l + 2, 0.0D).tex(1.0D, 1.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos(j1, k - 2, 0.0D).tex(1.0D, 0.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos(i1, k - 2, 0.0D).tex(0.0D, 0.0D).color(128, 128, 128, 255).endVertex();
+                    bufferbuilder.pos(i1 + 1, k + l + 1, 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos(j1 - 1, k + l + 1, 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos(j1 - 1, k - 1, 0.0D).tex(1.0D, 0.0D).color(0, 0, 0, 255).endVertex();
+                    bufferbuilder.pos(i1 + 1, k - 1, 0.0D).tex(0.0D, 0.0D).color(0, 0, 0, 255).endVertex();
                     tessellator.draw();
                     GlStateManager.enableTexture2D();
                 }

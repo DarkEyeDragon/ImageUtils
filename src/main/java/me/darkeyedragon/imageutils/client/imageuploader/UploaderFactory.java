@@ -15,7 +15,7 @@ public class UploaderFactory {
         if (ModConfig.customServer) {
             return new CustomUploader(main.getUploadHandler());
         } else {
-            return new ImgurUploader(main.getUploadHandler());
+            return new ImgurUploader(main);
         }
     }
 }

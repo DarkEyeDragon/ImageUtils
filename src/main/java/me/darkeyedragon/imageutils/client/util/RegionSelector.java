@@ -1,4 +1,4 @@
-package me.darkeyedragon.imageutils.client.utils;
+package me.darkeyedragon.imageutils.client.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

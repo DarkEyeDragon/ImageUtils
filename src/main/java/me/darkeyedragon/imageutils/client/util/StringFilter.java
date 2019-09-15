@@ -1,4 +1,4 @@
-package me.darkeyedragon.imageutils.client.utils;
+package me.darkeyedragon.imageutils.client.util;
 
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 import org.apache.http.client.methods.HttpGet;

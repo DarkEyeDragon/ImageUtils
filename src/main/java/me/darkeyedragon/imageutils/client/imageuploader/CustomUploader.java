@@ -1,39 +1,13 @@
 package me.darkeyedragon.imageutils.client.imageuploader;
 
-import me.darkeyedragon.imageutils.client.ImageUtilsMain;
-import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.UploadHandler;
 import me.darkeyedragon.imageutils.client.config.UploaderFile;
-import me.darkeyedragon.imageutils.client.message.Messages;
-import me.darkeyedragon.imageutils.client.utils.CopyToClipboard;
-import me.darkeyedragon.imageutils.client.utils.JsonHelper;
-import me.darkeyedragon.imageutils.client.utils.StringFilter;
-import me.darkeyedragon.imageutils.client.webhooks.WebhookValidation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 public class CustomUploader extends BaseUploader {
@@ -49,16 +23,13 @@ public class CustomUploader extends BaseUploader {
     private GuiNewChat chat;
 
     public CustomUploader(UploadHandler uploadHandler) {
-        super();
+        super(uploadHandler.getActiveUploader().getUploader().getURL(), uploadHandler.getFixedThreadPool());
         this.uploadHandler = uploadHandler;
         this.executorService = uploadHandler.getFixedThreadPool();
     }
 
-    @Override
-    public HttpResponse upload(BufferedImage bufferedImage) {
-        super.setUrl(uploadHandler.getActiveUploader().getUploader().getURL());
-        return super.upload(bufferedImage);
-    }
+
+
 
     /*public void upload(BufferedImage bufferedImage) {
         executorService.submit(() -> {

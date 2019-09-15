@@ -1,12 +1,12 @@
-package me.darkeyedragon.imageutils.client.utils;
+package me.darkeyedragon.imageutils.client.util;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import me.darkeyedragon.imageutils.client.adaptor.ImgurResponseTypeAdaptor;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -30,6 +30,12 @@ public class JsonHelper {
             return gson;
         }
     }
+
+    public static ImgurResponseTypeAdaptor toImgurResponse(String string) {
+        return new Gson().fromJson(string, ImgurResponseTypeAdaptor.class);
+    }
+
+    //TODO implement custom uploader response
 
     public static Map<String, String> readJsonFromUrl(InputStream inputStream) throws IOException {
         try {

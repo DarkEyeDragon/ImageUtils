@@ -2,12 +2,15 @@ package me.darkeyedragon.imageutils.client.gui;
 
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
 import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
-import me.darkeyedragon.imageutils.client.utils.RegionSelector;
+import me.darkeyedragon.imageutils.client.util.OutputHandler;
+import me.darkeyedragon.imageutils.client.util.RegionSelector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -79,7 +82,18 @@ public class GuiPartialScreenshot extends GuiScreen {
         mouseReleased.x *= res;
 
         BufferedImage partialScreenshot = ScreenshotHandler.partial(new Point(Math.min(mouseClicked.x, mouseReleased.x), Math.min(mouseClicked.y, mouseReleased.y)), new Point(Math.max(mouseClicked.x, mouseReleased.x), Math.max(mouseClicked.y, mouseReleased.y)));
-        uploader.upload(partialScreenshot);
+        uploader.uploadAsync(partialScreenshot, (response, error) -> {
+            ITextComponent errorComponent = new TextComponentTranslation("imageutil.message.upload.error").appendSibling(new TextComponentTranslation("imageutil.message.upload.error1"));
+            if (response == null && error != null) {
+                OutputHandler.sendMessage(errorComponent.appendText(error.getMessage()), this);
+            } else if (response != null) {
+                try {
+                    OutputHandler.sendUploadResponseMessage(response, null);
+                } catch (IOException e) {
+                    OutputHandler.sendMessage(errorComponent.appendText(e.getMessage()), this);
+                }
+            }
+        });
         mc.displayGuiScreen(null);
     }
 }

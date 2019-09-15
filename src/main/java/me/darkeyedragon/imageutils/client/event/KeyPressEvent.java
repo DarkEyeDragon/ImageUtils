@@ -5,12 +5,16 @@ import me.darkeyedragon.imageutils.client.KeyBindings;
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
 import me.darkeyedragon.imageutils.client.gui.GuiLocalScreenshots;
 import me.darkeyedragon.imageutils.client.gui.GuiPartialScreenshot;
+import me.darkeyedragon.imageutils.client.util.OutputHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 
 public class KeyPressEvent {
@@ -38,7 +42,18 @@ public class KeyPressEvent {
             Minecraft.getMinecraft().displayGuiScreen(new GuiLocalScreenshots(null, main));
         } else if (KeyBindings.screenshotUploadKey.isPressed()) {
             BufferedImage screenshot = ScreenshotHandler.full();
-            main.getUploaderFactory().getUploader().upload(screenshot);
+            main.getUploaderFactory().getUploader().uploadAsync(screenshot, (response, error) -> {
+                ITextComponent errorComponent = new TextComponentTranslation("imageutil.message.upload.error").appendSibling(new TextComponentTranslation("imageutil.message.upload.error1"));
+                if (response == null && error != null) {
+                    OutputHandler.sendMessage(errorComponent.appendText(error.getMessage()), null);
+                } else if (response != null) {
+                    try {
+                        OutputHandler.sendUploadResponseMessage(response, null);
+                    } catch (IOException e) {
+                        OutputHandler.sendMessage(errorComponent.appendText(e.getMessage()), null);
+                    }
+                }
+            });
         }
     }
 }

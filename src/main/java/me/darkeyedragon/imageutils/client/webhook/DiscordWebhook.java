@@ -1,4 +1,4 @@
-package me.darkeyedragon.imageutils.client.webhooks;
+package me.darkeyedragon.imageutils.client.webhook;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;

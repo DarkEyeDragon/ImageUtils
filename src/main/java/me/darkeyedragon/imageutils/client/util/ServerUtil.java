@@ -1,4 +1,4 @@
-package me.darkeyedragon.imageutils.client.utils;
+package me.darkeyedragon.imageutils.client.util;
 
 public class ServerUtil {
     private static boolean isPinging = false;

@@ -1,4 +1,4 @@
-package me.darkeyedragon.imageutils.client.utils;
+package me.darkeyedragon.imageutils.client.util;
 
 import java.io.IOException;
 import java.io.OutputStream;

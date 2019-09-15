@@ -1,6 +1,4 @@
-package me.darkeyedragon.imageutils.client.utils;
-
-import org.jetbrains.annotations.NotNull;
+package me.darkeyedragon.imageutils.client.util;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -16,7 +14,6 @@ public class TransferableImage implements Transferable {
 
 
     @Override
-    @NotNull
     public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
         if (flavor.equals(DataFlavor.imageFlavor) && i != null) {
             return i;

@@ -1,6 +1,6 @@
 package me.darkeyedragon.imageutils.client.gui;
 
-import me.darkeyedragon.imageutils.client.utils.ImageResource;
+import me.darkeyedragon.imageutils.client.util.ImageResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.resources.I18n;

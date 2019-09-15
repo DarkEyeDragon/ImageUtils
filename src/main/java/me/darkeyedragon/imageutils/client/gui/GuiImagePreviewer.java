@@ -1,11 +1,11 @@
 package me.darkeyedragon.imageutils.client.gui;
 
 import me.darkeyedragon.imageutils.client.ModConfig;
-import me.darkeyedragon.imageutils.client.utils.CopyToClipboard;
-import me.darkeyedragon.imageutils.client.utils.ImageResource;
-import me.darkeyedragon.imageutils.client.utils.ImageUtil;
-import me.darkeyedragon.imageutils.client.webhooks.DiscordWebhook;
-import me.darkeyedragon.imageutils.client.webhooks.WebhookValidation;
+import me.darkeyedragon.imageutils.client.util.ClipboardUtil;
+import me.darkeyedragon.imageutils.client.util.ImageResource;
+import me.darkeyedragon.imageutils.client.util.ImageUtil;
+import me.darkeyedragon.imageutils.client.webhook.DiscordWebhook;
+import me.darkeyedragon.imageutils.client.webhook.WebhookValidation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiNewChat;
@@ -109,7 +109,7 @@ public class GuiImagePreviewer extends GuiScreen {
         TextComponentTranslation clipboard = new TextComponentTranslation("imageutil.message.copy_to_clipboard");
         TextComponentTranslation clipboard_error = new TextComponentTranslation("imageutil.message.copy_to_clipboard_error");
         if (button.id == 0) {
-            if (CopyToClipboard.copy(bufferedImage)) {
+            if (ClipboardUtil.copy(bufferedImage)) {
                 chat.printChatMessage(clipboard);
             } else {
                 chat.printChatMessage(clipboard_error);
@@ -130,7 +130,7 @@ public class GuiImagePreviewer extends GuiScreen {
                 }
             }
         } else if (button.id == 2) {
-            if (CopyToClipboard.copy(urlStr)) {
+            if (ClipboardUtil.copy(urlStr)) {
                 chat.printChatMessage(clipboard);
             } else {
                 chat.printChatMessage(clipboard_error);

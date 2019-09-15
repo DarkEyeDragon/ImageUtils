@@ -1,43 +1,23 @@
 package me.darkeyedragon.imageutils.client.imageuploader;
 
-import me.darkeyedragon.imageutils.client.UploadHandler;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.util.text.TextComponentString;
+import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 import org.apache.http.HttpHeaders;
-import org.apache.http.HttpResponse;
-
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 public class ImgurUploader extends BaseUploader {
 
-    private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    private final UploadHandler uploadHandler;
-    private int responseCode = -1;
-    private GuiNewChat chat;
-
-    public ImgurUploader(UploadHandler uploadHandler) {
-        super("https://api.imgur.com/3/image");
+    public ImgurUploader(ImageUtilsMain main) {
+        super("https://api.imgur.com/3/image", main.getUploadHandler().getFixedThreadPool());
         super.getHttpPost().addHeader(HttpHeaders.AUTHORIZATION, "Client-ID bfea9c11835d95c");
-        this.uploadHandler = uploadHandler;
     }
 
-    @Override
+    /*@Override
     public HttpResponse upload(BufferedImage bufferedImage) {
         HttpResponse response = super.upload(bufferedImage);
-        try {
-            super.addParam("type", "base64");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return null;
-        }
-        chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
+        GuiNewChat chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
         chat.printChatMessage(new TextComponentString(response.getStatusLine().getStatusCode() + ": " + response.getStatusLine().getReasonPhrase()));
 
         StringBuilder stringBuilder = new StringBuilder();
-        String line = null;
+        String line;
 
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8))) {
             while ((line = bufferedReader.readLine()) != null) {
@@ -49,29 +29,12 @@ public class ImgurUploader extends BaseUploader {
         }
 
         return response;
-        /*JsonObject jsonObject;
-        try {
-            jsonObject = new JsonParser().parse(super.getHttpResponse().getEntity().getContent()).getAsJsonObject();
-            String result = jsonObject.get("data").getAsJsonObject().get("link").getAsString();
-            //Send result to player
-            Messages.uploadMessage(result);
-            if (ModConfig.copyToClipboard) {
-                if (CopyToClipboard.copy(result)) {
-                    chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard"));
-                } else {
-                    chat.printChatMessage(new TextComponentTranslation("imageutil.message.copy_to_clipboard_error"));
-                }
-            }
-            WebhookValidation.addLink(result);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-
     }
 
-
+    @Override
+    public Consumer<BufferedImage> uploadAsync(BufferedImage bufferedImage) {
+        return super.uploadAsync(bufferedImage);
+    }
 
     /*public void upload(BufferedImage bufferedImage) {
         uploadHandler.getFixedThreadPool().submit(() -> {

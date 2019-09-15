@@ -1,6 +1,6 @@
 package me.darkeyedragon.imageutils.client.entity;
 
-import me.darkeyedragon.imageutils.client.utils.OutputStreamProgress;
+import me.darkeyedragon.imageutils.client.util.OutputStreamProgress;
 
 import java.io.File;
 import java.io.IOException;

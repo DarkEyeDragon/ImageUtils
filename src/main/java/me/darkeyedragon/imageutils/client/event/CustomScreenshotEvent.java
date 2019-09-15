@@ -5,7 +5,7 @@ import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
 import me.darkeyedragon.imageutils.client.UploadHandler;
 import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
-import me.darkeyedragon.imageutils.client.utils.JsonHelper;
+import me.darkeyedragon.imageutils.client.util.OutputHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -37,7 +37,18 @@ public class CustomScreenshotEvent {
     public void onScreenshot(net.minecraftforge.client.event.ScreenshotEvent event) {
         if (ModConfig.Override) {
             BufferedImage screenshot = event.getImage();
-            uploader.upload(screenshot);
+            uploader.uploadAsync(screenshot, (response, error) -> {
+                ITextComponent errorComponent = new TextComponentTranslation("imageutil.message.upload.error").appendSibling(new TextComponentTranslation("imageutil.message.upload.error1"));
+                if (response == null && error != null) {
+                    OutputHandler.sendMessage(errorComponent.appendText(error.getMessage()), null);
+                } else if (response != null) {
+                    try {
+                        OutputHandler.sendUploadResponseMessage(response, null);
+                    } catch (IOException e) {
+                        OutputHandler.sendMessage(errorComponent.appendText(e.getMessage()), null);
+                    }
+                }
+            });
         } else {
             event.setCanceled(true);
             BufferedImage screenshot = ScreenshotHandler.full();

@@ -12,7 +12,7 @@ public class GuiConfirmAction extends GuiYesNo {
     private String buttonConfirm = "Yes";
     private String buttonCancel = "Cancel";
 
-    GuiConfirmAction(GuiYesNoCallback parentScreenIn, String title, String messageLine1In, String messageLine2In, int parentButtonClickedIdIn, GuiScreen parent) {
+    public GuiConfirmAction(GuiYesNoCallback parentScreenIn, String title, String messageLine1In, String messageLine2In, int parentButtonClickedIdIn, GuiScreen parent) {
         super(parentScreenIn, messageLine1In, messageLine2In, parentButtonClickedIdIn);
         this.parent = parent;
         this.messageLine1 = messageLine1In;
@@ -20,7 +20,7 @@ public class GuiConfirmAction extends GuiYesNo {
         this.title = title;
     }
 
-    GuiConfirmAction(GuiYesNoCallback parentScreenIn, String title, String messageLine1In, String messageLine2In, String buttonConfirm, String buttonCancel, int parentButtonClickedIdIn, GuiScreen parent) {
+    public GuiConfirmAction(GuiYesNoCallback parentScreenIn, String title, String messageLine1In, String messageLine2In, String buttonConfirm, String buttonCancel, int parentButtonClickedIdIn, GuiScreen parent) {
         super(parentScreenIn, "", "", parentButtonClickedIdIn);
         this.messageLine1 = messageLine1In;
         this.messageLine2 = messageLine2In;

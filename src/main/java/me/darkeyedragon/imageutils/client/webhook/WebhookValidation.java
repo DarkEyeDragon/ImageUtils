@@ -1,4 +1,4 @@
-package me.darkeyedragon.imageutils.client.webhooks;
+package me.darkeyedragon.imageutils.client.webhook;
 
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 

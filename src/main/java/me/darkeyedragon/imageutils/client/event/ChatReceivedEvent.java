@@ -1,7 +1,7 @@
 package me.darkeyedragon.imageutils.client.event;
 
 import me.darkeyedragon.imageutils.client.message.Messages;
-import me.darkeyedragon.imageutils.client.utils.StringFilter;
+import me.darkeyedragon.imageutils.client.util.StringFilter;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

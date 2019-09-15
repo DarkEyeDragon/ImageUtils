@@ -1,11 +1,11 @@
-package me.darkeyedragon.imageutils.client.utils;
+package me.darkeyedragon.imageutils.client.util;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 
-public class CopyToClipboard {
+public class ClipboardUtil {
 
     private static String copiedText;
 

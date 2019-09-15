@@ -1,6 +1,5 @@
 package me.darkeyedragon.imageutils.client;
 
-import me.darkeyedragon.imageutils.client.imageuploader.UploaderFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ScreenShotHelper;
 
@@ -28,11 +27,6 @@ public class ScreenshotHandler {
         int width = Math.abs(second.x - first.x - 3);
         return screenshot.getSubimage(first.x + 3, first.y + 3, width, height);
         //upload(alteredScreenshot);
-    }
-
-    /*Upload the image using the current selected uploader*/
-    public static void upload(BufferedImage screenshot, UploaderFactory uploaderFactory) {
-        uploaderFactory.getUploader().upload(screenshot);
     }
 
     public static File getTimestampedPNGFileForDirectory(File gameDirectory) {

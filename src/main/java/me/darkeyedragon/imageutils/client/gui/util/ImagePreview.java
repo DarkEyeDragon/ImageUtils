@@ -1,7 +1,7 @@
 package me.darkeyedragon.imageutils.client.gui.util;
 
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
-import me.darkeyedragon.imageutils.client.utils.ImageResource;
+import me.darkeyedragon.imageutils.client.util.ImageResource;
 import net.coobird.thumbnailator.Thumbnails;
 import net.minecraft.client.gui.GuiScreen;
 
