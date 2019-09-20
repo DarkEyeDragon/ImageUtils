@@ -25,6 +25,11 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.function.BiConsumer;
 
+/**
+ * The base uploader class that implements sync and async uploading.
+ * Usually you'd only want to override the constructor and add your own
+ * headers and settings on top of the already existing ones.
+ */
 public abstract class BaseUploader implements Uploader {
 
     private HttpClient httpClient;

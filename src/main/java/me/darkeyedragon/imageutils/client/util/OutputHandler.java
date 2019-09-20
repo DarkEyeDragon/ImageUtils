@@ -29,21 +29,30 @@ public class OutputHandler {
     public static void sendUploadResponseMessage(HttpResponse httpResponse, GuiScreen parent) throws IOException {
         String jsonResult = IOUtils.toString(httpResponse.getEntity().getContent(), StandardCharsets.UTF_8);
         JsonObject jsonObject = new JsonParser().parse(jsonResult).getAsJsonObject();
-        String link = jsonObject.get("data").getAsJsonObject().get("link").getAsString();
         ITextComponent component;
-        if (!ModConfig.debug) {
-            component = new TextComponentTranslation("imageutil.message.upload.success").appendText(" ").appendSibling(new TextComponentString(link).setStyle(Message.getLinkStyle()));
-        } else {
-            component = new TextComponentString(JsonHelper.toImgurResponse(jsonResult).getData().toString());
-        }
-        OutputHandler.sendMessage(component, parent);
-        if (ModConfig.copyToClipboard) {
-            if (ClipboardUtil.copy(link)) {
-                component = new TextComponentTranslation("imageutil.message.copy_to_clipboard");
-            } else {
-                component = new TextComponentTranslation("imageutil.message.copy_to_clipboard_error");
+        if (jsonObject.get("status").getAsInt() == 200) {
+
+            String link = jsonObject.get("data").getAsJsonObject().get("link").getAsString();
+            if (!ModConfig.debug) {
+                component = new TextComponentTranslation("imageutil.message.upload.success").appendText(" ").appendSibling(new TextComponentString(link).setStyle(Message.getLinkStyle()));
+                OutputHandler.sendMessage(component, parent);
             }
+            component = new TextComponentString(JsonHelper.toImgurResponse(jsonResult).getData().toString());
             OutputHandler.sendMessage(component, parent);
+            if (ModConfig.copyToClipboard) {
+                if (ClipboardUtil.copy(link)) {
+                    component = new TextComponentTranslation("imageutil.message.copy_to_clipboard");
+                } else {
+                    component = new TextComponentTranslation("imageutil.message.copy_to_clipboard_error");
+                }
+                OutputHandler.sendMessage(component, parent);
+            }
+        } else {
+            component = new TextComponentTranslation("imageutil.message.upload.error")
+                    .appendSibling(new TextComponentString(" "))
+                    .appendSibling(new TextComponentString(httpResponse.getStatusLine().toString()));
+            OutputHandler.sendMessage(component, parent);
+            OutputHandler.sendMessage(new TextComponentTranslation("imageutil.message.upload.error1").appendSibling(new TextComponentTranslation("imageutil.message.upload.errorlink")), parent);
         }
     }
 
