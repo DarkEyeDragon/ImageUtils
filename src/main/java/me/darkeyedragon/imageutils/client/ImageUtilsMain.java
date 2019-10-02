@@ -1,6 +1,7 @@
 package me.darkeyedragon.imageutils.client;
 
 
+import me.darkeyedragon.imageutils.client.command.View;
 import me.darkeyedragon.imageutils.client.event.*;
 import me.darkeyedragon.imageutils.client.imageuploader.UploaderFactory;
 import net.minecraft.client.Minecraft;
@@ -8,6 +9,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
@@ -20,10 +22,10 @@ import java.util.List;
 public class ImageUtilsMain {
 
 
-
     //Mod information
     public static final String MODID = "imageutils";
     public static final String VERSION = "@VERSION@";
+    public static final String NAME = "Image Utils";
     static final String updateJSON = "https://darkeyedragon.me/mods/updates/imageutils.json";
     //keep track of webhooks to prevent spam on discord
     public static List<String> webhookLinks = new ArrayList<>();
@@ -90,6 +92,11 @@ public class ImageUtilsMain {
     public void preInit(FMLPreInitializationEvent pre) {
         logger = pre.getModLog();
         configPath = Paths.get(pre.getModConfigurationDirectory().getPath(), MODID);
+    }
+
+    @Mod.EventHandler
+    public void serverLoad(FMLServerStartingEvent event) {
+        event.registerServerCommand(new View(this));
     }
 
     public Logger getLogger() {

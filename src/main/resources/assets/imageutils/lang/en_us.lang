@@ -70,3 +70,6 @@ imageutil.button.options=Options
 imageutil.button.delete=Delete
 imageutil.button.refresh=Refresh
 imageutil.button.save=Save
+
+imageutil.command.view.name=View
+imageutil.command.view.usage=View an image in-game
