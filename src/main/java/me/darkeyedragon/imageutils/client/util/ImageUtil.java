@@ -85,7 +85,7 @@ public class ImageUtil {
             BufferedImage img = ImageIO.read(image);
             Map<String, BufferedImage> downloads = ScreenshotHandler.getDownloadList();
             if (!downloads.containsKey(imgUrl.toString())) {
-                ScreenshotHandler.getDownloadList().put(imgUrl.toString(), img);
+                downloads.put(imgUrl.toString(), img);
                 return img;
 
             } else {

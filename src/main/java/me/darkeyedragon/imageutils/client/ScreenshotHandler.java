@@ -9,10 +9,19 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ScreenshotHandler {
 
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+    private static final LinkedHashMap<String, BufferedImage> downloadList = new LinkedHashMap<String, BufferedImage>() {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<String, BufferedImage> eldest) {
+            return size() > 4;
+        }
+    };
+
 
     /*Take a full screenshot of the current game window*/
     public static BufferedImage full() {
@@ -41,5 +50,9 @@ public class ScreenshotHandler {
             }
             ++i;
         }
+    }
+
+    public static LinkedHashMap<String, BufferedImage> getDownloadList() {
+        return downloadList;
     }
 }
