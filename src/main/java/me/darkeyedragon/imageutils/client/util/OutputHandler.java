@@ -36,9 +36,10 @@ public class OutputHandler {
             if (!ModConfig.debug) {
                 component = new TextComponentTranslation("imageutil.message.upload.success").appendText(" ").appendSibling(new TextComponentString(link).setStyle(Message.getLinkStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/view " + link))));
                 OutputHandler.sendMessage(component, parent);
+            } else {
+                component = new TextComponentString(JsonHelper.toImgurResponse(jsonResult).getData().toString());
+                OutputHandler.sendMessage(component, parent);
             }
-            component = new TextComponentString(JsonHelper.toImgurResponse(jsonResult).getData().toString());
-            OutputHandler.sendMessage(component, parent);
             if (ModConfig.copyToClipboard) {
                 if (ClipboardUtil.copy(link)) {
                     component = new TextComponentTranslation("imageutil.message.copy_to_clipboard");
