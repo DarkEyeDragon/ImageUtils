@@ -5,8 +5,6 @@ import me.darkeyedragon.imageutils.client.ScreenshotHandler;
 import me.darkeyedragon.imageutils.client.image.ImageType;
 import me.darkeyedragon.imageutils.client.message.ClientMessage;
 import net.coobird.thumbnailator.Thumbnails;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -57,11 +55,9 @@ public class ImageUtil {
             HttpResponse response = httpClient.execute(httpGet);
             HttpEntity httpEntity = response.getEntity();
             if (httpEntity.getContentLength() > 8) return false;
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("" + response.getEntity().getContentLength()));
             int[] bytes = new int[8];
             for (int i = 0; i < 8; i++) {
                 bytes[i] = (short) httpEntity.getContent().read();
-                Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("" + bytes[i]));
             }
             for (int i = 0; i < ImageType.values().length; i++) {
                 if (ImageType.values()[i].compare(bytes)) return true;
