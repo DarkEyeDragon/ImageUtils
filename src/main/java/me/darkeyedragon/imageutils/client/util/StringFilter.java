@@ -1,11 +1,5 @@
 package me.darkeyedragon.imageutils.client.util;
 
-import me.darkeyedragon.imageutils.client.ImageUtilsMain;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -31,15 +25,6 @@ public class StringFilter {
     public static boolean isValidUrl(String stringToCheck) {
         Matcher urlMatcher = pattern.matcher(stringToCheck);
         return urlMatcher.matches();
-    }
-
-    public static boolean isValidImage(String stringToCheck) {
-        try (CloseableHttpClient curClient = HttpClientBuilder.create().setUserAgent("ScreenshotUploader/" + ImageUtilsMain.VERSION).build()) {
-            return curClient.execute(new HttpGet(stringToCheck)).getFirstHeader("Content-Type").getValue().startsWith("image/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     static String getHostName(String link) throws URISyntaxException {
