@@ -26,8 +26,13 @@ Feel free to join the discord  [here](https://discord.gg/p9YrN53). This is mainl
 - Overlays/watermarks
 
 #### Screenshots
-https://minecraft.curseforge.com/projects/image-utils/images
-(will add some directly here later)
+![In-game Screenshot viewer](https://media.forgecdn.net/attachments/236/63/image_utils_1.png)
+![Custom uploaders](https://media.forgecdn.net/attachments/236/66/image_utils_4.png)
+![Partial screenshots](https://media.forgecdn.net/attachments/240/749/image_utils_6.png)
+![Partial screenshots](https://media.forgecdn.net/attachments/240/750/image_utils_7.png)
+
+or view them on [CurseForge](https://minecraft.curseforge.com/projects/image-utils/images)
+
 #### Changing settings
 - you can change your settings by going to mods on the main menu or by going to mod options in the in-game menu.
 ## Uploading to a custom server
