@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.event.ClickEvent;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 
@@ -31,10 +32,9 @@ public class OutputHandler {
         JsonObject jsonObject = new JsonParser().parse(jsonResult).getAsJsonObject();
         ITextComponent component;
         if (jsonObject.get("status").getAsInt() == 200) {
-
             String link = jsonObject.get("data").getAsJsonObject().get("link").getAsString();
             if (!ModConfig.debug) {
-                component = new TextComponentTranslation("imageutil.message.upload.success").appendText(" ").appendSibling(new TextComponentString(link).setStyle(Message.getLinkStyle()));
+                component = new TextComponentTranslation("imageutil.message.upload.success").appendText(" ").appendSibling(new TextComponentString(link).setStyle(Message.getLinkStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/view " + link))));
                 OutputHandler.sendMessage(component, parent);
             }
             component = new TextComponentString(JsonHelper.toImgurResponse(jsonResult).getData().toString());
