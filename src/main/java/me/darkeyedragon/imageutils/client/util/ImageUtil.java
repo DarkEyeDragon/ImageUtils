@@ -26,6 +26,12 @@ import java.util.Map;
 public class ImageUtil {
 
 
+    /**
+     * @param img  the image to resize
+     * @param newW the new width
+     * @param newH the new height
+     * @return the resized image
+     */
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
         try {
             return Thumbnails.of(img).size(newW, newH).asBufferedImage();
@@ -63,14 +69,14 @@ public class ImageUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*try (CloseableHttpClient curClient = HttpClientBuilder.create().setUserAgent("Image Utils/" + ImageUtilsMain.VERSION).build()) {
-            return curClient.execute(new HttpGet(imageUrl)).getFirstHeader("Content-Type").getValue().startsWith("image/");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         return false;
     }
 
+    /**
+     * @param url the url to download the image from
+     * @return the downloaded image
+     * @throws IOException thrown when no connection could be made to the url
+     */
     public static BufferedImage downloadFromUrl(String url) throws IOException {
 
         if (!StringFilter.isValidUrl(url) || !isValidImage(url)) {
