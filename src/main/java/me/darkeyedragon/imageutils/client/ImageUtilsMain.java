@@ -1,7 +1,8 @@
 package me.darkeyedragon.imageutils.client;
 
 
-import me.darkeyedragon.imageutils.client.command.View;
+import me.darkeyedragon.imageutils.client.command.ViewCommand;
+import me.darkeyedragon.imageutils.client.command.ViewLocalCommand;
 import me.darkeyedragon.imageutils.client.event.*;
 import me.darkeyedragon.imageutils.client.imageuploader.UploaderFactory;
 import net.minecraft.client.Minecraft;
@@ -96,7 +97,8 @@ public class ImageUtilsMain {
 
     @Mod.EventHandler
     public void serverLoad(FMLServerStartingEvent event) {
-        event.registerServerCommand(new View(this));
+        event.registerServerCommand(new ViewCommand(this));
+        event.registerServerCommand(new ViewLocalCommand(this));
     }
 
     public Logger getLogger() {

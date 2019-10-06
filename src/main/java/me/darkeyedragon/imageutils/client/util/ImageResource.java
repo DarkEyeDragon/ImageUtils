@@ -19,7 +19,8 @@ public class ImageResource {
 
 
     public ImageResource(ImageUtilsMain main, String name, BufferedImage image, String url) {
-        this(main, name, image, false, url);
+        this(main, name, image, false, null);
+        this.url = url;
     }
 
     public ImageResource(ImageUtilsMain main, String name, BufferedImage image, boolean selected, String path) {

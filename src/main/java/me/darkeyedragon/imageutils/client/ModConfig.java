@@ -36,6 +36,11 @@ public class ModConfig {
     @Config.Comment("Set the discord webhook URL ")
     public static String webhookUrl = "";
 
+    @Config.Name("maxImageSize")
+    @Config.LangKey("imageutil.config.max_image_size")
+    @Config.Comment("The max amount of MB an image is allowed to be to be downloaded.")
+    public static int maxImageSize = 8;
+
     @Config.Name("debug")
     @Config.LangKey("imageutil.config.debug")
     @Config.Comment("Set this to true if you want to reload the uploader files when you close this config screen. Useful when you made changes to the config after the game was launched.")

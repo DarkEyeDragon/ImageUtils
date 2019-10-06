@@ -1,9 +1,12 @@
 package me.darkeyedragon.imageutils.client.command;
 
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
+import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.gui.GuiImagePreviewer;
+import me.darkeyedragon.imageutils.client.image.DownloadImage;
 import me.darkeyedragon.imageutils.client.util.ImageResource;
 import me.darkeyedragon.imageutils.client.util.ImageUtil;
+import me.darkeyedragon.imageutils.client.util.OutputHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -11,7 +14,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nullable;
 import java.awt.image.BufferedImage;
@@ -19,7 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class View implements ICommand {
+public class ViewCommand implements ICommand {
 
     private final String name;
     private final String usage;
@@ -27,7 +33,7 @@ public class View implements ICommand {
     private final List<String> aliases = new ArrayList<>();
     private final List<String> tabs = new ArrayList<>();
 
-    public View(ImageUtilsMain imageUtilsMain) {
+    public ViewCommand(ImageUtilsMain imageUtilsMain) {
         this.name = new TextComponentTranslation("imageutil.command.view.name").getUnformattedComponentText();
         this.usage = new TextComponentTranslation("imageutil.command.view.usage").getUnformattedComponentText();
         this.imageUtilsMain = imageUtilsMain;
@@ -52,16 +58,21 @@ public class View implements ICommand {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (sender instanceof EntityPlayer) {
-            BufferedImage image = null;
+            DownloadImage downloadImage;
             try {
-                image = ImageUtil.downloadFromUrl(args[0]);
+                downloadImage = ImageUtil.downloadFromUrl(args[0], ModConfig.maxImageSize);
+                if (downloadImage.getBufferedImage() == null) {
+                    OutputHandler.sendMessage(new TextComponentString(downloadImage.getResponseMessage().toString()).setStyle(new Style().setColor(TextFormatting.RED)), null);
+                    return;
+                }
+                BufferedImage finalImage = downloadImage.getBufferedImage();
+                Minecraft.getMinecraft().addScheduledTask(()
+                        -> Minecraft.getMinecraft().displayGuiScreen(new GuiImagePreviewer(new ImageResource(imageUtilsMain, args[0], finalImage, args[0])))
+                );
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            BufferedImage finalImage = image;
-            Minecraft.getMinecraft().addScheduledTask(() -> {
-                Minecraft.getMinecraft().displayGuiScreen(new GuiImagePreviewer(new ImageResource(imageUtilsMain, args[0], finalImage, false, args[0])));
-            });
+
         }
     }
 

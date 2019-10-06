@@ -2,6 +2,8 @@ package me.darkeyedragon.imageutils.client.util;
 
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
+import me.darkeyedragon.imageutils.client.image.DownloadImage;
+import me.darkeyedragon.imageutils.client.image.DownloadResponse;
 import me.darkeyedragon.imageutils.client.image.ImageType;
 import me.darkeyedragon.imageutils.client.message.ClientMessage;
 import net.coobird.thumbnailator.Thumbnails;
@@ -60,8 +62,12 @@ public class ImageUtil {
                 bytes[i] = (short) httpEntity.getContent().read();
             }
             for (int i = 0; i < ImageType.values().length; i++) {
-                if (ImageType.values()[i].compare(bytes)) return true;
+                System.out.print(i);
+                if (ImageType.values()[i].compare(bytes)) {
+                    return true;
+                }
             }
+            System.out.println(bytes);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,28 +79,32 @@ public class ImageUtil {
      * @return the downloaded image
      * @throws IOException thrown when no connection could be made to the url
      */
-    public static BufferedImage downloadFromUrl(String url) throws IOException {
+    public static DownloadImage downloadFromUrl(String url, int maxSize) throws IOException {
+
+        Map<String, BufferedImage> downloads = ScreenshotHandler.getDownloadList();
+        if (downloads.containsKey(url)) {
+            return new DownloadImage(downloads.get(url), DownloadResponse.SUCCESS);
+        }
 
         if (!StringFilter.isValidUrl(url) || !isValidImage(url)) {
-            return null;
+            return new DownloadImage(null, DownloadResponse.ERROR);
         }
+
         URL imgUrl = new URL(url);
         if (isValidImage(url)) {
             URLConnection conn;
             conn = imgUrl.openConnection();
             conn.setRequestProperty(HttpHeaders.USER_AGENT, ImageUtilsMain.NAME + "/" + ImageUtilsMain.VERSION);
+            //Devide by 1000000 to get MB
+            if (conn.getContentLength() / 1000000 > maxSize) {
+                return new DownloadImage(null, DownloadResponse.FILE_TO_BIG);
+            }
             InputStream image = conn.getInputStream();
             BufferedImage img = ImageIO.read(image);
-            Map<String, BufferedImage> downloads = ScreenshotHandler.getDownloadList();
-            if (!downloads.containsKey(imgUrl.toString())) {
-                downloads.put(imgUrl.toString(), img);
-                return img;
-
-            } else {
-                return downloads.get(imgUrl.toString());
-            }
+            downloads.put(imgUrl.toString(), img);
+            return new DownloadImage(img, DownloadResponse.SUCCESS);
         }
-        return null;
+        return new DownloadImage(null, DownloadResponse.ERROR);
     }
 
     public void getImageSize(String url) {

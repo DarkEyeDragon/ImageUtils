@@ -188,4 +188,10 @@ public class GuiImagePreviewer extends GuiScreen {
         }
         resourceLocation = mc.renderEngine.getDynamicTextureLocation("urlImage", new DynamicTexture(bufferedImage));
     }
+
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+        mc.renderEngine.deleteTexture(resourceLocation);
+    }
 }

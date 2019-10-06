@@ -70,3 +70,6 @@ imageutil.button.options=Opções
 imageutil.button.delete=Apagar
 imageutil.button.refresh=Atualizar
 imageutil.button.save=Guardar
+
+imageutil.command.view_local.name=view local
+imageutil.command.view_local.usage=/viewlocal <image url>

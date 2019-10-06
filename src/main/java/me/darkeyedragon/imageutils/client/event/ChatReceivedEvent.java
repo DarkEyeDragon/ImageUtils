@@ -1,6 +1,7 @@
 package me.darkeyedragon.imageutils.client.event;
 
 import me.darkeyedragon.imageutils.client.message.Messages;
+import me.darkeyedragon.imageutils.client.util.ImageUtil;
 import me.darkeyedragon.imageutils.client.util.StringFilter;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -18,7 +19,7 @@ public class ChatReceivedEvent {
         if (urls.size() > 0) {
             e.setCanceled(true);
             for (String link : urls) {
-                if (StringFilter.isValidImage(link)) {
+                if (ImageUtil.isValidImage(link)) {
                     e.setCanceled(true);
                     Messages.imageLink(link, text);
                 } else {

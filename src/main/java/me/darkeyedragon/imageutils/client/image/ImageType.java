@@ -17,9 +17,11 @@ public enum ImageType {
     }
 
     public boolean compare(int... toCompare) {
-        if (toCompare.length != hexValue.length) return false;
+        if (toCompare.length < hexValue.length) return false;
         for (int i = 0; i < hexValue.length; i++) {
-            if (toCompare[i] != hexValue[i]) return false;
+            if (toCompare[i] != hexValue[i]) {
+                return false;
+            }
         }
         return true;
     }

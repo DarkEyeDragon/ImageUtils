@@ -71,3 +71,6 @@ imageutil.button.options=Inställningar
 imageutil.button.delete=Ta bort
 imageutil.button.refresh=Ladda om
 imageutil.button.save=Spara
+
+imageutil.command.view_local.name=view local
+imageutil.command.view_local.usage=/viewlocal <image url>

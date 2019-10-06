@@ -33,10 +33,9 @@ public class OutputHandler {
         ITextComponent component;
         if (jsonObject.get("status").getAsInt() == 200) {
             String link = jsonObject.get("data").getAsJsonObject().get("link").getAsString();
-            if (!ModConfig.debug) {
-                component = new TextComponentTranslation("imageutil.message.upload.success").appendText(" ").appendSibling(new TextComponentString(link).setStyle(Message.getLinkStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/view " + link))));
-                OutputHandler.sendMessage(component, parent);
-            } else {
+            component = new TextComponentTranslation("imageutil.message.upload.success").appendText(" ").appendSibling(new TextComponentString(link).setStyle(Message.getLinkStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/view " + link))));
+            OutputHandler.sendMessage(component, parent);
+            if (ModConfig.debug) {
                 component = new TextComponentString(JsonHelper.toImgurResponse(jsonResult).getData().toString());
                 OutputHandler.sendMessage(component, parent);
             }
@@ -64,7 +63,7 @@ public class OutputHandler {
      */
     public static void sendMessage(ITextComponent textComponent, GuiScreen currentScreen) {
         Minecraft mc = Minecraft.getMinecraft();
-        if (!mc.inGameHasFocus) {
+        if (!mc.inGameHasFocus && currentScreen != null) {
             GuiConfirmAction guiConfirmDelete = new GuiConfirmAction((result, id) ->
                     mc.displayGuiScreen(currentScreen), "Image Upload", new TextComponentTranslation("imageutil.gui.delete_screenshot").getUnformattedComponentText(), new TextComponentTranslation("imageutil.gui.delete_screenshot_line2").getUnformattedComponentText(), 0, currentScreen) {
                 @Override
@@ -75,8 +74,9 @@ public class OutputHandler {
             };
             mc.displayGuiScreen(guiConfirmDelete);
 
+        } else {
+            mc.ingameGUI.getChatGUI().printChatMessage(textComponent);
         }
-        mc.ingameGUI.getChatGUI().printChatMessage(textComponent);
 
     }
 }

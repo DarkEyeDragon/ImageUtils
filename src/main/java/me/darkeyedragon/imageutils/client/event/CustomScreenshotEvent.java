@@ -67,7 +67,7 @@ public class CustomScreenshotEvent {
                     TextComponentTranslation prefix = new TextComponentTranslation("imageutil.message.screenshot_save");
                     ITextComponent itextcomponent = new TextComponentString(screenshotFile.getName());
                     //itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://LINK::"+screenshotFile.getName()));
-                    itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/view " + screenshotFile.getName()));
+                    itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/viewlocal " + screenshotFile.getAbsolutePath()));
                     uploadHandler.getValidLinks().put(event.getScreenshotFile().getName(), screenshot);
                     itextcomponent.getStyle().setUnderlined(true);
                     itextcomponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("View image in-game")));

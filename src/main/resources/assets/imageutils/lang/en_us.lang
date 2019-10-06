@@ -2,7 +2,7 @@
 imageutil.config.general=General
 imageutil.config.general.tooltip=General Settings
 
-imageutil.config.copy=Copy To Clipboard
+imageutil.config.copy=Copy to tlipboard
 imageutil.config.copy.tooltip=Copy the link to your screenshot for easy pasting
 
 imageutil.config.override=Override default key
@@ -17,11 +17,14 @@ imageutil.config.custom_server.tooltip=The server to upload to
 imageutil.config.reload_uploaders=Reload uploaders
 imageutil.config.reload_uploaders.tooltip=Set this to true if you added files after launching the game. This will reload all the upload scripts.
 
-imageutil.config.debug=Debug Mode
+imageutil.config.debug=Debug mode
 imageutil.config.debug.tooltip=This will display useful information to the debug screen. For regular gameplay this probably should be set to false.
 
 imageutil.config.webhook=Webhook
 imageutil.config.webhook.tooltip=Paste the url of your discord webhook here.
+
+imageutil.config.max_image_size=Max image size
+imageutil.config.max_image_size.tooltip=The max amount of MB an image is allowed to be to be downloaded.
 
 imageutil.message.upload.success=Image uploaded to
 imageutil.message.upload.hover=Click here to see a preview of the image
@@ -62,6 +65,10 @@ imageutil.message.non_json_matches=Possible matches:
 
 imageutil.message.overlay_message.upload= Uploading to
 
+imageutil.message.download_response.file_to_big="Image exceeded maximum allowed size!"
+imageutil.message.download_response.success="Successfully downloaded image!"
+imageutil.message.download_response.error="Oops! Something went wrong while downloading..."
+
 imageutil.button.yes=Yes
 imageutil.button.no=No
 imageutil.button.cancel=Cancel
@@ -73,3 +80,5 @@ imageutil.button.save=Save
 
 imageutil.command.view.name=View
 imageutil.command.view.usage=View an image in-game
+imageutil.command.view_local.name=view local
+imageutil.command.view_local.usage=View an image in-game
