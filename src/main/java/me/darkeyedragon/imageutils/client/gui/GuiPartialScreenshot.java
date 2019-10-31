@@ -22,7 +22,7 @@ public class GuiPartialScreenshot extends GuiScreen {
     private final Uploader uploader;
     private boolean dragging = false;
     private Point mouseClicked;
-    private RegionSelector regionSelector = new RegionSelector();
+    private RegionSelector regionSelector = new RegionSelector(5);
 
 
     public GuiPartialScreenshot(Uploader uploader) {

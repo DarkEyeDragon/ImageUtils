@@ -5,11 +5,19 @@ import net.minecraft.client.gui.GuiScreen;
 
 public class RegionSelector extends GuiScreen {
 
+    private final int LINE_LENGTH;
+
+    public RegionSelector(int lineLength) {
+        this.LINE_LENGTH = lineLength;
+    }
+
+    public RegionSelector() {
+        this(10);
+    }
+
     public void drawRegion(int startX, int startY, int endX, int endY) {
         int length = endX - startX;
         int height = endY - startY;
-
-        final int LINE_LENGTH = 10;
 
         //Striped line
 
@@ -17,26 +25,26 @@ public class RegionSelector extends GuiScreen {
         int color = 0xFFFFFFFF;
         for (int x = 0; x < length / LINE_LENGTH; x++) {
             if (x % 2 == 0) {
-                drawHorizontalLine(startX + (x * LINE_LENGTH), startX + (x * 10) + LINE_LENGTH, startY, color);
+                drawHorizontalLine(startX + (x * LINE_LENGTH), startX + (x * LINE_LENGTH) + LINE_LENGTH, startY, color);
             }
         }
         //Draw left lines
         for (int y = 0; y < height / LINE_LENGTH; y++) {
             if (y % 2 == 0) {
-                drawVerticalLine(startX, startY + (y * LINE_LENGTH), startY + (y * 10) + LINE_LENGTH, color);
+                drawVerticalLine(startX, startY + (y * LINE_LENGTH), startY + (y * LINE_LENGTH) + LINE_LENGTH, color);
             }
         }
         //Draw bottom lines
         for (int x = 0; x < length / LINE_LENGTH; x++) {
             if (x % 2 == 0) {
-                drawHorizontalLine(startX + (x * LINE_LENGTH), startX + (x * 10) + LINE_LENGTH, endY, color);
+                drawHorizontalLine(startX + (x * LINE_LENGTH), startX + (x * LINE_LENGTH) + LINE_LENGTH, endY, color);
             }
         }
 
         //Draw right lines
         for (int y = 0; y < height / LINE_LENGTH; y++) {
             if (y % 2 == 0) {
-                drawVerticalLine(endX, startY + (y * LINE_LENGTH), startY + (y * 10) + LINE_LENGTH, color);
+                drawVerticalLine(endX, startY + (y * LINE_LENGTH), startY + (y * LINE_LENGTH) + LINE_LENGTH, color);
             }
         }
 
@@ -44,20 +52,20 @@ public class RegionSelector extends GuiScreen {
 
 
         //Top left
-        drawHorizontalLine(startX, startX + 10, startY, color);
-        drawVerticalLine(startX, startY, startY + 10, color);
+        drawHorizontalLine(startX, startX + LINE_LENGTH, startY, color);
+        drawVerticalLine(startX, startY, startY + LINE_LENGTH, color);
 
         //Top right
-        drawHorizontalLine(endX - 10, endX, startY, color);
-        drawVerticalLine(endX, startY + 10, startY, color);
+        drawHorizontalLine(endX - LINE_LENGTH, endX, startY, color);
+        drawVerticalLine(endX, startY + LINE_LENGTH, startY, color);
 
         //Bottom right
-        drawHorizontalLine(endX - 10, endX, endY, color);
-        drawVerticalLine(endX, endY, endY - 10, color);
+        drawHorizontalLine(endX - LINE_LENGTH, endX, endY, color);
+        drawVerticalLine(endX, endY, endY - LINE_LENGTH, color);
 
         //Bottom left
-        drawHorizontalLine(startX, startX + 10, endY, color);
-        drawVerticalLine(startX, endY - 10, endY, color);
+        drawHorizontalLine(startX, startX + LINE_LENGTH, endY, color);
+        drawVerticalLine(startX, endY - LINE_LENGTH, endY, color);
 
         //Darken the outside
     }
