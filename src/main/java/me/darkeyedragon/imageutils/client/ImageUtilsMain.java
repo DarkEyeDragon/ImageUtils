@@ -17,6 +17,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Mod(modid = ImageUtilsMain.MODID, version = ImageUtilsMain.VERSION, updateJSON = ImageUtilsMain.updateJSON, clientSideOnly = true)
@@ -41,7 +42,7 @@ public class ImageUtilsMain {
         return MODID;
     }
 
-    public static String getVERSION() {
+    public static String getVersion() {
         return VERSION;
     }
 
@@ -76,17 +77,22 @@ public class ImageUtilsMain {
             }
         }
 
+        registerEvents(new KeyPressEvent(this),
+                new CustomScreenshotEvent(this),
+                new ChatReceivedEvent(),
+                new CustomGuiOpenEvent(this),
+                new GuiMenuHookEvent(this),
+                new IngameGuiEvent(),
+                new ConfigUpdateEvent(getUploadHandler())
+        );
 
-        MinecraftForge.EVENT_BUS.register(new KeyPressEvent(this));
-        MinecraftForge.EVENT_BUS.register(new CustomScreenshotEvent(this));
-        MinecraftForge.EVENT_BUS.register(new ChatReceivedEvent());
-        MinecraftForge.EVENT_BUS.register(new CustomGuiOpenEvent(this));
-        MinecraftForge.EVENT_BUS.register(new GuiMenuHookEvent(this));
-        MinecraftForge.EVENT_BUS.register(new IngameGuiEvent());
-        MinecraftForge.EVENT_BUS.register(new ConfigUpdateEvent(getUploadHandler()));
         keybinds = new KeyBindings();
         keybinds.RegisterKeybinds();
 
+    }
+
+    private void registerEvents(Object... events) {
+        Arrays.stream(events).forEach(MinecraftForge.EVENT_BUS::register);
     }
 
     @Mod.EventHandler
