@@ -5,7 +5,6 @@ import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
 import me.darkeyedragon.imageutils.client.imageuploader.UploaderFactory;
 import me.darkeyedragon.imageutils.client.util.ImageResource;
 import me.darkeyedragon.imageutils.client.util.ImageUtil;
-import me.darkeyedragon.imageutils.client.util.OutputHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -19,7 +18,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import org.lwjgl.input.Mouse;
 
@@ -153,7 +151,8 @@ public class GuiLocalScreenshots extends GuiScreen {
             uploadButton.enabled = false;
             BufferedImage img = imageResource.getImage();
             if (img != null) {
-                uploader.uploadAsync(img, (response, error) -> {
+                //TODO FIX
+                /*uploader.uploadAsync(img, (response, error) -> {
                     ITextComponent errorComponent = new TextComponentTranslation("imageutil.message.upload.error").appendSibling(new TextComponentTranslation("imageutil.message.upload.error1"));
                     if (response == null && error != null) {
                         OutputHandler.sendMessage(errorComponent.appendText(error.getMessage()), this);
@@ -164,7 +163,7 @@ public class GuiLocalScreenshots extends GuiScreen {
                             OutputHandler.sendMessage(errorComponent.appendText(e.getMessage()), this);
                         }
                     }
-                });
+                });*/
             } else {
                 //TODO show popup instead
                 uploadButton.displayString = "Unable to upload screenshot!";

@@ -20,11 +20,16 @@ public class ConfigUpdateEvent {
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equals(ImageUtilsMain.MODID)) {
             ConfigManager.sync(ImageUtilsMain.MODID, Config.Type.INSTANCE);
-            uploadHandler.setActiveUploader(); //old non valid way
+            uploadHandler.setActiveUploader(ModConfig.uploader); //old non valid way
+            if (ModConfig.customServer) {
+                uploadHandler.loadUploaders();
+            } else {
+                uploadHandler.unloadUploaders();
+            }
             if (ModConfig.reloadUploaders) {
-                uploadHandler.loadUploaders(); //old non valid way
                 ModConfig.reloadUploaders = false;
                 ConfigManager.sync(ImageUtilsMain.MODID, Config.Type.INSTANCE);
+                uploadHandler.loadUploaders(); //old non valid way
             }
             //ImageUtilsMain.debug(ModConfig.debug);
         }

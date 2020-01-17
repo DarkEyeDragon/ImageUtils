@@ -60,22 +60,11 @@ public class ImageUtilsMain {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent init) {
-        uploadDir = new File(configPath.toFile(), "uploaders");
-        if (!uploadDir.exists()) {
-            if (uploadDir.mkdir()) {
-                logger.info("No uploaders directory, creating one...");
-            } else {
-                logger.warn("Unable to create uploaders directory! This will cause problems later on.");
-            }
-        } else {
-            logger.warn(uploadHandler);
-            uploadHandler.loadUploaders();
-            if (ModConfig.uploader != null) {
-                if (!ModConfig.uploader.equalsIgnoreCase("")) {
-                    uploadHandler.setActiveUploader();
-                }
-            }
-        }
+
+        initUploaders();
+
+        keybinds = new KeyBindings();
+        keybinds.RegisterKeybinds();
 
         registerEvents(new KeyPressEvent(this),
                 new CustomScreenshotEvent(this),
@@ -86,9 +75,29 @@ public class ImageUtilsMain {
                 new ConfigUpdateEvent(getUploadHandler())
         );
 
-        keybinds = new KeyBindings();
-        keybinds.RegisterKeybinds();
+    }
 
+    private void initUploaders() {
+        uploadDir = new File(configPath.toFile(), "uploaders");
+        if (uploadDir.exists()) {
+
+            uploadHandler.loadUploaders();
+
+            if (!ModConfig.uploader.isEmpty()) {
+                try {
+                    uploadHandler.setActiveUploader(ModConfig.uploader);
+
+                } catch (IllegalArgumentException ex) {
+                    logger.warn("Uploader file " + ModConfig.uploader + " does not exist. Ignoring it.");
+                }
+            }
+        } else {
+            if (uploadDir.mkdir()) {
+                logger.info("No uploaders directory, creating one...");
+            } else {
+                logger.warn("Unable to create uploaders directory! This will cause problems later on.");
+            }
+        }
     }
 
     private void registerEvents(Object... events) {

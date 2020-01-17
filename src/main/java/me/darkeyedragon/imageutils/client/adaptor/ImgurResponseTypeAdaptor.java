@@ -2,7 +2,7 @@ package me.darkeyedragon.imageutils.client.adaptor;
 
 import java.util.Map;
 
-public class ImgurResponseTypeAdaptor {
+public class ImgurResponseTypeAdaptor implements UploadResponseAdaptor {
 
     private Map<String, Object> data;
     private boolean success;
@@ -16,10 +16,6 @@ public class ImgurResponseTypeAdaptor {
 
     public Map<String, Object> getData() {
         return data;
-    }
-
-    public void setData(Map<String, Object> data) {
-        this.data = data;
     }
 
     public int getId() {
@@ -38,15 +34,13 @@ public class ImgurResponseTypeAdaptor {
         return success;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    @Override
+    public String getURL() {
+        return (String) data.get("url");
     }
 
     public int getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
 }

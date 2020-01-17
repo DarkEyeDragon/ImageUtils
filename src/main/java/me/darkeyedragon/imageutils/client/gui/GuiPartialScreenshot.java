@@ -1,20 +1,19 @@
 package me.darkeyedragon.imageutils.client.gui;
 
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
+import me.darkeyedragon.imageutils.client.imageuploader.ResponseFactory;
 import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
-import me.darkeyedragon.imageutils.client.util.OutputHandler;
+import me.darkeyedragon.imageutils.client.message.ResponseMessageFactory;
 import me.darkeyedragon.imageutils.client.util.RegionSelector;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.util.Objects;
 
 public class GuiPartialScreenshot extends GuiScreen {
 
@@ -82,18 +81,17 @@ public class GuiPartialScreenshot extends GuiScreen {
         mouseReleased.x *= res;
 
         BufferedImage partialScreenshot = ScreenshotHandler.partial(new Point(Math.min(mouseClicked.x, mouseReleased.x), Math.min(mouseClicked.y, mouseReleased.y)), new Point(Math.max(mouseClicked.x, mouseReleased.x), Math.max(mouseClicked.y, mouseReleased.y)));
-        uploader.uploadAsync(partialScreenshot, (response, error) -> {
-            ITextComponent errorComponent = new TextComponentTranslation("imageutil.message.upload.error").appendSibling(new TextComponentTranslation("imageutil.message.upload.error1"));
-            if (response == null && error != null) {
-                OutputHandler.sendMessage(errorComponent.appendText(error.getMessage()), this);
-            } else if (response != null) {
-                try {
-                    OutputHandler.sendUploadResponseMessage(response, null);
-                } catch (IOException e) {
-                    OutputHandler.sendMessage(errorComponent.appendText(e.getMessage()), this);
-                }
+        //TODO FIX
+        uploader.uploadAsync(partialScreenshot).thenAccept((httpResponse -> {
+            if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(ResponseMessageFactory.getFormattedMessage(Objects.requireNonNull(ResponseFactory.getResponseAdaptor(httpResponse))));
             }
+        })).exceptionally((error) -> {
+            error.printStackTrace();
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(ResponseMessageFactory.getErrorMessage(error));
+            return null;
         });
+
         mc.displayGuiScreen(null);
     }
 }

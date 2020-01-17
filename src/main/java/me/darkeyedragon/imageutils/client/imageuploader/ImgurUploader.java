@@ -3,7 +3,7 @@ package me.darkeyedragon.imageutils.client.imageuploader;
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 import org.apache.http.HttpHeaders;
 
-public class ImgurUploader extends BaseUploader {
+public class ImgurUploader extends Uploader {
 
     public ImgurUploader(ImageUtilsMain main) {
         super("https://api.imgur.com/3/image", main.getUploadHandler().getFixedThreadPool());

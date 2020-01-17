@@ -10,7 +10,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.util.concurrent.ExecutorService;
 
-public class CustomUploader extends BaseUploader {
+public class CustomUploader extends Uploader {
 
     private static MultipartEntityBuilder builder;
     private static UploaderFile uploaderFile;
@@ -23,7 +23,11 @@ public class CustomUploader extends BaseUploader {
     private GuiNewChat chat;
 
     public CustomUploader(UploadHandler uploadHandler) {
-        super(uploadHandler.getActiveUploader().getUploader().getURL(), uploadHandler.getFixedThreadPool());
+        super(uploadHandler
+                        .getActiveUploader()
+                        .getUploader()
+                        .getRequestUrl()
+                , uploadHandler.getFixedThreadPool());
         this.uploadHandler = uploadHandler;
         this.executorService = uploadHandler.getFixedThreadPool();
     }

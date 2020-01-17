@@ -32,16 +32,15 @@ public class UploadHandler {
         uploaders = new ArrayList<>();
     }
 
-    public void setActiveUploader() {
-        if (ModConfig.customServer) {
-
-            uploaders.forEach(uf -> {
-                if (uf.getFileName().equalsIgnoreCase(ModConfig.uploader)) {
-                    getLogger().info("Setting active uploader script.");
-                    setActiveUploader(uf);
-                }
-            });
-        }
+    public void setActiveUploader(String uploaderName) {
+        uploaders.forEach(uf -> {
+            if (uf.getFileName().equalsIgnoreCase(uploaderName) || uf.getDisplayName().equalsIgnoreCase(uploaderName)) {
+                getLogger().info("Setting active uploader script.");
+                setActiveUploader(uf);
+            } else {
+                throw new IllegalArgumentException();
+            }
+        });
     }
 
     public List<UploaderFile> getUploaders() {
@@ -65,6 +64,7 @@ public class UploadHandler {
     }
 
     public void loadUploaders() {
+        unloadUploaders();
         getLogger().info("Uploaders directory found, loading uploaders...");
         String[] list = main.getUploadDir().list();
         if (list != null && list.length > 0) {
@@ -80,6 +80,10 @@ public class UploadHandler {
                 }
             }
         }
+    }
+
+    public void unloadUploaders() {
+        uploaders.clear();
     }
 
     public ExecutorService getFixedThreadPool() {
