@@ -3,12 +3,14 @@ package me.darkeyedragon.imageutils.client.event;
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 import me.darkeyedragon.imageutils.client.KeyBindings;
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
+import me.darkeyedragon.imageutils.client.adaptor.UploadResponseAdaptor;
 import me.darkeyedragon.imageutils.client.gui.GuiLocalScreenshots;
 import me.darkeyedragon.imageutils.client.gui.GuiPartialScreenshot;
 import me.darkeyedragon.imageutils.client.imageuploader.ResponseFactory;
 import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
 import me.darkeyedragon.imageutils.client.message.ResponseMessageFactory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 
@@ -37,7 +39,9 @@ public class KeyPressEvent {
             Uploader uploader = main.getUploaderFactory().getUploader();
             uploader.uploadAsync(screenshot).thenAccept((httpResponse -> {
                 if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                    Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(ResponseMessageFactory.getFormattedMessage(Objects.requireNonNull(ResponseFactory.getResponseAdaptor(httpResponse))));
+                    UploadResponseAdaptor adaptor = Objects.requireNonNull(ResponseFactory.getResponseAdaptor(httpResponse));
+                    ITextComponent component = ResponseMessageFactory.getFormattedMessage(adaptor);
+                    Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(component);
                 }
             })).exceptionally((error) -> {
                 error.printStackTrace();

@@ -4,8 +4,10 @@ import me.darkeyedragon.imageutils.client.ImageUtilsMain;
 import me.darkeyedragon.imageutils.client.ModConfig;
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
 import me.darkeyedragon.imageutils.client.UploadHandler;
+import me.darkeyedragon.imageutils.client.adaptor.UploadResponseAdaptor;
+import me.darkeyedragon.imageutils.client.imageuploader.ResponseFactory;
 import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
-import me.darkeyedragon.imageutils.client.util.JsonHelper;
+import me.darkeyedragon.imageutils.client.message.ResponseMessageFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -21,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Objects;
 
 public class CustomScreenshotEvent {
 
@@ -38,13 +41,14 @@ public class CustomScreenshotEvent {
         if (ModConfig.Override) {
             BufferedImage screenshot = event.getImage();
             uploader.uploadAsync(screenshot).thenAccept((httpResponse -> {
-                try {
-                    JsonHelper.readJsonFromUrl(httpResponse.getEntity().getContent());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                    UploadResponseAdaptor adaptor = Objects.requireNonNull(ResponseFactory.getResponseAdaptor(httpResponse));
+                    ITextComponent component = ResponseMessageFactory.getFormattedMessage(adaptor);
+                    Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(component);
                 }
             })).exceptionally((error) -> {
-                System.out.println(error.getMessage());
+                error.printStackTrace();
+                Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(ResponseMessageFactory.getErrorMessage(error));
                 return null;
             });
 
@@ -64,6 +68,7 @@ public class CustomScreenshotEvent {
                 });
                 Minecraft.getMinecraft().addScheduledTask(() -> {
                     TextComponentTranslation prefix = new TextComponentTranslation("imageutil.message.screenshot_save");
+                    prefix.appendText(" ");
                     ITextComponent itextcomponent = new TextComponentString(screenshotFile.getName());
                     //itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://LINK::"+screenshotFile.getName()));
                     itextcomponent.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/viewlocal " + screenshotFile.getAbsolutePath()));

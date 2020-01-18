@@ -97,20 +97,18 @@ public class ImageUtil {
         }
 
         URL imgUrl = new URL(url);
-        if (isValidImage(url)) {
-            URLConnection conn;
-            conn = imgUrl.openConnection();
-            conn.setRequestProperty(HttpHeaders.USER_AGENT, ImageUtilsMain.NAME + "/" + ImageUtilsMain.VERSION);
-            //Devide by 1000000 to get MB
-            if (conn.getContentLength() / 1000000 > maxSize) {
-                return new DownloadImage(null, DownloadResponse.FILE_TO_BIG);
-            }
-            InputStream image = conn.getInputStream();
-            BufferedImage img = ImageIO.read(image);
-            downloads.put(imgUrl.toString(), img);
-            return new DownloadImage(img, DownloadResponse.SUCCESS);
+        URLConnection conn;
+        conn = imgUrl.openConnection();
+        conn.setRequestProperty(HttpHeaders.USER_AGENT, ImageUtilsMain.NAME + "/" + ImageUtilsMain.VERSION);
+        //Devide by 1000000 to get MB
+        if (conn.getContentLength() / 1000000 > maxSize) {
+            return new DownloadImage(null, DownloadResponse.FILE_TO_BIG);
         }
-        return new DownloadImage(null, DownloadResponse.ERROR);
+        InputStream image = conn.getInputStream();
+        BufferedImage img = ImageIO.read(image);
+        downloads.put(imgUrl.toString(), img);
+        return new DownloadImage(img, DownloadResponse.SUCCESS);
+
     }
 
     public void getImageSize(String url) {
