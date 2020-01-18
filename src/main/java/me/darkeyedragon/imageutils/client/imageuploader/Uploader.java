@@ -136,6 +136,10 @@ public abstract class Uploader {
         this.params = params;
     }
 
+    public MultipartEntityBuilder getBuilder() {
+        return builder;
+    }
+
     public HttpPost getHttpPost() {
         return httpPost;
     }

@@ -29,6 +29,9 @@ public class CustomUploader extends Uploader {
                         .getRequestUrl()
                 , uploadHandler.getFixedThreadPool());
         this.uploadHandler = uploadHandler;
+        uploadHandler.getActiveUploader().getArguments().forEach((key, value) -> {
+            this.getBuilder().addTextBody(key, value.toString());
+        });
         this.executorService = uploadHandler.getFixedThreadPool();
     }
 
