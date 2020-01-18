@@ -33,12 +33,11 @@ public class UploadHandler {
     }
 
     public void setActiveUploader(String uploaderName) {
+        activeUploader = null;
         uploaders.forEach(uf -> {
             if (uf.getFileName().equalsIgnoreCase(uploaderName) || uf.getDisplayName().equalsIgnoreCase(uploaderName)) {
                 getLogger().info("Setting active uploader script.");
                 setActiveUploader(uf);
-            } else {
-                throw new IllegalArgumentException();
             }
         });
     }
@@ -68,12 +67,10 @@ public class UploadHandler {
         getLogger().info("Uploaders directory found, loading uploaders...");
         String[] list = main.getUploadDir().list();
         if (list != null && list.length > 0) {
-            List<String> displayName = new ArrayList<>();
             for (File file : Objects.requireNonNull(main.getUploadDir().listFiles())) {
                 try {
                     UploaderFile uf = new UploaderFile(file);
                     uploaders.add(uf);
-                    displayName.add(uf.getDisplayName());
                     getLogger().info("Loaded: " + file.getName());
                 } catch (Exception e) {
                     getLogger().warn("Unable to load " + file.getName() + e.getMessage() + "!");

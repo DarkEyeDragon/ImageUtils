@@ -84,10 +84,9 @@ public class ImageUtilsMain {
             uploadHandler.loadUploaders();
 
             if (!ModConfig.uploader.isEmpty()) {
-                try {
                     uploadHandler.setActiveUploader(ModConfig.uploader);
 
-                } catch (IllegalArgumentException ex) {
+                if (uploadHandler.getActiveUploader() == null) {
                     logger.warn("Uploader file " + ModConfig.uploader + " does not exist. Ignoring it.");
                 }
             }
