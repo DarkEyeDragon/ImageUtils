@@ -8,7 +8,7 @@ import me.darkeyedragon.imageutils.client.util.ImageResource;
 import me.darkeyedragon.imageutils.client.util.ImageUtil;
 import me.darkeyedragon.imageutils.client.util.OutputHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandException;
+import net.minecraft.client.gui.GuiConfirmOpenLink;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -56,13 +56,16 @@ public class ViewCommand implements ICommand {
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
         if (sender instanceof EntityPlayer) {
             DownloadImage downloadImage;
             try {
                 downloadImage = ImageUtil.downloadFromUrl(args[0], ModConfig.maxImageSize);
                 if (downloadImage.getBufferedImage() == null) {
                     OutputHandler.sendMessage(new TextComponentString(downloadImage.getResponseMessage().toString()).setStyle(new Style().setColor(TextFormatting.RED)), null);
+                    Minecraft.getMinecraft().addScheduledTask(()
+                            -> Minecraft.getMinecraft().displayGuiScreen(new GuiConfirmOpenLink(Minecraft.getMinecraft().currentScreen, args[0], 0, false))
+                    );
                     return;
                 }
                 BufferedImage finalImage = downloadImage.getBufferedImage();
