@@ -16,7 +16,7 @@ public class ResponseMessageFactory {
         TextComponentTranslation component;
         if (adaptor.getStatus() == 200) {
             //Set the link of the image if the response code is 200
-            linkStyle.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, adaptor.getURL()));
+            linkStyle.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/view " + adaptor.getURL()));
 
             component = new TextComponentTranslation("imageutil.message.upload.success");
             component.appendText(" ").appendSibling(new TextComponentString(adaptor.getURL()).setStyle(linkStyle));
@@ -35,7 +35,7 @@ public class ResponseMessageFactory {
         translation.appendText("\n");
         translation.appendSibling(new TextComponentTranslation("imageutil.message.upload.error1").setStyle(new Style().setColor(TextFormatting.WHITE)));
         translation.appendText(" ");
-        translation.appendSibling(new TextComponentTranslation("imageutil.message.upload.errorlink").setStyle(linkStyle));
+        translation.appendSibling(new TextComponentTranslation("imageutil.message.upload.errorlink").setStyle(linkStyle.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/DarkEyeDragon/ImageUtils"))));
         return translation;
     }
     //public void addLink(string, Format)
