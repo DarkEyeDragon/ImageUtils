@@ -38,8 +38,8 @@ public enum ImageType {
         return true;
     }*/
     public boolean compare(List<Integer> toCompare) {
-        if (toCompare.size() < hexValue.length) return false;
-        for (int i = 0; i < toCompare.size(); i++) {
+        for (int i = 0; i < hexValue.length; i++) {
+            if (toCompare.get(i) < hexValue.length) return false;
             if ((toCompare.get(i) != hexValue[i]) && hexValue[i] != -1) {
                 return false;
             }
