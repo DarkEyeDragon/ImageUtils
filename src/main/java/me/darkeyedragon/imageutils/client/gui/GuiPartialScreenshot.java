@@ -1,6 +1,7 @@
 package me.darkeyedragon.imageutils.client.gui;
 
 import me.darkeyedragon.imageutils.client.ScreenshotHandler;
+import me.darkeyedragon.imageutils.client.adaptor.UploadResponseAdaptor;
 import me.darkeyedragon.imageutils.client.imageuploader.ResponseFactory;
 import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
 import me.darkeyedragon.imageutils.client.message.ResponseMessageFactory;
@@ -10,6 +11,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.ITextComponent;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -84,7 +86,9 @@ public class GuiPartialScreenshot extends GuiScreen {
         //TODO FIX
         uploader.uploadAsync(partialScreenshot).thenAccept((httpResponse -> {
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(ResponseMessageFactory.getFormattedMessage(Objects.requireNonNull(ResponseFactory.getResponseAdaptor(httpResponse))));
+                UploadResponseAdaptor adaptor = Objects.requireNonNull(ResponseFactory.getResponseAdaptor(httpResponse));
+                ITextComponent component = ResponseMessageFactory.getFormattedMessage(adaptor);
+                Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(component);
             }
         })).exceptionally((error) -> {
             error.printStackTrace();

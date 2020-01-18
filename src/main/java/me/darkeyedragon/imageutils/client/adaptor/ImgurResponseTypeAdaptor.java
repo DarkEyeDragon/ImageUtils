@@ -36,7 +36,7 @@ public class ImgurResponseTypeAdaptor implements UploadResponseAdaptor {
 
     @Override
     public String getURL() {
-        return (String) data.get("url");
+        return (String) data.get("link");
     }
 
     public int getStatus() {

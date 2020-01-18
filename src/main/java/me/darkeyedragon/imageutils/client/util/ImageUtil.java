@@ -21,10 +21,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ImageUtil {
 
+    private static final byte BYTES_TO_READ = 12;
 
     /**
      * @param img  the image to resize
@@ -52,17 +55,20 @@ public class ImageUtil {
         HttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(imageUrl);
         httpGet.addHeader(HttpHeaders.USER_AGENT, ImageUtilsMain.NAME + "/" + ImageUtilsMain.VERSION);
-        httpGet.addHeader(HttpHeaders.RANGE, "bytes=0-7");
+        httpGet.addHeader(HttpHeaders.RANGE, "bytes=0-" + (BYTES_TO_READ - 1));
         try {
             HttpResponse response = httpClient.execute(httpGet);
             HttpEntity httpEntity = response.getEntity();
-            if (httpEntity.getContentLength() > 8) return false;
-            int[] bytes = new int[8];
-            for (int i = 0; i < 8; i++) {
-                bytes[i] = (short) httpEntity.getContent().read();
+            if (httpEntity.getContentLength() > BYTES_TO_READ) return false;
+            List<Integer> bytes = new ArrayList<>(4);
+            int byteValue = 0;
+            while (byteValue != -1) {
+                int byt = httpEntity.getContent().read();
+                bytes.add(byt);
+                byteValue = byt;
             }
+
             for (int i = 0; i < ImageType.values().length; i++) {
-                System.out.print(i);
                 if (ImageType.values()[i].compare(bytes)) {
                     return true;
                 }
