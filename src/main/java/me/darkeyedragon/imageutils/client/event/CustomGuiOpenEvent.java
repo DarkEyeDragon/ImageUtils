@@ -1,62 +1,32 @@
 package me.darkeyedragon.imageutils.client.event;
 
 import me.darkeyedragon.imageutils.client.ImageUtilsMain;
-import me.darkeyedragon.imageutils.client.UploadHandler;
-import me.darkeyedragon.imageutils.client.gui.GuiImagePreviewer;
-import me.darkeyedragon.imageutils.client.imageuploader.Uploader;
-import me.darkeyedragon.imageutils.client.util.ImageResource;
-import me.darkeyedragon.imageutils.client.util.ImageUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiConfirmOpenLink;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Mouse;
+import net.minecraft.client.gui.screen.IngameMenuScreen;
+import net.minecraft.client.gui.screen.MainMenuScreen;
+import net.minecraft.client.gui.screen.OptionsScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.button.ImageButton;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
-
+@Mod.EventBusSubscriber(modid = ImageUtilsMain.MODID, value = Dist.CLIENT)
 public class CustomGuiOpenEvent {
 
+    private static final ResourceLocation LOGO = new ResourceLocation(ImageUtilsMain.MODID, "textures/widgets.png");
 
-    private final Uploader uploader;
-    private final UploadHandler uploadHandler;
-    private final ImageUtilsMain main;
-
-    public CustomGuiOpenEvent(ImageUtilsMain main) {
-        this.uploader = main.getUploaderFactory().getUploader();
-        this.uploadHandler = main.getUploadHandler();
-        this.main = main;
-    }
-
-    //TODO switch to command
     @SubscribeEvent
-    public void guiOpenEvent(net.minecraftforge.client.event.GuiOpenEvent e) {
-        if (e.getGui() instanceof GuiConfirmOpenLink) {
-            Minecraft mc = Minecraft.getMinecraft();
-            ITextComponent textComponent = mc.ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
-            if (textComponent != null) {
-                String link = Objects.requireNonNull(textComponent.getStyle().getClickEvent()).getValue();
-                ImageResource imgResource = null;
-                if (uploadHandler.getValidLinks().containsKey(link)) {
-                    imgResource = new ImageResource(main, link, uploadHandler.getValidLinks().get(link), link);
-                } else if (link.startsWith("http://LINK::")) {
-                    String splitStr = link.replace("http://LINK::", "");
-                    try {
-                        Path path = Paths.get(Minecraft.getMinecraft().gameDir.getCanonicalPath(), "screenshots", splitStr);
-                        imgResource = new ImageResource(main, splitStr, ImageUtil.getLocal(path.toFile()), false, path.toString());
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-                if (imgResource != null) {
-                    e.setGui(new GuiImagePreviewer(imgResource));
-                }
-            } else {
-                main.getLogger().warn("Something went wrong! Unable to get URL");
-            }
-
+    public void guiOpenEvent(GuiScreenEvent.InitGuiEvent initGuiEvent) {
+        final Screen screen = initGuiEvent.getGui();
+        if (screen instanceof IngameMenuScreen || screen instanceof MainMenuScreen) {
+            final int width = initGuiEvent.getGui().width;
+            final int height = initGuiEvent.getGui().height;
+            initGuiEvent.addWidget(new ImageButton(width / 2 - 10, height / 4, 20, 20, 0, 0, 0, LOGO, button -> {
+                Minecraft.getInstance().displayGuiScreen(new OptionsScreen(initGuiEvent.getGui(), Minecraft.getInstance().gameSettings));
+            }));
         }
     }
 }
