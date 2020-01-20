@@ -12,6 +12,9 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'java'
+
+compileJava.options.encoding = 'UTF-8'
 
 version = '1.0'
 group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
