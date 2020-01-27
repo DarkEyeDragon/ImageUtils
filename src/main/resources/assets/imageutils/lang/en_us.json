@@ -50,9 +50,9 @@
   "imageutil.message.non_json_uploadResponse": "Response:",
   "imageutil.message.non_json_matches": "Possible matches:",
   "imageutil.message.overlay_message.upload": "Uploading to",
-  "imageutil.message.download_response.file_to_big": "\"Image exceeded maximum allowed size!\"",
-  "imageutil.message.download_response.success": "\"Successfully downloaded image!\"",
-  "imageutil.message.download_response.error": "\"Oops! Something went wrong while downloading...\"",
+  "imageutil.message.download_response.file_to_big": "Image exceeded maximum allowed size!",
+  "imageutil.message.download_response.success": "Successfully downloaded image!",
+  "imageutil.message.download_response.error": "Oops! Something went wrong while downloading...",
   "imageutil.button.yes": "Yes",
   "imageutil.button.no": "No",
   "imageutil.button.cancel": "Cancel",
@@ -65,5 +65,7 @@
   "imageutil.command.view.usage": "View an image in-game",
   "imageutil.command.view_local": "view local",
   "imageutil.command.view_local.usage": "View an image in-game",
-  "imageutil.special.arrow_left": "«"
+  "imageutil.special.arrow_left": "«",
+  "imageutil.special.arrow_right": "»",
+  "imageutil.keybind.partial_screenshot": "Take a partial screenshot"
 }
